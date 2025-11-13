@@ -9,8 +9,15 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "BAI Solutions - Web Design and IT Services",
-  description: "Award-winning portfolio by Dom Behrens - Web design and IT Services",
+  title: "BAI Solutions - Web Design & IT Services by Dom Behrens",
+  description: "Premium web development and design services. Specializing in Next.js, Shopify, GSAP animations, and interactive digital experiences. Portfolio by Dom Behrens.",
+  keywords: ["web design", "web development", "Next.js", "Shopify", "GSAP", "portfolio", "Dom Behrens", "BAI Solutions"],
+  authors: [{ name: "Dom Behrens" }],
+  openGraph: {
+    title: "BAI Solutions - Web Design & IT Services",
+    description: "Premium web development and design services by Dom Behrens",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
