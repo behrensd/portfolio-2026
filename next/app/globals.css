@@ -281,17 +281,19 @@ body {
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(20, 20, 20, 0.6) 100%);
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
     position: relative;
+    border-radius: 8px;
 }
 
 .mockup-label {
-    color: var(--color-text-dim);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    opacity: 0.6;
+    opacity: 0.9;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Size variants */
@@ -315,6 +317,110 @@ body {
     border-color: rgba(255, 107, 53, 0.3);
     box-shadow: 0 20px 60px rgba(255, 107, 53, 0.1);
     transition: all 0.3s ease;
+}
+
+/* ================================
+   PROJECT ADDITIONAL CONTENT
+   ================================ */
+.project-role {
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.project-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.metric-item {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.2);
+    border-radius: 6px;
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+    background: rgba(255, 107, 53, 0.15);
+    border-color: rgba(255, 107, 53, 0.3);
+    transform: translateY(-2px);
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--spacing-md);
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: var(--color-bg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-primary);
+}
+
+.project-link:hover {
+    background: transparent;
+    color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+}
+
+.project-link:hover .link-arrow {
+    transform: translate(4px, -4px) rotate(45deg);
+}
+
+.link-arrow {
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.project-credits {
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-dim);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.credit-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.credit-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.credit-link:hover::after {
+    width: 100%;
+}
+
+.credit-link:hover {
+    color: var(--color-text);
 }
 
 /* Initial clip-path state for animations */
@@ -519,6 +625,29 @@ body {
     
     .mockup-small {
         height: 250px;
+    }
+    
+    /* Responsive project elements */
+    .project-role {
+        font-size: 0.85rem;
+    }
+    
+    .project-metrics {
+        gap: 0.4rem;
+    }
+    
+    .metric-item {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .project-link {
+        font-size: 0.85rem;
+        padding: 0.6rem 1.2rem;
+    }
+    
+    .project-credits {
+        font-size: 0.8rem;
     }
 }
 

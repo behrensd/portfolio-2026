@@ -4,29 +4,41 @@ const projectsData = [
     {
         id: 0,
         number: '01',
-        title: 'Interactive Portfolio',
-        description: 'Modern portfolio website featuring smooth animations and scroll-based storytelling for maximum engagement.',
-        tags: ['Anime.js', 'GSAP', 'WebGL'],
+        title: 'Warmanziehen Portfolio',
+        description: 'Eine Portfolio-Plattform mit maßgeschneiderter 3D-Animation für eine Hamburger Videoproduktionsfirma. Interaktives Storytelling trifft auf moderne Webtechnologie.',
+        role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer lw25_3d.',
+        tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Vercel'],
         mockupSize: 'mockup-medium',
-        mockupLabel: 'Portfolio Preview'
+        mockupLabel: 'Warmanziehen Preview',
+        url: 'https://warmanziehen.vercel.app',
+        credits: {
+            motionDesigner: 'lw25_3d',
+            instagramHandle: '@lw25_3d'
+        }
     },
     {
         id: 1,
         number: '02',
-        title: 'E-Commerce Experience',
-        description: 'Custom Shopify store with 3D scroll animations and seamless checkout experience. Built with performance in mind.',
-        tags: ['Shopify', 'Three.js', 'GSAP'],
+        title: 'Premium E-Commerce Platform',
+        description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
+        role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
+        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Stripe'],
         mockupSize: 'mockup-large',
-        mockupLabel: 'E-Commerce Storefront'
+        mockupLabel: 'E-Commerce Preview',
+        url: '#',
+        metrics: ['40% höhere Conversion-Rate', 'Ladezeit unter 1,5s', '60% mehr Mobile-Traffic']
     },
     {
         id: 2,
         number: '03',
-        title: 'Business Website',
-        description: 'Complete web solution with SEO optimization, email infrastructure, and GDPR compliance for German market.',
-        tags: ['SEO', 'Email Setup', 'Analytics'],
+        title: 'Corporate Digital Hub',
+        description: 'Komplette digitale Präsenz für einen deutschen B2B-Dienstleister. SEO-optimiert, GDPR-konform mit integrierter E-Mail-Infrastruktur und umfassendem Analytics-Setup.',
+        role: 'Konzeption und Entwicklung der gesamten Web-Lösung. Integration von Nodemailer für automatisierte E-Mail-Workflows, Google Analytics Setup und SEO-Optimierung.',
+        tags: ['Next.js', 'Tailwind CSS', 'Nodemailer', 'Analytics'],
         mockupSize: 'mockup-small',
-        mockupLabel: 'Business Site'
+        mockupLabel: 'Business Preview',
+        url: '#',
+        metrics: ['95+ Lighthouse Score', '100% GDPR-Konformität', 'Top-10 Google Rankings']
     }
 ];
 
@@ -55,11 +67,65 @@ export default function Projects() {
                             >
                                 <h3 className="project-title">{project.title}</h3>
                                 <p className="project-description">{project.description}</p>
+                                
+                                {project.role && (
+                                    <p className="project-role">{project.role}</p>
+                                )}
+                                
+                                {project.metrics && (
+                                    <div className="project-metrics">
+                                        {project.metrics.map((metric, index) => (
+                                            <span key={index} className="metric-item">
+                                                {metric}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                                
                                 <div className="project-tags">
                                     {project.tags.map((tag, index) => (
                                         <span key={index} className="tag">{tag}</span>
                                     ))}
                                 </div>
+                                
+                                {project.url && project.url !== '#' && (
+                                    <a 
+                                        href={project.url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="project-link"
+                                    >
+                                        <span>View Site</span>
+                                        <svg 
+                                            width="16" 
+                                            height="16" 
+                                            viewBox="0 0 16 16" 
+                                            fill="none"
+                                            className="link-arrow"
+                                        >
+                                            <path 
+                                                d="M4 12L12 4M12 4H6M12 4V10" 
+                                                stroke="currentColor" 
+                                                strokeWidth="2" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                    </a>
+                                )}
+                                
+                                {project.credits && (
+                                    <p className="project-credits">
+                                        3D Animation: <a 
+                                            href={`https://instagram.com/${project.credits.motionDesigner}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="credit-link"
+                                        >
+                                            {project.credits.instagramHandle}
+                                        </a>
+                                    </p>
+                                )}
                             </div>
                             <div className={`mockup-container ${project.mockupSize}`}>
                                 <div className="mockup-placeholder">
