@@ -22,6 +22,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
         
         // Set canvas size
         function resizeCanvas() {
+            if (!canvas) return;
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
@@ -65,6 +66,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
             }
             
             reset() {
+                if (!canvas) return;
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 3 + 1;
@@ -90,6 +92,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                         
                     case 'project02':
                         // Particles cluster toward right side (mockup area)
+                        if (!canvas) break;
                         const pullX = canvas.width * 0.7;
                         const pullY = canvas.height * 0.5;
                         const dx = pullX - this.x;
@@ -119,6 +122,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                 this.y += this.speedY;
                 
                 // Wrap around screen
+                if (!canvas) return;
                 if (this.x > canvas.width) this.x = 0;
                 if (this.x < 0) this.x = canvas.width;
                 if (this.y > canvas.height) this.y = 0;
@@ -154,6 +158,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
         
         // Animation loop
         function animate() {
+            if (!canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach((particle, index) => {
