@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dom - Web Developer & Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Logo Overlay Container -->
+    <div id="logo-overlay-container">
+        <a href="#hero" class="hero-logo-link" id="bai-logo-link">
+            <img src="BAI_logo (2).png" 
+                 alt="BAI Solutions Logo" 
+                 class="hero-logo" 
+                 id="bai-logo">
+        </a>
+    </div>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+    <!-- Floating Dock Navigation -->
+    <nav class="floating-dock">
+        <a href="#hero" class="dock-item" data-section="hero">
+            <span class="dock-icon">Start</span>
+            <span class="dock-indicator"></span>
+        </a>
+        <a href="#about" class="dock-item" data-section="about">
+            <span class="dock-icon">About</span>
+            <span class="dock-indicator"></span>
+        </a>
+        <a href="#projects" class="dock-item" data-section="projects">
+            <span class="dock-icon">Work</span>
+            <span class="dock-indicator"></span>
+        </a>
+        <a href="#contact" class="dock-item" data-section="contact">
+            <span class="dock-icon">Contact</span>
+            <span class="dock-indicator"></span>
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="section-tile hero-tile">
+        <canvas id="hero-canvas" data-speed="0.5"></canvas>
+        <div class="tile-content" data-speed="1">
+            <div class="hero-content">
+                <div class="logo-spacer"></div>
+                <h1 class="hero-title" data-speed="0.8">
+                    <span class="hero-line">BAI</span>
+                    <span class="hero-line">SOLUTIONS</span>
+                </h1>
+                <p class="hero-subtitle" data-speed="0.9">Web design and IT Services by Dom Behrens</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section - Clean Flat Tile -->
+    <section id="about" class="content-tile">
+        <div class="tile-inner">
+            <h2 class="section-title">About Me</h2>
+            <p class="about-description">
+                I'm a freelance web developer and designer specializing in creating 
+                engaging digital experiences. From Shopify stores to interactive 
+                portfolios, I bring ideas to life through clean code and compelling 
+                motion design.
+            </p>
+            <div class="about-skills">
+                <div class="skill-item">
+                    <h3>Development</h3>
+                    <p>Shopify, JavaScript, React, Three.js</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Design</h3>
+                    <p>Motion Design, 3D Animation, Blender</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Strategy</h3>
+                    <p>SEO, Performance, User Experience</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section - Clean Flat Tile -->
+    <section id="projects" class="content-tile">
+        <div class="tile-inner">
+            <h2 class="section-title">Selected Work</h2>
+            
+            <!-- Project 01 - Interactive Portfolio -->
+            <div class="project-item" data-project="0">
+                <div class="project-number" data-speed="0.5">01</div>
+                <div class="project-content">
+                    <div class="project-info" data-speed="0.85">
+                        <h3 class="project-title">Interactive Portfolio</h3>
+                        <p class="project-description">
+                            Modern portfolio website featuring smooth animations and 
+                            scroll-based storytelling for maximum engagement.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">Anime.js</span>
+                            <span class="tag">GSAP</span>
+                            <span class="tag">WebGL</span>
+                        </div>
+                    </div>
+                    <div class="mockup-container mockup-medium">
+                        <div class="mockup-placeholder">
+                            <span class="mockup-label">Portfolio Preview</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 02 - E-Commerce Experience -->
+            <div class="project-item" data-project="1">
+                <div class="project-number">02</div>
+                <div class="project-content">
+                    <div class="project-info">
+                        <h3 class="project-title">E-Commerce Experience</h3>
+                        <p class="project-description">
+                            Custom Shopify store with 3D scroll animations and seamless 
+                            checkout experience. Built with performance in mind.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">Shopify</span>
+                            <span class="tag">Three.js</span>
+                            <span class="tag">GSAP</span>
+                        </div>
+                    </div>
+                    <div class="mockup-container mockup-large">
+                        <div class="mockup-placeholder">
+                            <span class="mockup-label">E-Commerce Storefront</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 03 - Business Website -->
+            <div class="project-item" data-project="2">
+                <div class="project-number" data-speed="0.5">03</div>
+                <div class="project-content">
+                    <div class="project-info" data-speed="0.85">
+                        <h3 class="project-title">Business Website</h3>
+                        <p class="project-description">
+                            Complete web solution with SEO optimization, email infrastructure, 
+                            and GDPR compliance for German market.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">SEO</span>
+                            <span class="tag">Email Setup</span>
+                            <span class="tag">Analytics</span>
+                        </div>
+                    </div>
+                    <div class="mockup-container mockup-small">
+                        <div class="mockup-placeholder">
+                            <span class="mockup-label">Business Site</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section - Clean Flat Tile -->
+    <section id="contact" class="content-tile">
+        <div class="tile-content" data-speed="1">
+            <div class="contact-content">
+                <h2 class="section-title" data-speed="0.8">Let's Create Something</h2>
+                <p class="contact-description" data-speed="0.9">
+                    Ready to bring your project to life? Let's talk about how we can 
+                    work together to create something exceptional.
+                </p>
+                <div class="contact-links" data-speed="0.95">
+                    <a href="mailto:your@email.com" class="contact-link">Email</a>
+                    <a href="#" class="contact-link">LinkedIn</a>
+                    <a href="#" class="contact-link">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- GSAP Core & Plugins (NO LENIS - native scroll only) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    
+    <!-- Anime.js for page load animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

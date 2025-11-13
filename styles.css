@@ -1,0 +1,529 @@
+/* ================================
+   SEAMLESS PORTFOLIO - NO BORDERS
+   - Hero background throughout
+   - Free-floating elements
+   - NO boxes, NO borders, NO circles
+   - Ultra clean and lightweight
+   ================================ */
+
+/* CSS Variables */
+:root {
+    /* Colors */
+    --color-bg: #0a0a0a;
+    --color-primary: #ff6b35;
+    --color-text: #ffffff;
+    --color-text-dim: #a0a0a0;
+    
+    /* Typography */
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+    
+    /* Z-Index layers */
+    --z-background: 0;
+    --z-content: 10;
+    --z-dock: 1000;
+}
+
+/* ================================
+   GLOBAL STYLES
+   ================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================
+   HERO SECTION
+   (Keep this background throughout)
+   ================================ */
+#hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-background);
+}
+
+.hero-content {
+    position: relative;
+    z-index: var(--z-content);
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+/* Fixed Logo Overlay Container - Always on top */
+#logo-overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* BAI Logo Link Wrapper */
+.hero-logo-link {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.hero-logo-link:hover {
+    transform: scale(1.05);
+}
+
+/* BAI Logo Styling */
+.hero-logo {
+    display: block;
+    will-change: transform, width, height;
+}
+
+/* Logo spacer to maintain hero layout */
+.logo-spacer {
+    width: clamp(120px, 20vw, 200px);
+    height: clamp(120px, 20vw, 200px);
+    margin: 0 auto 2rem auto;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.02em;
+}
+
+.hero-line {
+    display: block;
+    opacity: 1;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--color-text-dim);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ================================
+   CONTENT TILES - SEAMLESS
+   ================================ */
+.content-tile {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+    background: transparent; /* NO BACKGROUND BOX */
+    z-index: var(--z-content);
+    opacity: 0;
+    transform: translateY(60px);
+}
+
+.tile-inner {
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* ================================
+   TYPOGRAPHY
+   ================================ */
+.section-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text);
+}
+
+/* ================================
+   ABOUT SECTION - FREE FLOATING
+   ================================ */
+.about-description {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-text-dim);
+}
+
+.about-skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.skill-item {
+    padding: 0; /* NO PADDING */
+    background: transparent; /* NO BACKGROUND */
+    border: none; /* NO BORDER */
+}
+
+.skill-item h3 {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+}
+
+.skill-item p {
+    color: var(--color-text-dim);
+    line-height: 1.8;
+}
+
+/* ================================
+   PROJECTS SECTION - ULTRA CLEAN
+   ================================ */
+.project-item {
+    position: relative;
+    margin-bottom: var(--spacing-xl);
+    padding: 0; /* NO PADDING */
+    border: none; /* NO BORDER */
+    perspective: 1200px; /* Enable 3D perspective for child elements */
+}
+
+.project-number {
+    font-size: clamp(4rem, 8vw, 6rem);
+    font-weight: 700;
+    color: rgba(255, 107, 53, 0.15);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    line-height: 1;
+}
+
+.project-content {
+    position: relative;
+    z-index: 2;
+    padding-left: clamp(2rem, 10vw, 6rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* ================================
+   MOCKUP CONTAINERS
+   ================================ */
+.mockup-container {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(255, 107, 53, 0.02) 100%);
+    border: 1px solid rgba(255, 107, 53, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    /* Initial states for animations */
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+/* Glass morphism effect */
+.mockup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    pointer-events: none;
+}
+
+.mockup-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(20, 20, 20, 0.6) 100%);
+    position: relative;
+}
+
+.mockup-label {
+    color: var(--color-text-dim);
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+}
+
+/* Size variants */
+.mockup-large {
+    max-width: 800px;
+    height: 600px;
+}
+
+.mockup-medium {
+    max-width: 600px;
+    height: 400px;
+}
+
+.mockup-small {
+    max-width: 500px;
+    height: 350px;
+}
+
+/* Hover effect for mockup containers */
+.mockup-container:hover {
+    border-color: rgba(255, 107, 53, 0.3);
+    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Initial clip-path state for animations */
+.project-item[data-project="0"] .project-content {
+    clip-path: polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);
+}
+
+/* 3D transform initial state for project 2 */
+.project-item[data-project="2"] .project-content {
+    transform-style: preserve-3d;
+}
+
+.project-title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.project-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-dim);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.tag {
+    padding: 0; /* NO PADDING */
+    background: transparent; /* NO BACKGROUND */
+    border: none; /* NO BORDER */
+    color: var(--color-primary); /* JUST COLOR */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ================================
+   CONTACT SECTION - MINIMAL
+   ================================ */
+.contact-content {
+    text-align: center;
+}
+
+.contact-content h2 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: var(--spacing-md);
+}
+
+.contact-content p {
+    font-size: 1.2rem;
+    color: var(--color-text-dim);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.8;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.contact-link {
+    padding: 0; /* NO PADDING */
+    background: transparent; /* NO BACKGROUND */
+    border: none; /* NO BORDER */
+    color: var(--color-primary); /* JUST COLOR */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.contact-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.contact-link:hover::after {
+    width: 100%;
+}
+
+.contact-link:hover {
+    color: var(--color-text);
+}
+
+/* ================================
+   FLOATING DOCK - MINIMAL
+   ================================ */
+.floating-dock {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    border: none; /* NO BORDER */
+    padding: 1rem 2rem;
+    display: flex;
+    gap: 2rem;
+    z-index: var(--z-dock);
+}
+
+.dock-item {
+    position: relative;
+    color: var(--color-text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.dock-item.active {
+    color: var(--color-primary);
+}
+
+.dock-item:hover {
+    color: var(--color-text);
+}
+
+.dock-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.dock-item.active .dock-indicator {
+    transform: scaleX(1);
+}
+
+.dock-icon {
+    display: block;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 768px) {
+    .content-tile {
+        width: 95%;
+        padding: var(--spacing-md) var(--spacing-sm);
+        margin: var(--spacing-md) auto;
+    }
+    
+    .about-skills {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .project-content {
+        padding-left: 0;
+        padding-top: var(--spacing-lg);
+    }
+    
+    .project-number {
+        position: relative;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .floating-dock {
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .dock-item {
+        font-size: 0.75rem;
+    }
+    
+    .contact-links {
+        gap: var(--spacing-md);
+    }
+    
+    /* Responsive mockup sizes */
+    .mockup-large {
+        height: 400px;
+    }
+    
+    .mockup-medium {
+        height: 300px;
+    }
+    
+    .mockup-small {
+        height: 250px;
+    }
+}
+
+/* ================================
+   PERFORMANCE OPTIMIZATIONS
+   ================================ */
+.content-tile,
+.project-item,
+.skill-item {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
