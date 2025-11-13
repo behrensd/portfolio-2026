@@ -60,19 +60,19 @@ export function useLogoScrollAnimation() {
         height: initialSize
       });
       
-      // Animate to corner - starts immediately, finishes quickly
+      // Animate to corner - smooth and buttery
       gsap.to(logoLink, {
         scrollTrigger: {
           trigger: '#hero',
           start: 'top+=50 top', // Start almost immediately
-          end: '+=400', // Shorter distance = faster completion
-          scrub: 1.5, // Quicker response
+          end: '+=600', // Longer distance = smoother animation
+          scrub: 0.5, // Much smoother response (lower = smoother)
         },
         left: finalLeft,
         top: finalTop,
         width: finalSize,
         height: finalSize,
-        ease: 'power2.inOut'
+        ease: 'power1.inOut' // Gentler easing
       });
       
       // Animate logo size
@@ -80,24 +80,24 @@ export function useLogoScrollAnimation() {
         scrollTrigger: {
           trigger: '#hero',
           start: 'top+=50 top',
-          end: '+=400',
-          scrub: 1.5
+          end: '+=600',
+          scrub: 0.5
         },
         width: finalSize,
         height: finalSize,
-        ease: 'power2.inOut'
+        ease: 'power1.inOut'
       });
       
-      // Smooth 360° rotation
+      // Smooth 360° rotation - extra smooth
       gsap.to(logo, {
         scrollTrigger: {
           trigger: '#hero',
           start: 'top+=50 top',
-          end: '+=400',
-          scrub: 1.5
+          end: '+=600',
+          scrub: 0.3 // Even smoother for rotation
         },
         rotation: 360,
-        ease: 'none'
+        ease: 'none' // Linear for rotation looks best
       });
     };
     

@@ -15,13 +15,13 @@ export function useProjectAnimations() {
             const tiles = gsap.utils.toArray('.content-tile');
             
             tiles.forEach((tile) => {
-                // Simple slide-in from bottom
+                // Simple slide-in from bottom - trigger earlier
                 gsap.to(tile as HTMLElement, {
                     scrollTrigger: {
                         trigger: tile as HTMLElement,
-                        start: 'top 80%',
-                        end: 'top 20%',
-                        scrub: 1,
+                        start: 'top 90%', // Trigger earlier
+                        end: 'top 30%', // More space for animation
+                        scrub: 0.5, // Smoother
                     },
                     opacity: 1,
                     y: 0,
@@ -73,13 +73,13 @@ function initProject01Animation() {
     const mockupContainer = project.querySelector('.mockup-container');
     const tags = project.querySelectorAll('.tag');
     
-    // Create timeline for project 01
+    // Create timeline for project 01 - trigger earlier for easier visibility
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: project,
-            start: 'top 75%',
-            end: 'top 25%',
-            scrub: 1.5,
+            start: 'top 85%', // Start earlier
+            end: 'top 30%', // More space
+            scrub: 0.8, // Smoother
         }
     });
     
@@ -122,7 +122,7 @@ function initProject01Animation() {
     // Create separate trigger for anime.js tag animations
     ScrollTrigger.create({
         trigger: project,
-        start: 'top 70%',
+        start: 'top 80%', // Trigger earlier
         once: true,
         onEnter: () => {
             animate(Array.from(tags), {
@@ -149,13 +149,13 @@ function initProject02Animation() {
     const tags = project.querySelectorAll('.tag');
     const projectInfo = project.querySelector('.project-info');
     
-    // Main timeline with ScrollTrigger
+    // Main timeline with ScrollTrigger - trigger earlier
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: project,
-            start: 'top 70%',
-            end: 'top 20%',
-            scrub: 1.8,
+            start: 'top 85%', // Start earlier
+            end: 'top 30%', // More space
+            scrub: 0.8, // Smoother
         }
     });
     
@@ -191,7 +191,7 @@ function initProject02Animation() {
     // Animate tags with anime.js elastic effect
     ScrollTrigger.create({
         trigger: project,
-        start: 'top 65%',
+        start: 'top 80%', // Trigger earlier
         once: true,
         onEnter: () => {
             animate(Array.from(tags), {
@@ -225,13 +225,13 @@ function initProject03Animation() {
         transformOrigin: 'bottom center'
     });
     
-    // Main timeline for 3D flip effect
+    // Main timeline for 3D flip effect - trigger earlier
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: project,
-            start: 'top 75%',
+            start: 'top 85%', // Start earlier
             end: 'top 30%',
-            scrub: 2,
+            scrub: 0.8, // Smoother
         }
     });
     
@@ -276,7 +276,7 @@ function initProject03Animation() {
     // Tags with anime.js
     ScrollTrigger.create({
         trigger: project,
-        start: 'top 70%',
+        start: 'top 80%', // Trigger earlier
         once: true,
         onEnter: () => {
             animate(Array.from(tags), {

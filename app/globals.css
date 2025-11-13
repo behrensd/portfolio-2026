@@ -46,6 +46,7 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
@@ -54,6 +55,7 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     overflow-x: hidden;
+    overflow-y: hidden; /* Prevent double scrollbar */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
