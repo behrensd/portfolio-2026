@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement>) {
+export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
