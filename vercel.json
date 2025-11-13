@@ -1,4 +1,5 @@
 {
+  "name": "portfolio-2026",
   "buildCommand": "cd next && npm run build",
   "devCommand": "cd next && npm run dev",
   "installCommand": "cd next && npm install",
