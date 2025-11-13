@@ -140,6 +140,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
             }
             
             draw() {
+                if (!ctx) return;
                 ctx.fillStyle = `rgba(255, 107, 53, ${Math.min(this.opacity, 0.7)})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -173,6 +174,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < connectionDistance) {
+                        if (!ctx) continue;
                         const lineOpacity = 0.1 * (1 - distance / connectionDistance);
                         ctx.strokeStyle = `rgba(255, 107, 53, ${lineOpacity})`;
                         ctx.lineWidth = currentBehavior === 'project01' ? 1.5 : 1;
