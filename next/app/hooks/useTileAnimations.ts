@@ -12,7 +12,7 @@ export function useTileAnimations() {
   useEffect(() => {
     const timer = setTimeout(() => {
       // Get all content tiles
-      const tiles = gsap.utils.toArray('.content-tile');
+      const tiles = gsap.utils.toArray<HTMLElement>('.content-tile');
       
       tiles.forEach((tile) => {
         // Simple slide-in from bottom
@@ -31,7 +31,7 @@ export function useTileAnimations() {
       });
       
       // Animate skill items
-      const skills = gsap.utils.toArray('.skill-item');
+      const skills = gsap.utils.toArray<HTMLElement>('.skill-item');
       skills.forEach((skill, index) => {
         gsap.from(skill, {
           scrollTrigger: {
