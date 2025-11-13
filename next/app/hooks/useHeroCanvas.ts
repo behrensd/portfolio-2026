@@ -159,7 +159,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
         
         // Animation loop
         function animate() {
-            if (!canvas) return;
+            if (!canvas || !ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach((particle, index) => {
