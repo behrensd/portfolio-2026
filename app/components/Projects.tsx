@@ -10,7 +10,7 @@ const projectsData = [
         tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Vercel'],
         mockupSize: 'mockup-medium',
         mockupLabel: 'Warmanziehen Preview',
-        url: 'https://warmanziehen.vercel.app',
+        url: 'https://warmanziehen-v2.vercel.app',
         credits: {
             motionDesigner: 'lw25_3d',
             instagramHandle: '@lw25_3d'

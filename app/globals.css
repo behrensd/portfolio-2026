@@ -18,8 +18,38 @@
     --color-text: #ffffff;
     --color-text-dim: #a0a0a0;
     
-    /* Typography */
-    --font-main: var(--font-lato), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Typography - Playfair Display System */
+    --font-main: var(--font-playfair), Georgia, serif;
+    
+    /* Type Scale - 1.250 Major Third Ratio */
+    --font-size-xs: 0.8rem;      /* 12.8px - Small text */
+    --font-size-sm: 0.875rem;    /* 14px - Captions */
+    --font-size-base: 1.125rem;  /* 18px - Body (larger for Playfair readability) */
+    --font-size-md: 1.25rem;     /* 20px - H4 */
+    --font-size-lg: 1.563rem;    /* 25px - H3 */
+    --font-size-xl: 1.953rem;    /* 31.25px - H2 */
+    --font-size-2xl: 2.441rem;   /* 39px - H1 */
+    --font-size-3xl: 3.052rem;   /* 48.8px - Hero Display */
+    
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    
+    /* Letter Spacing */
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.02em;
+    --letter-spacing-wider: 0.05em;
+    
+    /* Line Heights */
+    --line-height-tight: 1.2;
+    --line-height-snug: 1.4;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.8;
     
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -53,7 +83,10 @@ body {
     font-family: var(--font-main);
     background: var(--color-bg);
     color: var(--color-text);
-    line-height: 1.6;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-wide);
     overflow-x: hidden;
     overflow-y: hidden; /* Prevent double scrollbar */
     -webkit-font-smoothing: antialiased;
@@ -133,10 +166,10 @@ body {
 
 .hero-title {
     font-size: clamp(3rem, 10vw, 8rem);
-    font-weight: 700;
-    line-height: 1.1;
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
     margin-bottom: var(--spacing-md);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--letter-spacing-tight);
 }
 
 .hero-line {
@@ -147,9 +180,10 @@ body {
 .hero-subtitle {
     font-size: clamp(1rem, 2vw, 1.5rem);
     color: var(--color-text-dim);
-    font-weight: 300;
-    letter-spacing: 0.05em;
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
+    line-height: var(--line-height-normal);
 }
 
 /* ================================
@@ -177,7 +211,9 @@ body {
    ================================ */
 .section-title {
     font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 700;
+    font-weight: var(--font-weight-extrabold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
     margin-bottom: var(--spacing-lg);
     color: var(--color-text);
 }
@@ -187,7 +223,9 @@ body {
    ================================ */
 .about-description {
     font-size: clamp(1.1rem, 2vw, 1.3rem);
-    line-height: 1.8;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-wide);
     margin-bottom: var(--spacing-xl);
     color: var(--color-text-dim);
 }
@@ -205,15 +243,20 @@ body {
 }
 
 .skill-item h3 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-normal);
     color: var(--color-primary);
     margin-bottom: var(--spacing-xs);
-    font-weight: 600;
 }
 
 .skill-item p {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-wide);
     color: var(--color-text-dim);
-    line-height: 1.8;
 }
 
 /* ================================
@@ -326,9 +369,11 @@ body {
    ================================ */
 .project-role {
     margin-top: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-wide);
     color: var(--color-text-dim);
-    font-size: 0.9rem;
-    line-height: 1.6;
     opacity: 0.9;
 }
 
@@ -347,9 +392,9 @@ body {
     border: 1px solid rgba(255, 107, 53, 0.2);
     border-radius: 6px;
     color: var(--color-primary);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wider);
     transition: all 0.3s ease;
 }
 
@@ -368,9 +413,9 @@ body {
     background: var(--color-primary);
     color: var(--color-bg);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    letter-spacing: var(--letter-spacing-wider);
     border-radius: 8px;
     transition: all 0.3s ease;
     border: 2px solid var(--color-primary);
@@ -384,7 +429,7 @@ body {
 }
 
 .project-link:hover .link-arrow {
-    transform: translate(4px, -4px) rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .link-arrow {
@@ -395,8 +440,11 @@ body {
 .project-credits {
     margin-top: var(--spacing-sm);
     color: var(--color-text-dim);
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
     font-style: italic;
+    letter-spacing: var(--letter-spacing-wide);
+    line-height: var(--line-height-normal);
 }
 
 .credit-link {
@@ -437,14 +485,18 @@ body {
 
 .project-title {
     font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-normal);
     margin-bottom: var(--spacing-sm);
     color: var(--color-text);
-    font-weight: 600;
 }
 
 .project-description {
-    font-size: 1.1rem;
-    line-height: 1.8;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-wide);
     color: var(--color-text-dim);
     margin-bottom: var(--spacing-md);
 }
@@ -460,8 +512,9 @@ body {
     background: transparent; /* NO BACKGROUND */
     border: none; /* NO BORDER */
     color: var(--color-primary); /* JUST COLOR */
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
 }
 
 /* ================================
@@ -473,14 +526,19 @@ body {
 
 .contact-content h2 {
     font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: var(--font-weight-extrabold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
     margin-bottom: var(--spacing-md);
 }
 
 .contact-content p {
-    font-size: 1.2rem;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-wide);
     color: var(--color-text-dim);
     margin-bottom: var(--spacing-lg);
-    line-height: 1.8;
 }
 
 .contact-links {
@@ -496,8 +554,9 @@ body {
     border: none; /* NO BORDER */
     color: var(--color-primary); /* JUST COLOR */
     text-decoration: none;
-    font-weight: 600;
-    font-size: 1.2rem;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-md);
+    letter-spacing: var(--letter-spacing-wide);
     transition: all 0.3s ease;
     position: relative;
 }
@@ -542,10 +601,10 @@ body {
     position: relative;
     color: var(--color-text-dim);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: var(--letter-spacing-wider);
     padding-bottom: 0.5rem;
     transition: color 0.3s ease;
 }
@@ -609,7 +668,7 @@ body {
     }
     
     .dock-item {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     
     .contact-links {
@@ -631,7 +690,7 @@ body {
     
     /* Responsive project elements */
     .project-role {
-        font-size: 0.85rem;
+        font-size: var(--font-size-xs);
     }
     
     .project-metrics {
@@ -644,12 +703,12 @@ body {
     }
     
     .project-link {
-        font-size: 0.85rem;
+        font-size: var(--font-size-xs);
         padding: 0.6rem 1.2rem;
     }
     
     .project-credits {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 }
 
