@@ -3,9 +3,9 @@
 const projectsData = [
     {
         id: 0,
-        number: '01',
-        title: 'Warmanziehen Portfolio',
-        description: 'Eine Portfolio-Plattform mit maßgeschneiderter 3D-Animation für eine Hamburger Videoproduktionsfirma. Interaktives Storytelling trifft auf moderne Webtechnologie.',
+        number: '1',
+        title: 'Creator Portfolio',
+        description: 'Eine Portfolio-Seite mit maßgeschneiderter 3D-Animation für eine Hamburger Creator-Kollektiv. Interaktives Storytelling trifft auf moderne Webtechnologie.',
         role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer lw25_3d.',
         tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Vercel'],
         mockupSize: 'mockup-medium',
@@ -18,7 +18,7 @@ const projectsData = [
     },
     {
         id: 1,
-        number: '02',
+        number: '2',
         title: 'Premium E-Commerce Platform',
         description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
         role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
@@ -30,7 +30,7 @@ const projectsData = [
     },
     {
         id: 2,
-        number: '03',
+        number: '3',
         title: 'Corporate Digital Hub',
         description: 'Komplette digitale Präsenz für einen deutschen B2B-Dienstleister. SEO-optimiert, GDPR-konform mit integrierter E-Mail-Infrastruktur und umfassendem Analytics-Setup.',
         role: 'Konzeption und Entwicklung der gesamten Web-Lösung. Integration von Nodemailer für automatisierte E-Mail-Workflows, Google Analytics Setup und SEO-Optimierung.',

@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css"; 
 
-const playfair = Playfair_Display({
-  weight: ['400', '500', '600', '700', '800', '900'],
-  subsets: ["latin"],
-  variable: "--font-playfair",
+const vhsGothic = localFont({
+  src: './fonts/vhs-gothic.ttf',
+  variable: '--font-vhs',
   display: 'swap',
 });
 
@@ -28,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${playfair.variable} antialiased`}>
+      <body className={`${vhsGothic.variable} antialiased`}>
         {children}
       </body>
     </html>

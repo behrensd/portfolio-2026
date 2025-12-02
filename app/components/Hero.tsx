@@ -1,18 +1,17 @@
 'use client';
 
-import { useRef } from 'react';
 import { useHeroAnimation } from '../hooks/useHeroAnimation';
-import { useHeroCanvas } from '../hooks/useHeroCanvas';
+import SplineBackground from './SplineBackground';
 
 export default function Hero() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    
     useHeroAnimation();
-    useHeroCanvas(canvasRef);
 
     return (
         <section id="hero" className="section-tile hero-tile">
-            <canvas ref={canvasRef} id="hero-canvas" data-speed="0.5"></canvas>
+            <SplineBackground 
+                scene="https://prod.spline.design/jAeJX5ac4B2WBgwq/scene.splinecode"
+                className="hero-spline"
+            />
             <div className="tile-content" data-speed="1">
                 <div className="hero-content">
                     <div className="logo-spacer"></div>
@@ -21,7 +20,7 @@ export default function Hero() {
                         <span className="hero-line">SOLUTIONS</span>
                     </h1>
                     <p className="hero-subtitle" data-speed="0.9">
-                        Web design and IT Services by Dom Behrens
+                        Web design by Dom Behrens
                     </p>
                 </div>
             </div>
