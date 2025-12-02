@@ -31,6 +31,18 @@ export function useDockNavigation() {
                 }
             });
         });
+
+        // Force "Contact" active when reaching bottom of page
+        ScrollTrigger.create({
+            trigger: 'body',
+            start: 'bottom bottom', 
+            end: 'bottom bottom',
+            onEnter: () => {
+                dockItems.forEach(item => item.classList.remove('active'));
+                const contactLink = document.querySelector('.dock-item[href="#contact"]');
+                if (contactLink) contactLink.classList.add('active');
+            }
+        });
         
         // Smooth scroll on click
         dockItems.forEach(item => {
