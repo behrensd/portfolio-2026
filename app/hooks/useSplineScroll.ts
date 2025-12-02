@@ -1,21 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Application } from '@splinetool/runtime';
 
 export function useSplineScroll(splineRef: React.MutableRefObject<Application | null>, isLoaded: boolean) {
+  const animationFrameRef = useRef<number>();
+
   useEffect(() => {
     if (!isLoaded || !splineRef.current) return;
 
-    const handleScroll = () => {
+    const updateSpline = () => {
+      if (!splineRef.current) return;
+
       const scrollY = window.scrollY;
       const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const scrollProgress = Math.min(scrollY / maxScroll, 1);
+      const scrollProgress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
 
       // Try to find the Scene object to rotate
-      const scene = splineRef.current?.findObjectByName('Scene');
+      // Fallback to root object if 'Scene' not found
+      const scene = 
+        splineRef.current.findObjectByName('Scene') || 
+        splineRef.current.findObjectByName('Group') ||
+        splineRef.current._scene; 
       
       if (scene) {
+        // Smoother rotation calculation
         scene.rotation.y = scrollProgress * Math.PI; 
       }
+
+      animationFrameRef.current = requestAnimationFrame(updateSpline);
     };
 
     const handleResize = () => {
@@ -31,14 +42,17 @@ export function useSplineScroll(splineRef: React.MutableRefObject<Application | 
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Start the animation loop
+    updateSpline();
     window.addEventListener('resize', handleResize);
     
     // Initial setup
     handleResize();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       window.removeEventListener('resize', handleResize);
     };
   }, [isLoaded]); // Re-run when loaded

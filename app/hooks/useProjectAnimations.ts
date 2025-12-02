@@ -13,67 +13,23 @@ export function useProjectAnimations() {
             // Select all project items
             const projects = gsap.utils.toArray('.project-item');
             
-            projects.forEach((project: any) => {
-                const projectContent = project.querySelector('.project-content');
-                const projectNumber = project.querySelector('.project-number');
-                
-                // Unified Bottom-Up Reveal Animation
-                // The entire project item subtly fades in and moves up
-                gsap.fromTo(project, 
-                    { 
-                        y: 100, 
-                        opacity: 0 
-                    },
-                    {
-                        scrollTrigger: {
-                            trigger: project,
-                            start: 'top 85%', // Start animation when top of project hits 85% of viewport height
-                            end: 'top 60%',   // End animation when top of project hits 60%
-                            scrub: 1,         // Smooth scrubbing effect linked to scroll
-                            toggleActions: 'play none none reverse'
-                        },
-                        y: 0,
-                        opacity: 1,
-                        duration: 1.5,
-                        ease: 'power3.out'
-                    }
-                );
-
-                // Subtle parallax for the number (moves slightly faster)
-                if (projectNumber) {
-                    gsap.fromTo(projectNumber,
-                        { y: 50, opacity: 0 },
-                        {
-                            scrollTrigger: {
-                                trigger: project,
-                                start: 'top 90%',
-                                end: 'top 50%',
-                                scrub: 1.2
-                            },
-                            y: 0,
-                            opacity: 0.3, // Keep it subtle as per design
-                            ease: 'power2.out'
-                        }
-                    );
-                }
-                
-                // Glass card content slight lag for depth
-                if (projectContent) {
-                    gsap.fromTo(projectContent,
-                        { y: 40, opacity: 0 },
-                        {
-                            scrollTrigger: {
-                                trigger: project,
-                                start: 'top 80%',
-                                end: 'top 40%',
-                                scrub: 1
-                            },
-                            y: 0,
-                            opacity: 1,
-                            ease: 'power2.out'
-                        }
-                    );
-                }
+            ScrollTrigger.matchMedia({
+                // Desktop
+                "(min-width: 769px)": function() {
+                    setupAnimations(projects, {
+                        start: 'top 85%',
+                        end: 'top 60%',
+                        scrub: 1
+                    });
+                },
+                // Mobile
+                "(max-width: 768px)": function() {
+                    setupAnimations(projects, {
+                        start: 'top 95%', // Trigger almost immediately when in view
+                        end: 'top 70%',
+                        scrub: 0.5 // Faster response on mobile
+                    });
+                } 
             });
             
             console.log('✨ Smooth bottom-up project animations initialized');
@@ -84,4 +40,61 @@ export function useProjectAnimations() {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
     }, []);
+}
+
+function setupAnimations(projects: any[], config: any) {
+    projects.forEach((project: any) => {
+        const projectContent = project.querySelector('.project-content');
+        const projectNumber = project.querySelector('.project-number');
+        
+        // Ensure initial state is set immediately to avoid FOUC
+        gsap.set(project, { y: 100, opacity: 0 });
+        if (projectNumber) gsap.set(projectNumber, { y: 50, opacity: 0 });
+        if (projectContent) gsap.set(projectContent, { y: 40, opacity: 0 });
+
+        // Container Animation
+        gsap.to(project, {
+            scrollTrigger: {
+                trigger: project,
+                start: config.start,
+                end: config.end,
+                scrub: config.scrub,
+                toggleActions: 'play none none reverse'
+            },
+            y: 0,
+            opacity: 1,
+            duration: 1.5,
+            ease: 'power3.out'
+        });
+
+        // Number Parallax
+        if (projectNumber) {
+            gsap.to(projectNumber, {
+                scrollTrigger: {
+                    trigger: project,
+                    start: config.start,
+                    end: config.end,
+                    scrub: config.scrub * 1.2
+                },
+                y: 0,
+                opacity: 0.3,
+                ease: 'power2.out'
+            });
+        }
+        
+        // Content Card
+        if (projectContent) {
+            gsap.to(projectContent, {
+                scrollTrigger: {
+                    trigger: project,
+                    start: config.start,
+                    end: config.end,
+                    scrub: config.scrub
+                },
+                y: 0,
+                opacity: 1,
+                ease: 'power2.out'
+            });
+        }
+    });
 }
