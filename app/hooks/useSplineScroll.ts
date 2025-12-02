@@ -1,29 +1,57 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 import { Application } from '@splinetool/runtime';
 
 export function useSplineScroll(splineRef: React.MutableRefObject<Application | null>, isLoaded: boolean) {
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | null>(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     if (!isLoaded || !splineRef.current) return;
 
+    // Try to find any rotatable object in the scene
+    const findRotatableObject = () => {
+      if (!splineRef.current) return null;
+      
+      // Try common object names
+      const names = ['Scene', 'Group', 'Mesh', 'Object', 'MainGroup', 'Root'];
+      for (const name of names) {
+        const obj = splineRef.current.findObjectByName(name);
+        if (obj) return obj;
+      }
+      
+      // Fallback: try to access internal scene
+      try {
+        return (splineRef.current as any)._scene;
+      } catch {
+        return null;
+      }
+    };
+
+    const targetObject = findRotatableObject();
+    
     const updateSpline = () => {
       if (!splineRef.current) return;
 
-      const scrollY = window.scrollY;
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const scrollProgress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+      // Use document.documentElement.scrollTop for better iOS compatibility
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const viewportHeight = window.innerHeight;
+      const maxScroll = docHeight - viewportHeight;
+      const scrollProgress = maxScroll > 0 ? Math.min(Math.max(scrollY / maxScroll, 0), 1) : 0;
 
-      // Try to find the Scene object to rotate
-      // Fallback to root object if 'Scene' not found
-      const scene = 
-        splineRef.current.findObjectByName('Scene') || 
-        splineRef.current.findObjectByName('Group') ||
-        splineRef.current._scene; 
-      
-      if (scene) {
-        // Smoother rotation calculation
-        scene.rotation.y = scrollProgress * Math.PI; 
+      // Only update if scroll position changed (performance optimization)
+      if (Math.abs(scrollY - lastScrollY.current) > 0.5) {
+        lastScrollY.current = scrollY;
+        
+        if (targetObject && targetObject.rotation) {
+          // Smooth rotation based on scroll
+          targetObject.rotation.y = scrollProgress * Math.PI;
+        }
       }
 
       animationFrameRef.current = requestAnimationFrame(updateSpline);
@@ -35,10 +63,15 @@ export function useSplineScroll(splineRef: React.MutableRefObject<Application | 
       const isMobile = window.innerWidth < 768;
       
       // Adjust zoom based on device width
-      if (isMobile) {
-        splineRef.current.setZoom(0.6); 
-      } else {
-        splineRef.current.setZoom(1);
+      try {
+        if (isMobile) {
+          splineRef.current.setZoom(0.6);
+        } else {
+          splineRef.current.setZoom(1);
+        }
+      } catch (e) {
+        // setZoom might not be available in all Spline versions
+        console.log('Spline setZoom not available');
       }
     };
 
@@ -55,5 +88,5 @@ export function useSplineScroll(splineRef: React.MutableRefObject<Application | 
       }
       window.removeEventListener('resize', handleResize);
     };
-  }, [isLoaded]); // Re-run when loaded
+  }, [isLoaded]);
 }
