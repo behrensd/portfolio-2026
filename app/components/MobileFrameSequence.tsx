@@ -16,6 +16,7 @@ interface MobileFrameSequenceProps {
 // Configuration for progressive loading - optimized for smooth scrolling
 const SEGMENT_SIZE = 15; // Load 15 frames at a time
 const LOOKAHEAD_SEGMENTS = 3; // Preload 3 segments ahead for smoother playback
+const LOOP_COUNT = 5; // Number of times to loop through frames during full scroll
 
 /**
  * Progressive Image Loader
@@ -112,9 +113,18 @@ class ProgressiveImageLoader {
   }
 
   async loadInitialFrames(): Promise<void> {
-    // Load first two segments for smooth start
+    // Load first three segments for smooth start with faster animation
     await this.loadSegment(0);
-    this.loadSegment(1); // Start loading second segment non-blocking
+    await this.loadSegment(1);
+    this.loadSegment(2); // Start loading third segment non-blocking
+  }
+
+  // Preload all frames in background for seamless looping
+  preloadAllFrames(): void {
+    const totalSegments = Math.ceil(this.urls.length / SEGMENT_SIZE);
+    for (let i = 0; i < totalSegments; i++) {
+      this.loadSegment(i);
+    }
   }
 }
 
@@ -250,10 +260,9 @@ export default function MobileFrameSequence({
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('orientationchange', handleOrientation);
 
-    // Build frame URLs - single forward pass for faster iteration
-    // The animation naturally loops due to ScrollTrigger behavior
+    // Build frame URLs - loops through frames multiple times for smoother animation
     const urls = frameData.frames.map(f => f.url);
-    const totalSegments = Math.ceil(urls.length / SEGMENT_SIZE);
+    const totalFrames = urls.length;
 
     // Initialize loader
     loaderRef.current = new ProgressiveImageLoader(urls);
@@ -265,16 +274,30 @@ export default function MobileFrameSequence({
     loader.loadInitialFrames().then(() => {
       setIsLoaded(true);
       drawFrame(0, canvas, true);
+      
+      // Start preloading all frames in background for seamless looping
+      loader.preloadAllFrames();
 
-      // Smooth scroll-linked animation
+      // Animate through all frames LOOP_COUNT times during full scroll
+      // This creates a faster, more dynamic animation effect
+      const totalAnimationFrames = (totalFrames - 1) * LOOP_COUNT;
+      
       tweenRef.current = gsap.to(playhead, {
-        frame: urls.length - 1,
+        frame: totalAnimationFrames,
         ease: 'none',
         onUpdate: () => {
-          const frameIndex = Math.round(playhead.frame);
+          // Use modulo to loop through frames seamlessly
+          const rawFrame = Math.round(playhead.frame);
+          const frameIndex = rawFrame % totalFrames;
           
-          // Preload nearby segments
+          // Preload nearby segments (accounting for loop wrap-around)
           loader.loadSegmentsForFrame(frameIndex);
+          
+          // Also preload segments near the start for seamless looping
+          if (frameIndex > totalFrames - 20) {
+            loader.loadSegmentsForFrame(0);
+            loader.loadSegmentsForFrame(SEGMENT_SIZE);
+          }
           
           // Schedule frame draw via RAF for smooth rendering
           scheduleDrawFrame(frameIndex, canvas);
@@ -283,7 +306,7 @@ export default function MobileFrameSequence({
           trigger: document.body,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.5, // Faster response for buttery smooth scrolling
+          scrub: 0.3, // Faster response for buttery smooth scrolling with multiple loops
         },
       });
     });
