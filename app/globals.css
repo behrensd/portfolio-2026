@@ -312,6 +312,8 @@ body {
 .hero-tile {
     position: relative;
     overflow: hidden;
+    /* Slightly shorter than full viewport */
+    min-height: 85vh;
 }
 
 .tile-content {
@@ -337,6 +339,8 @@ body {
     z-index: var(--z-content);
     text-align: center;
     padding: var(--spacing-md);
+    /* Add bottom padding to keep text above the floating dock */
+    padding-bottom: 8rem;
     /* Ensure content is above Spline background */
     pointer-events: auto;
     /* Explicit centering - using all methods for maximum compatibility */
@@ -350,11 +354,11 @@ body {
     box-sizing: border-box;
 } 
 
-/* Hero Image - above title */
+/* Hero Image - between BAI and SOLUTIONS */
 .hero-image-container {
     width: 100%;
-    max-width: 500px;
-    margin-bottom: var(--spacing-lg);
+    max-width: 400px;
+    margin: var(--spacing-md) auto;
     display: flex;
     justify-content: center;
 }
@@ -367,6 +371,13 @@ body {
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure title displays as column with image in middle */
+.hero-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-title {
@@ -401,6 +412,11 @@ body {
     /* Force center */
     text-align: center;
     width: 100%;
+}
+
+/* Push BAI down from top */
+.hero-line:first-child {
+    margin-top: 4rem;
 }
 
 .hero-subtitle {
@@ -989,6 +1005,8 @@ body {
         width: 100%;
         padding-left: var(--spacing-sm);
         padding-right: var(--spacing-sm);
+        /* Smaller bottom padding on mobile - dock is smaller */
+        padding-bottom: 6rem;
     }
     
     .hero-title {

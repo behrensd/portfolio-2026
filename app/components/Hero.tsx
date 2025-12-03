@@ -45,19 +45,19 @@ export default function Hero() {
             )}
             <div className="tile-content" data-speed="1">
                 <div className="hero-content">
-                    <div className="hero-image-container">
-                        <Image 
-                            src="https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/dom-behrens.webp"
-                            alt="Dom Behrens"
-                            width={800}
-                            height={800}
-                            className="hero-image"
-                            priority
-                            unoptimized
-                        />
-                    </div>
                     <h1 className="hero-title" data-speed="0.8">
                         <span className="hero-line">BAI</span>
+                        <div className="hero-image-container">
+                            <Image 
+                                src="https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/dom-behrens.webp"
+                                alt="Dom Behrens"
+                                width={800}
+                                height={800}
+                                className="hero-image"
+                                priority
+                                unoptimized
+                            />
+                        </div>
                         <span className="hero-line">SOLUTIONS</span>
                     </h1>
                     <p className="hero-subtitle" data-speed="0.9">
