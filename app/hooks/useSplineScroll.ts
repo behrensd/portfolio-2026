@@ -10,12 +10,16 @@ if (typeof window !== 'undefined') {
 /**
  * Spline Scroll Animation Hook
  * 
- * Uses GSAP ScrollTrigger for consistent scroll handling across all devices.
+ * Uses GSAP ScrollTrigger for consistent scroll handling.
  * 
- * UPDATE: Added robust retry logic for finding Spline objects on mobile.
- * Previously, mobile devices might have initialized too quickly, failing to find
- * individual cubes and falling back to rotating the entire scene (which looked choppy).
- * Now we explicitly wait and retry until we find the specific objects we want to animate.
+ * DESKTOP:
+ * - Animates individual cubes (rotation) on scroll.
+ * - Retries finding specific objects if needed.
+ * 
+ * MOBILE:
+ * - DISABLES scroll-driven rotation ("spin") completely to prevent choppiness.
+ * - Keeps the scene visible and running (smooth intrinsic animation).
+ * - Ensures the model is zoomed out correctly.
  */
 export function useSplineScroll(splineApp: Application | null) {
   const objectsToRotateRef = useRef<any[]>([]);
@@ -29,8 +33,25 @@ export function useSplineScroll(splineApp: Application | null) {
     setupAttemptedRef.current = true;
 
     const isMobile = window.innerWidth < 768;
+    
+    // MOBILE OPTIMIZATION:
+    // User requested "smoothly animate on mobile without the spin".
+    // This means we skip the scroll-linked rotation logic entirely on mobile.
+    // The Spline scene will simply play its default state/animation without JS interference.
+    if (isMobile) {
+      console.log('📱 Mobile detected - disabling scroll-driven spin for smooth performance');
+      // Ensure correct zoom for mobile
+      try {
+        splineApp.setZoom(0.6);
+      } catch (e) {
+        // Zoom not available
+      }
+      return;
+    }
+
+    // DESKTOP LOGIC:
     let attempts = 0;
-    const maxAttempts = isMobile ? 10 : 5; // Try harder on mobile
+    const maxAttempts = 5;
     const retryDelay = 200;
 
     const initAnimation = () => {
@@ -50,8 +71,7 @@ export function useSplineScroll(splineApp: Application | null) {
         }
       });
 
-      // If we haven't found specific cubes yet, and we have retries left, wait and try again.
-      // We DO NOT want to fall back to the container immediately on mobile, as that causes the "choppy spinning" issue.
+      // Retry logic for desktop to ensure we get the cubes
       if (objectsFound.length === 0 && attempts < maxAttempts) {
         console.log(`🔄 Spline objects not found, retrying... (${attempts + 1}/${maxAttempts})`);
         attempts++;
@@ -61,7 +81,6 @@ export function useSplineScroll(splineApp: Application | null) {
 
       // Method 2: Fallback to common container names ONLY if we exhausted retries
       if (objectsFound.length === 0) {
-        console.log('⚠️ Could not find individual cubes, falling back to container rotation.');
         const containerNames = ['Scene', 'Group', 'Container', 'Root', 'Main'];
         for (const name of containerNames) {
           try {
@@ -78,7 +97,7 @@ export function useSplineScroll(splineApp: Application | null) {
 
       // If absolutely nothing found
       if (objectsFound.length === 0) {
-        console.log('ℹ️ No Spline objects found for rotation - scroll will work without 3D rotation');
+        console.log('ℹ️ No Spline objects found for rotation');
         return;
       }
 
@@ -87,12 +106,12 @@ export function useSplineScroll(splineApp: Application | null) {
 
       console.log(`✨ Found ${objectsFound.length} Spline object(s) for scroll animation`);
 
-      // Use GSAP ScrollTrigger for consistent scroll tracking
+      // Use GSAP ScrollTrigger for consistent scroll tracking (DESKTOP ONLY)
       scrollTriggerRef.current = ScrollTrigger.create({
         trigger: document.body,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.5, // Increased scrub time slightly for smoother feel on mobile
+        scrub: 1,
         onUpdate: (self) => {
           objectsToRotateRef.current.forEach((obj, index) => {
             if (obj?.rotation) {
@@ -105,9 +124,8 @@ export function useSplineScroll(splineApp: Application | null) {
       });
     };
 
-    // Start the initialization process
-    // We add a small initial delay to give the runtime a breathing room
-    setTimeout(initAnimation, isMobile ? 100 : 500);
+    // Start the initialization process for desktop
+    setTimeout(initAnimation, 500);
 
     // Handle resize for zoom adjustment
     const handleResize = () => {

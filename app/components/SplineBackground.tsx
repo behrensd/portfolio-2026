@@ -65,12 +65,12 @@ export default function SplineBackground({ scene, className = '', onSplineLoad }
         }
     }, [isMobile, onSplineLoad]);
 
-    // On mobile, keep pointer-events: none to allow touch scrolling through the scene
-    // On desktop, allow pointer events for interaction
-    const pointerClass = isMobile ? 'mobile-no-pointer' : '';
+    // On mobile: CSS media query handles pointer-events (allows scroll-based animations)
+    // On desktop: full interaction enabled
+    // We no longer add mobile-no-pointer class to avoid conflicts with Spline's native scroll animations
 
     return (
-        <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''} ${pointerClass}`}>
+        <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''}`}>
             {shouldRender && (
                 <Spline 
                     scene={scene} 

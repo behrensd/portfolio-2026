@@ -200,10 +200,11 @@ body {
     pointer-events: auto;
 }
 
-/* On mobile, keep pointer-events none to allow touch scrolling through the 3D scene */
+/* On mobile, pointer-events handled by media query to allow Spline native scroll animations */
+/* The mobile-no-pointer class is kept for backwards compat but no longer uses !important */
 .spline-wrapper.mobile-no-pointer,
 .spline-wrapper.mobile-no-pointer.loaded {
-    pointer-events: none !important;
+    pointer-events: none;
 }
 
 /* Force Spline viewer to fill viewport */
@@ -894,16 +895,23 @@ body {
         width: 100%;
         align-items: center;
         justify-content: center;
+        
+        /* OPTIMIZED SHADOWS FOR MOBILE */
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
     }
     
     .hero-line {
         text-align: center;
         width: 100%;
+        /* Remove expensive drop-shadow filter on mobile */
+        filter: none;
     }
     
     .hero-subtitle {
         text-align: center;
         width: 100%;
+        /* Simplified shadow */
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
     }
     
     .content-tile {
@@ -932,14 +940,15 @@ body {
         font-size: 5rem;
         opacity: 0.85;
         z-index: 0;
-        text-shadow: 
-            0 0 15px rgba(255, 107, 53, 0.7),
-            0 0 30px rgba(255, 107, 53, 0.5);
+        /* OPTIMIZED SHADOWS FOR MOBILE - REMOVED MULTI-LAYER GLOW */
+        text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
     }
     
     .glass-card {
         border-radius: 16px;
         padding: var(--spacing-md);
+        /* Simplified shadows */
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
     
     .floating-dock {
@@ -1039,11 +1048,21 @@ body {
         overscroll-behavior-y: none;
     }
     
-    /* Ensure Spline doesn't block touch scrolling on mobile */
-    .spline-wrapper,
+    /* 
+     * IMPORTANT: Spline has native scroll-based animations.
+     * We use touch-action: pan-y to allow vertical scrolling to pass through
+     * while still letting Spline receive scroll position updates.
+     * pointer-events: none prevents Spline from capturing taps/drags,
+     * but scroll events on window still reach the Spline runtime.
+     */
+    .spline-wrapper {
+        touch-action: pan-y;
+        pointer-events: none;
+    }
+    
     .spline-wrapper canvas {
-        touch-action: none;
-        pointer-events: none !important;
+        touch-action: pan-y;
+        pointer-events: none;
     }
     
     /* Reduce heavy blur on mobile for performance */
