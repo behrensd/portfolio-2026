@@ -21,9 +21,11 @@ export default function Home() {
 
   return (
     <>
+      {/* Navigation MUST be outside smooth-wrapper to maintain true position:fixed behavior */}
+      {/* If inside a transformed container, fixed elements become relative to that container */}
+      <Navigation />
       <div id="smooth-wrapper">
         <div id="smooth-content">
-          <Navigation />
           <Hero />
           <About />
           <Projects />

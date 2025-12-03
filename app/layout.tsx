@@ -8,14 +8,12 @@ const vhsGothic = localFont({
   display: 'swap',
 });
 
-// Viewport configuration for iOS Safari safe area support
+// Viewport configuration - keep simple to avoid iOS Safari layout issues
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  // Critical for iOS safe-area-inset-* to work
-  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {

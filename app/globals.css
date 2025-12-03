@@ -966,22 +966,22 @@ body {
    ================================ */
 .floating-dock {
     position: fixed;
-    /* Use max() to ensure safe-area-inset is respected on iOS */
-    bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-radius: 12px; /* Subtle rounded corners */
+    border-radius: 12px;
     padding: 1rem 2rem;
     display: flex;
-    align-items: center; /* Center items vertically */
+    align-items: center;
     gap: 2rem;
     z-index: var(--z-dock);
-    /* iOS Safari fix: force hardware layer */
+    /* Force GPU layer for smooth positioning */
     -webkit-transform: translateX(-50%) translateZ(0);
     transform: translateX(-50%) translateZ(0);
+    will-change: transform;
 }
 
 .dock-item {
@@ -1116,13 +1116,10 @@ body {
     .floating-dock {
         gap: 1rem;
         padding: 0.75rem 1rem;
-        /* Add extra bottom padding on mobile for safe area */
-        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-        width: 90%; /* Prevent overflow */
-        max-width: 400px; /* Cap max width for larger phones */
+        width: 90%;
+        max-width: 400px;
         justify-content: space-between;
-        /* iOS Safari: use dvh-aware positioning */
-        bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+        bottom: 1rem;
     }
     
     .dock-item {
@@ -1294,29 +1291,10 @@ input, select, textarea {
     font-size: 16px;
 }
 
-/* Fix position:fixed on iOS Safari */
+/* Force GPU layers for position:fixed elements on iOS Safari */
 .floating-dock {
     -webkit-transform: translateX(-50%) translate3d(0, 0, 0);
     transform: translateX(-50%) translate3d(0, 0, 0);
-}
-
-/* iOS Safari specific fixes using @supports for safe-area-inset */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .floating-dock {
-        /* Account for iPhone notch/home bar area */
-        bottom: calc(1rem + env(safe-area-inset-bottom));
-    }
-}
-
-/* iOS Safari dynamic viewport fix */
-/* The --real-vh custom property is set by JavaScript to match the actual visible viewport */
-@supports (-webkit-touch-callout: none) {
-    .floating-dock {
-        /* Use JavaScript-calculated viewport height when available */
-        bottom: calc(max(1rem, env(safe-area-inset-bottom, 0.5rem)));
-        /* Ensure dock is always in layer for smooth repositioning */
-        will-change: transform;
-    }
 }
 
 .spline-wrapper {
