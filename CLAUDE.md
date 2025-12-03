@@ -36,7 +36,7 @@ This is a **Next.js 15 App Router** portfolio website featuring advanced GSAP an
 
 - **Native Scroll**: No smooth scroll libraries (Lenis, etc.). Uses native browser scrolling for maximum compatibility, especially on mobile Safari.
 - **GSAP ScrollTrigger**: All scroll animations use GSAP ScrollTrigger with proper cleanup. ScrollTriggers are stored in refs and killed on unmount to prevent memory leaks.
-- **Anime.js for Micro-interactions**: Used for magnetic dock hover, tag interactions, and other small UI flourishes. Imported from `/lib/anime.es.js` for proper ES module support.
+- **Anime.js for Micro-interactions**: Used for magnetic dock hover, tag interactions, and other small UI flourishes. Anime.js v4.2.2 imported directly from npm package using ES modules (`import { animate, stagger } from 'animejs'`).
 - **Spline 3D Integration**: Desktop background uses Spline 3D scenes with dynamic import (no SSR) for better performance. Mobile uses frame sequence fallback.
 - **Vercel Blob Storage**: Images and videos are hosted on Vercel Blob storage (referenced via environment variables).
 
@@ -179,9 +179,237 @@ With a single-weight pixel font, hierarchy is achieved through:
 ### Known Quirks
 - Logo animation uses fixed positioning in overlay container for smooth scroll-based movement
 - Canvas particles use `requestAnimationFrame` for smooth 60fps rendering
-- Anime.js must be imported from `/lib/anime.es.js` (not npm package) for ES module compatibility
+- Anime.js v4.2.2 provides native ES module support via npm package (no local file needed)
 - Native scroll is used (no Lenis) to avoid Safari mobile issues
 - All animations wait 100-300ms after mount to ensure DOM elements exist
+
+## Anime.js Best Practices
+
+### Installation & Import
+
+Anime.js v4.2.2 is already installed in this project:
+
+```typescript
+// Correct v4 import syntax
+import { animate, stagger } from 'animejs';
+
+// Additional utilities (if needed)
+import { createTimeline, utils, createSpring } from 'animejs';
+```
+
+**Note:** The project uses the npm package directly. No local `/lib/anime.es.js` file is needed because animejs v4.2.2 provides native ES module support.
+
+### When to Use Anime.js vs GSAP
+
+This project uses a **hybrid animation system**:
+
+**Use GSAP + ScrollTrigger for:**
+- Scroll-triggered animations
+- Major page transitions and layout animations
+- Complex timeline sequences with scrubbing
+- Animations that need to sync precisely with scroll position
+
+**Use Anime.js for:**
+- Hover effects and mouse interactions
+- Click/touch event-driven animations
+- Micro-interactions and UI flourishes
+- Stagger animations on discrete events
+- Animations not tied to scroll position
+
+### Current Implementation Pattern
+
+**Location:** `/Users/dom/Documents/Portfolio2026/app/hooks/useAnimeInteractions.ts`
+
+```typescript
+'use client';
+import { useEffect } from 'react';
+import { animate, stagger } from 'animejs';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+export function useAnimeInteractions() {
+    useEffect(() => {
+        // 100ms delay ensures DOM is ready
+        const timer = setTimeout(() => {
+            // Initialize all interactions here
+            initDockHover();
+            initTagInteractions();
+            initContactStagger();
+        }, 100);
+
+        return () => {
+            clearTimeout(timer);
+            // Clean up ScrollTriggers if used
+        };
+    }, []);
+}
+```
+
+### Integration with GSAP ScrollTrigger
+
+For scroll-triggered Anime.js animations, use GSAP ScrollTrigger for detection and Anime.js for the animation:
+
+```typescript
+let scrollTrigger: ScrollTrigger | null = null;
+
+scrollTrigger = ScrollTrigger.create({
+    trigger: '.section',
+    start: 'top 90%',
+    once: true,
+    onEnter: () => {
+        animate('.element', {
+            translateY: [30, 0],
+            opacity: [0, 1],
+            duration: 600,
+            delay: stagger(150),
+            ease: 'out(3)'
+        });
+    }
+});
+
+// Always clean up
+return () => {
+    if (scrollTrigger) scrollTrigger.kill();
+};
+```
+
+### Initialization Timing
+
+All Anime.js interactions initialize with a **100ms delay** after mount:
+
+```typescript
+useEffect(() => {
+    const timer = setTimeout(() => {
+        // Initialize animations
+    }, 100);
+
+    return () => clearTimeout(timer);
+}, []);
+```
+
+**Why?**
+- Ensures DOM elements are fully mounted
+- Prevents querySelector returning null
+- Allows Next.js client hydration to complete
+
+### V4 Syntax Reference
+
+Key v4 changes (already implemented correctly in this project):
+
+```typescript
+// ✅ Correct v4 syntax (current implementation)
+import { animate, stagger } from 'animejs';
+
+animate('.element', {
+    translateX: 250,
+    opacity: 0.5,
+    duration: 600,
+    ease: 'outQuad',        // Renamed from 'easing'
+    delay: stagger(100)
+});
+
+// ❌ Old v3 syntax (don't use)
+import anime from 'animejs';
+anime({
+    targets: '.element',
+    translateX: 250,
+    easing: 'easeOutQuad'
+});
+```
+
+### Common Patterns
+
+**Hover Effect:**
+```typescript
+element.addEventListener('mouseenter', function() {
+    animate(this, {
+        scale: 1.1,
+        duration: 300,
+        ease: 'out(3)'
+    });
+});
+
+element.addEventListener('mouseleave', function() {
+    animate(this, {
+        scale: 1,
+        duration: 400,
+        ease: 'out(3)'
+    });
+});
+```
+
+**Stagger Animation:**
+```typescript
+animate('.item', {
+    translateY: [20, 0],
+    opacity: [0, 1],
+    duration: 500,
+    delay: stagger(100, {
+        from: 'center'  // Start from center and spread outward
+    }),
+    ease: 'out(2)'
+});
+```
+
+**Magnetic Effect:**
+```typescript
+element.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    animate(this, {
+        translateX: x * 0.3,  // 30% of distance
+        translateY: y * 0.3,
+        duration: 300,
+        ease: 'outQuad'
+    });
+});
+```
+
+### Easing Functions
+
+Anime.js v4 uses simplified easing names:
+
+```typescript
+ease: 'out(2)'      // Power ease with parameter (default)
+ease: 'outQuad'     // Named ease
+ease: 'outCubic'
+ease: 'outExpo'
+ease: 'inOutQuad'
+ease: 'inOutElastic'
+ease: (t) => t * t  // Custom function
+```
+
+### Advanced Features
+
+Anime.js v4 includes powerful new utilities:
+
+**Timer** - Replacement for setTimeout/setInterval:
+```typescript
+import { createTimer } from 'animejs';
+```
+
+**Animatable** - For high-frequency updates (cursor following):
+```typescript
+import { createAnimatable } from 'animejs';
+```
+
+**Draggable** - Drag interactions with physics:
+```typescript
+import { createDraggable } from 'animejs';
+```
+
+**Scroll** - Native scroll synchronization (alternative to GSAP ScrollTrigger):
+```typescript
+import { createScroll } from 'animejs';
+```
+
+### Reference Documentation
+
+For comprehensive Anime.js documentation, see:
+- **Project Reference:** `/Users/dom/Documents/Portfolio2026/ANIMEJS_REFERENCE.md`
+- **Official Docs:** [animejs.com/documentation](https://animejs.com/documentation/)
+- **V4 Migration:** [github.com/juliangarnier/anime/wiki/Migrating-from-v3-to-v4](https://github.com/juliangarnier/anime/wiki/Migrating-from-v3-to-v4)
 
 ## Troubleshooting
 

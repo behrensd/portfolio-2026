@@ -1,530 +1,531 @@
 {
   "totalFrames": 131,
-  "uploadedAt": "2025-12-03T15:54:05.134Z",
+  "uploadedAt": "2025-12-03T19:44:15.470Z",
+  "source": "cloner-cube-binary-copy",
   "frames": [
     {
-      "name": "frame_0001.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0001.png"
+      "name": "000.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/000.png"
     },
     {
-      "name": "frame_0002.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0002.png"
+      "name": "001.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/001.png"
     },
     {
-      "name": "frame_0003.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0003.png"
+      "name": "002.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/002.png"
     },
     {
-      "name": "frame_0004.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0004.png"
+      "name": "003.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/003.png"
     },
     {
-      "name": "frame_0005.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0005.png"
+      "name": "004.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/004.png"
     },
     {
-      "name": "frame_0006.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0006.png"
+      "name": "005.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/005.png"
     },
     {
-      "name": "frame_0007.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0007.png"
+      "name": "006.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/006.png"
     },
     {
-      "name": "frame_0008.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0008.png"
+      "name": "007.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/007.png"
     },
     {
-      "name": "frame_0009.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0009.png"
+      "name": "008.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/008.png"
     },
     {
-      "name": "frame_0010.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0010.png"
+      "name": "009.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/009.png"
     },
     {
-      "name": "frame_0011.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0011.png"
+      "name": "010.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/010.png"
     },
     {
-      "name": "frame_0012.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0012.png"
+      "name": "011.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/011.png"
     },
     {
-      "name": "frame_0013.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0013.png"
+      "name": "012.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/012.png"
     },
     {
-      "name": "frame_0014.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0014.png"
+      "name": "013.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/013.png"
     },
     {
-      "name": "frame_0015.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0015.png"
+      "name": "014.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/014.png"
     },
     {
-      "name": "frame_0016.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0016.png"
+      "name": "015.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/015.png"
     },
     {
-      "name": "frame_0017.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0017.png"
+      "name": "016.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/016.png"
     },
     {
-      "name": "frame_0018.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0018.png"
+      "name": "017.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/017.png"
     },
     {
-      "name": "frame_0019.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0019.png"
+      "name": "018.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/018.png"
     },
     {
-      "name": "frame_0020.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0020.png"
+      "name": "019.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/019.png"
     },
     {
-      "name": "frame_0021.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0021.png"
+      "name": "020.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/020.png"
     },
     {
-      "name": "frame_0022.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0022.png"
+      "name": "021.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/021.png"
     },
     {
-      "name": "frame_0023.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0023.png"
+      "name": "022.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/022.png"
     },
     {
-      "name": "frame_0024.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0024.png"
+      "name": "023.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/023.png"
     },
     {
-      "name": "frame_0025.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0025.png"
+      "name": "024.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/024.png"
     },
     {
-      "name": "frame_0026.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0026.png"
+      "name": "025.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/025.png"
     },
     {
-      "name": "frame_0027.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0027.png"
+      "name": "026.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/026.png"
     },
     {
-      "name": "frame_0028.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0028.png"
+      "name": "027.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/027.png"
     },
     {
-      "name": "frame_0029.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0029.png"
+      "name": "028.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/028.png"
     },
     {
-      "name": "frame_0030.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0030.png"
+      "name": "029.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/029.png"
     },
     {
-      "name": "frame_0031.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0031.png"
+      "name": "030.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/030.png"
     },
     {
-      "name": "frame_0032.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0032.png"
+      "name": "031.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/031.png"
     },
     {
-      "name": "frame_0033.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0033.png"
+      "name": "032.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/032.png"
     },
     {
-      "name": "frame_0034.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0034.png"
+      "name": "033.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/033.png"
     },
     {
-      "name": "frame_0035.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0035.png"
+      "name": "034.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/034.png"
     },
     {
-      "name": "frame_0036.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0036.png"
+      "name": "035.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/035.png"
     },
     {
-      "name": "frame_0037.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0037.png"
+      "name": "036.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/036.png"
     },
     {
-      "name": "frame_0038.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0038.png"
+      "name": "037.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/037.png"
     },
     {
-      "name": "frame_0039.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0039.png"
+      "name": "038.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/038.png"
     },
     {
-      "name": "frame_0040.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0040.png"
+      "name": "039.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/039.png"
     },
     {
-      "name": "frame_0041.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0041.png"
+      "name": "040.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/040.png"
     },
     {
-      "name": "frame_0042.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0042.png"
+      "name": "041.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/041.png"
     },
     {
-      "name": "frame_0043.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0043.png"
+      "name": "042.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/042.png"
     },
     {
-      "name": "frame_0044.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0044.png"
+      "name": "043.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/043.png"
     },
     {
-      "name": "frame_0045.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0045.png"
+      "name": "044.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/044.png"
     },
     {
-      "name": "frame_0046.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0046.png"
+      "name": "045.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/045.png"
     },
     {
-      "name": "frame_0047.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0047.png"
+      "name": "046.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/046.png"
     },
     {
-      "name": "frame_0048.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0048.png"
+      "name": "047.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/047.png"
     },
     {
-      "name": "frame_0049.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0049.png"
+      "name": "048.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/048.png"
     },
     {
-      "name": "frame_0050.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0050.png"
+      "name": "049.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/049.png"
     },
     {
-      "name": "frame_0051.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0051.png"
+      "name": "050.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/050.png"
     },
     {
-      "name": "frame_0052.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0052.png"
+      "name": "051.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/051.png"
     },
     {
-      "name": "frame_0053.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0053.png"
+      "name": "052.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/052.png"
     },
     {
-      "name": "frame_0054.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0054.png"
+      "name": "053.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/053.png"
     },
     {
-      "name": "frame_0055.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0055.png"
+      "name": "054.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/054.png"
     },
     {
-      "name": "frame_0056.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0056.png"
+      "name": "055.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/055.png"
     },
     {
-      "name": "frame_0057.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0057.png"
+      "name": "056.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/056.png"
     },
     {
-      "name": "frame_0058.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0058.png"
+      "name": "057.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/057.png"
     },
     {
-      "name": "frame_0059.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0059.png"
+      "name": "058.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/058.png"
     },
     {
-      "name": "frame_0060.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0060.png"
+      "name": "059.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/059.png"
     },
     {
-      "name": "frame_0061.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0061.png"
+      "name": "060.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/060.png"
     },
     {
-      "name": "frame_0062.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0062.png"
+      "name": "061.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/061.png"
     },
     {
-      "name": "frame_0063.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0063.png"
+      "name": "062.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/062.png"
     },
     {
-      "name": "frame_0064.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0064.png"
+      "name": "063.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/063.png"
     },
     {
-      "name": "frame_0065.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0065.png"
+      "name": "064.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/064.png"
     },
     {
-      "name": "frame_0066.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0066.png"
+      "name": "065.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/065.png"
     },
     {
-      "name": "frame_0067.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0067.png"
+      "name": "066.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/066.png"
     },
     {
-      "name": "frame_0068.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0068.png"
+      "name": "067.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/067.png"
     },
     {
-      "name": "frame_0069.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0069.png"
+      "name": "068.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/068.png"
     },
     {
-      "name": "frame_0070.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0070.png"
+      "name": "069.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/069.png"
     },
     {
-      "name": "frame_0071.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0071.png"
+      "name": "070.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/070.png"
     },
     {
-      "name": "frame_0072.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0072.png"
+      "name": "071.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/071.png"
     },
     {
-      "name": "frame_0073.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0073.png"
+      "name": "072.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/072.png"
     },
     {
-      "name": "frame_0074.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0074.png"
+      "name": "073.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/073.png"
     },
     {
-      "name": "frame_0075.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0075.png"
+      "name": "074.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/074.png"
     },
     {
-      "name": "frame_0076.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0076.png"
+      "name": "075.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/075.png"
     },
     {
-      "name": "frame_0077.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0077.png"
+      "name": "076.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/076.png"
     },
     {
-      "name": "frame_0078.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0078.png"
+      "name": "077.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/077.png"
     },
     {
-      "name": "frame_0079.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0079.png"
+      "name": "078.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/078.png"
     },
     {
-      "name": "frame_0080.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0080.png"
+      "name": "079.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/079.png"
     },
     {
-      "name": "frame_0081.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0081.png"
+      "name": "080.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/080.png"
     },
     {
-      "name": "frame_0082.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0082.png"
+      "name": "081.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/081.png"
     },
     {
-      "name": "frame_0083.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0083.png"
+      "name": "082.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/082.png"
     },
     {
-      "name": "frame_0084.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0084.png"
+      "name": "083.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/083.png"
     },
     {
-      "name": "frame_0085.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0085.png"
+      "name": "084.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/084.png"
     },
     {
-      "name": "frame_0086.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0086.png"
+      "name": "085.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/085.png"
     },
     {
-      "name": "frame_0087.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0087.png"
+      "name": "086.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/086.png"
     },
     {
-      "name": "frame_0088.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0088.png"
+      "name": "087.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/087.png"
     },
     {
-      "name": "frame_0089.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0089.png"
+      "name": "088.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/088.png"
     },
     {
-      "name": "frame_0090.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0090.png"
+      "name": "089.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/089.png"
     },
     {
-      "name": "frame_0091.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0091.png"
+      "name": "090.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/090.png"
     },
     {
-      "name": "frame_0092.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0092.png"
+      "name": "091.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/091.png"
     },
     {
-      "name": "frame_0093.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0093.png"
+      "name": "092.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/092.png"
     },
     {
-      "name": "frame_0094.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0094.png"
+      "name": "093.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/093.png"
     },
     {
-      "name": "frame_0095.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0095.png"
+      "name": "094.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/094.png"
     },
     {
-      "name": "frame_0096.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0096.png"
+      "name": "095.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/095.png"
     },
     {
-      "name": "frame_0097.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0097.png"
+      "name": "096.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/096.png"
     },
     {
-      "name": "frame_0098.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0098.png"
+      "name": "097.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/097.png"
     },
     {
-      "name": "frame_0099.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0099.png"
+      "name": "098.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/098.png"
     },
     {
-      "name": "frame_0100.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0100.png"
+      "name": "099.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/099.png"
     },
     {
-      "name": "frame_0101.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0101.png"
+      "name": "100.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/100.png"
     },
     {
-      "name": "frame_0102.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0102.png"
+      "name": "101.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/101.png"
     },
     {
-      "name": "frame_0103.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0103.png"
+      "name": "102.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/102.png"
     },
     {
-      "name": "frame_0104.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0104.png"
+      "name": "103.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/103.png"
     },
     {
-      "name": "frame_0105.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0105.png"
+      "name": "104.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/104.png"
     },
     {
-      "name": "frame_0106.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0106.png"
+      "name": "105.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/105.png"
     },
     {
-      "name": "frame_0107.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0107.png"
+      "name": "106.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/106.png"
     },
     {
-      "name": "frame_0108.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0108.png"
+      "name": "107.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/107.png"
     },
     {
-      "name": "frame_0109.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0109.png"
+      "name": "108.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/108.png"
     },
     {
-      "name": "frame_0110.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0110.png"
+      "name": "109.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/109.png"
     },
     {
-      "name": "frame_0111.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0111.png"
+      "name": "110.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/110.png"
     },
     {
-      "name": "frame_0112.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0112.png"
+      "name": "111.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/111.png"
     },
     {
-      "name": "frame_0113.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0113.png"
+      "name": "112.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/112.png"
     },
     {
-      "name": "frame_0114.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0114.png"
+      "name": "113.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/113.png"
     },
     {
-      "name": "frame_0115.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0115.png"
+      "name": "114.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/114.png"
     },
     {
-      "name": "frame_0116.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0116.png"
+      "name": "115.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/115.png"
     },
     {
-      "name": "frame_0117.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0117.png"
+      "name": "116.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/116.png"
     },
     {
-      "name": "frame_0118.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0118.png"
+      "name": "117.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/117.png"
     },
     {
-      "name": "frame_0119.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0119.png"
+      "name": "118.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/118.png"
     },
     {
-      "name": "frame_0120.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0120.png"
+      "name": "119.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/119.png"
     },
     {
-      "name": "frame_0121.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0121.png"
+      "name": "120.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/120.png"
     },
     {
-      "name": "frame_0122.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0122.png"
+      "name": "121.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/121.png"
     },
     {
-      "name": "frame_0123.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0123.png"
+      "name": "122.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/122.png"
     },
     {
-      "name": "frame_0124.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0124.png"
+      "name": "123.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/123.png"
     },
     {
-      "name": "frame_0125.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0125.png"
+      "name": "124.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/124.png"
     },
     {
-      "name": "frame_0126.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0126.png"
+      "name": "125.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/125.png"
     },
     {
-      "name": "frame_0127.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0127.png"
+      "name": "126.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/126.png"
     },
     {
-      "name": "frame_0128.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0128.png"
+      "name": "127.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/127.png"
     },
     {
-      "name": "frame_0129.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0129.png"
+      "name": "128.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/128.png"
     },
     {
-      "name": "frame_0130.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0130.png"
+      "name": "129.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/129.png"
     },
     {
-      "name": "frame_0131.png",
-      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/frames/frame_0131.png"
+      "name": "130.png",
+      "url": "https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/binary-cube-frames/130.png"
     }
   ]
 }

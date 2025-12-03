@@ -161,7 +161,7 @@ All animations use custom hooks for:
 ### Known Considerations
 - Logo animation uses fixed positioning in overlay container
 - Canvas particles use `requestAnimationFrame` for smooth rendering
-- Anime.js imported from `/lib/anime.es.js` for proper ES module support
+- Anime.js v4.2.2 imported directly from npm package (`import { animate, stagger } from 'animejs'`)
 - All animations initialize after DOM is ready (100ms delay)
 
 ## 📝 Migration from Vanilla
