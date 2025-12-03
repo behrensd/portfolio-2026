@@ -19,14 +19,11 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
     const [isLoaded, setIsLoaded] = useState(false);
     const [shouldRender, setShouldRender] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
 
     // Check device type on mount
     useEffect(() => {
         const checkDevice = () => {
-            const width = window.innerWidth;
-            setIsMobile(width < 768);
-            setIsSmallScreen(width < 480);
+            setIsMobile(window.innerWidth < 768);
         };
         
         checkDevice();
@@ -37,28 +34,23 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
 
     // Delay rendering to improve initial page load performance
     useEffect(() => {
-        // Skip Spline on very small screens
-        if (isSmallScreen) {
-            return;
-        }
-        
-        // Longer delay on mobile for better performance
-        const delay = isMobile ? 1500 : 500;
+        // Delay more on mobile for smoother experience
+        const delay = isMobile ? 800 : 300;
         const timer = setTimeout(() => {
             setShouldRender(true);
         }, delay);
 
         return () => clearTimeout(timer);
-    }, [isMobile, isSmallScreen]);
+    }, [isMobile]);
 
     const handleLoad = (splineApp: Application) => {
         setIsLoaded(true);
         console.log('✨ Spline scene loaded');
         
-        // Optimize for mobile/tablet
+        // Zoom out on mobile for better view
         if (isMobile) {
             try {
-                splineApp.setZoom(0.5);
+                splineApp.setZoom(0.6);
             } catch (e) {
                 console.log('Zoom not available');
             }
@@ -67,7 +59,7 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
 
     return (
         <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''}`}>
-            {shouldRender && !isSmallScreen && (
+            {shouldRender && (
                 <Spline 
                     scene={scene} 
                     onLoad={handleLoad}
