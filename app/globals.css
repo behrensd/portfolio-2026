@@ -217,6 +217,12 @@ body {
                  0 2px 8px rgba(0, 0, 0, 0.7),
                  0 0 60px rgba(0, 0, 0, 0.5);
     color: #ffffff;
+    /* Force centering */
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-line {
@@ -224,11 +230,14 @@ body {
     opacity: 1;
     /* Ensure distinct visibility */
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+    /* Force center */
+    text-align: center;
+    width: 100%;
 }
 
 .hero-subtitle {
     font-size: var(--font-size-sm);
-    color: #ffffff; /* Brighter than dim for contrast */
+    color: #ffffff;
     font-weight: var(--font-weight-normal);
     letter-spacing: var(--letter-spacing-widest);
     text-transform: uppercase;
@@ -236,6 +245,9 @@ body {
     /* Text shadow for readability */
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
     opacity: 0.9;
+    /* Force centering */
+    text-align: center;
+    width: 100%;
 }
 
 /* ================================
