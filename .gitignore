@@ -42,3 +42,4 @@ next-env.d.ts
 next_backup/
 next_backup/
 .env*.local
+public/videos/*.mp4
