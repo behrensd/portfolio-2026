@@ -9,6 +9,10 @@ if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 }
 
+// Global scroll tween reference - allows killing from anywhere
+let currentScrollTween: gsap.core.Tween | null = null;
+let isNavigating = false;
+
 export function useDockNavigation() {
     // Store our ScrollTriggers to clean up only ours
     const triggersRef = useRef<ScrollTrigger[]>([]);
@@ -18,22 +22,30 @@ export function useDockNavigation() {
         const dockItems = document.querySelectorAll('.dock-item');
         const sections = document.querySelectorAll('section[id]');
         
-        // Update active state on scroll
+        // Helper to update active state immediately
+        const setActiveItem = (targetHref: string) => {
+            dockItems.forEach(item => {
+                item.classList.remove('active');
+                const itemHref = item.getAttribute('data-href') || item.getAttribute('href');
+                if (itemHref === targetHref) {
+                    item.classList.add('active');
+                }
+            });
+        };
+        
+        // Update active state on scroll (only when not navigating via click)
         sections.forEach((section) => {
             const trigger = ScrollTrigger.create({
                 trigger: section,
                 start: 'top center',
                 end: 'bottom center',
                 onToggle: (self) => {
+                    // Don't update during programmatic navigation
+                    if (isNavigating) return;
+                    
                     if (self.isActive) {
                         const id = section.getAttribute('id');
-                        dockItems.forEach(item => {
-                            item.classList.remove('active');
-                            const itemHref = item.getAttribute('data-href') || item.getAttribute('href');
-                            if (itemHref === `#${id}`) {
-                                item.classList.add('active');
-                            }
-                        });
+                        setActiveItem(`#${id}`);
                     }
                 }
             });
@@ -46,10 +58,8 @@ export function useDockNavigation() {
             start: 'bottom bottom', 
             end: 'bottom bottom',
             onEnter: () => {
-                dockItems.forEach(item => item.classList.remove('active'));
-                const contactLink = document.querySelector('.dock-item[data-href="#contact"]') || 
-                                   document.querySelector('.dock-item[href="#contact"]');
-                if (contactLink) contactLink.classList.add('active');
+                if (isNavigating) return;
+                setActiveItem('#contact');
             }
         });
         triggersRef.current.push(bottomTrigger);
@@ -63,21 +73,49 @@ export function useDockNavigation() {
                 const targetId = item.getAttribute('data-href') || item.getAttribute('href');
                 const targetSection = targetId ? document.querySelector(targetId) : null;
                 
-                if (targetSection) {
-                    // Safari needs slightly longer duration for smooth rendering
-                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-                    
-                    gsap.to(window, {
-                        duration: isSafari ? 0.6 : 0.4,
-                        scrollTo: {
-                            y: targetSection,
-                            offsetY: 0,
-                            autoKill: true
-                        },
-                        ease: 'power4.out', // Fast start, gentle stop - works better on Safari
-                        overwrite: 'auto' // Kill any conflicting scroll tweens
-                    });
+                if (!targetSection || !targetId) return;
+                
+                // Kill any existing scroll animation immediately
+                if (currentScrollTween) {
+                    currentScrollTween.kill();
+                    currentScrollTween = null;
                 }
+                
+                // Also kill any other scroll tweens on window
+                gsap.killTweensOf(window, 'scrollTo');
+                
+                // Set active state immediately on tap (don't wait for scroll)
+                setActiveItem(targetId);
+                isNavigating = true;
+                
+                // Safari needs slightly longer duration for smooth rendering
+                const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                
+                currentScrollTween = gsap.to(window, {
+                    duration: isSafari ? 0.5 : 0.35,
+                    scrollTo: {
+                        y: targetSection,
+                        offsetY: 0,
+                        autoKill: true,
+                        onAutoKill: () => {
+                            // User interrupted - let scroll triggers take over
+                            isNavigating = false;
+                            currentScrollTween = null;
+                        }
+                    },
+                    ease: 'power3.out',
+                    overwrite: true, // Aggressively kill ALL conflicting tweens
+                    onComplete: () => {
+                        isNavigating = false;
+                        currentScrollTween = null;
+                        // Refresh ScrollTrigger after navigation completes
+                        ScrollTrigger.refresh();
+                    },
+                    onInterrupt: () => {
+                        isNavigating = false;
+                        currentScrollTween = null;
+                    }
+                });
             };
             
             item.addEventListener('click', handleClick);
@@ -87,6 +125,13 @@ export function useDockNavigation() {
         console.log('✨ Dock navigation initialized');
         
         return () => {
+            // Kill any active scroll tween
+            if (currentScrollTween) {
+                currentScrollTween.kill();
+                currentScrollTween = null;
+            }
+            isNavigating = false;
+            
             // Only kill our own ScrollTriggers
             triggersRef.current.forEach(trigger => trigger.kill());
             triggersRef.current = [];

@@ -890,14 +890,12 @@ body {
    ================================ */
 .contact-content {
     text-align: center;
-    /* Glass Card */
-    background: rgba(10, 10, 10, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    /* Solid black background - no transparency */
+    background: #0a0a0a;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
     padding: var(--spacing-xl) var(--spacing-lg);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -1225,10 +1223,14 @@ body {
     .glass-card,
     .about-description,
     .project-content,
-    .contact-content,
     .floating-dock {
         -webkit-backdrop-filter: blur(8px) !important;
         backdrop-filter: blur(8px) !important;
+    }
+    
+    /* Contact uses solid black background - no blur needed */
+    .contact-content {
+        background: #0a0a0a;
     }
 }
 
@@ -1245,7 +1247,6 @@ body {
     .glass-card,
     .about-description,
     .project-content,
-    .contact-content,
     .floating-dock {
         -webkit-backdrop-filter: blur(16px);
         backdrop-filter: blur(16px);
@@ -1256,14 +1257,15 @@ body {
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass-card,
     .about-description,
-    .project-content,
-    .contact-content {
+    .project-content {
         background: rgba(10, 10, 10, 0.95);
     }
     
     .floating-dock {
         background: rgba(0, 0, 0, 0.95);
     }
+    
+    /* Contact already uses solid black */
 }
 
 /* Prevent iOS zoom on input focus */
