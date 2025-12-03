@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import ProjectVideo from './ProjectVideo';
 
 const projectsData = [
     {
@@ -46,37 +46,6 @@ const projectsData = [
 ];
 
 export default function Projects() {
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video) return;
-
-        // Force play and keep checking
-        const playVideo = () => {
-            if (video.paused) {
-                video.play().catch(() => {});
-            }
-        };
-
-        // Initial play
-        playVideo();
-
-        // Keep checking every 500ms to ensure video stays playing
-        const interval = setInterval(playVideo, 500);
-
-        // Also play on visibility change
-        const handleVisibility = () => {
-            if (!document.hidden) playVideo();
-        };
-        document.addEventListener('visibilitychange', handleVisibility);
-
-        return () => {
-            clearInterval(interval);
-            document.removeEventListener('visibilitychange', handleVisibility);
-        };
-    }, []);
-
     return (
         <section id="projects" className="content-tile">
             <div className="tile-inner">
@@ -163,19 +132,9 @@ export default function Projects() {
                             </div>
                             <div className={`mockup-container ${project.mockupSize}`}>
                                 {project.videoUrl ? (
-                                    <video 
-                                        ref={project.id === 0 ? videoRef : undefined}
-                                        className="mockup-video"
-                                        autoPlay
-                                        muted
-                                        loop
-                                        playsInline
-                                        preload="auto"
+                                    <ProjectVideo 
                                         src={project.videoUrl}
-                                        onCanPlay={(e) => {
-                                            const video = e.currentTarget;
-                                            video.play().catch(() => {});
-                                        }}
+                                        className="mockup-video"
                                     />
                                 ) : (
                                     <div className="mockup-placeholder">

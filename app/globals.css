@@ -97,6 +97,58 @@ body {
 }
 
 /* ================================
+   CUSTOM RANGE SLIDER (Video Scrubber)
+   ================================ */
+.video-range-input {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Thumb Styling */
+.video-range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 12px;
+    width: 12px;
+    background-color: #ffffff;
+    border: 2px solid #ff6b35;
+    border-radius: 50%;
+    margin-top: -6px; /* Centers thumb on the 2px height track? Actually on 0px height track since we use a separate div for track */
+    position: relative;
+    z-index: 30;
+}
+
+.video-range-input::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    background-color: #ffffff;
+    border: 2px solid #ff6b35;
+    border-radius: 50%;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 30;
+    cursor: pointer;
+}
+
+/* Track Styling - Make invisible as we draw our own */
+.video-range-input::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+}
+
+.video-range-input::-moz-range-track {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+}
+
+/* ================================
    HERO SECTION
    (Keep this background throughout)
    ================================ */
