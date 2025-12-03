@@ -163,6 +163,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Ensure children are centered */
+    text-align: center;
 }
 
 .hero-tile {
@@ -177,6 +179,11 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: var(--spacing-lg);
+    /* Ensure centering on all devices */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-spline {
@@ -190,6 +197,12 @@ body {
     padding: var(--spacing-md);
     /* Ensure content is above Spline background */
     pointer-events: auto;
+    /* Explicit centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 } 
 
 .hero-title {
