@@ -278,25 +278,40 @@ export default function MobileFrameSequence({
       // Start preloading all frames in background for seamless looping
       loader.preloadAllFrames();
 
-      // Animate through all frames LOOP_COUNT times during full scroll
-      // This creates a faster, more dynamic animation effect
-      const totalAnimationFrames = (totalFrames - 1) * LOOP_COUNT;
+      // Animate through all frames LOOP_COUNT times with boomerang/ping-pong effect
+      // Each cycle: forward (0→130) + reverse (129→1) = smooth bounce loop
+      // This avoids jarring snap-back to frame 0
+      const cycleLength = (totalFrames - 1) * 2; // One ping-pong cycle (forward + reverse)
+      const totalAnimationFrames = cycleLength * LOOP_COUNT;
       
       tweenRef.current = gsap.to(playhead, {
         frame: totalAnimationFrames,
         ease: 'none',
         onUpdate: () => {
-          // Use modulo to loop through frames seamlessly
           const rawFrame = Math.round(playhead.frame);
-          const frameIndex = rawFrame % totalFrames;
           
-          // Preload nearby segments (accounting for loop wrap-around)
+          // Calculate position within current ping-pong cycle
+          const positionInCycle = rawFrame % cycleLength;
+          
+          // Boomerang logic: forward then reverse
+          let frameIndex;
+          if (positionInCycle <= totalFrames - 1) {
+            // Forward half: 0 → 130
+            frameIndex = positionInCycle;
+          } else {
+            // Reverse half: 129 → 1 (bounce back, skipping endpoints)
+            frameIndex = cycleLength - positionInCycle;
+          }
+          
+          // Preload nearby segments (accounting for both directions)
           loader.loadSegmentsForFrame(frameIndex);
           
-          // Also preload segments near the start for seamless looping
-          if (frameIndex > totalFrames - 20) {
+          // Preload frames in both directions for smooth playback
+          if (frameIndex < 20) {
             loader.loadSegmentsForFrame(0);
-            loader.loadSegmentsForFrame(SEGMENT_SIZE);
+          }
+          if (frameIndex > totalFrames - 20) {
+            loader.loadSegmentsForFrame(totalFrames - 1);
           }
           
           // Schedule frame draw via RAF for smooth rendering
