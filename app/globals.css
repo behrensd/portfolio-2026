@@ -220,19 +220,23 @@ body {
    ================================ */
 .frame-sequence-container {
     position: fixed;
-    inset: 0;
-    width: 100vw;
-    /* Use svh (small viewport height) for stable height on mobile */
-    /* Falls back to vh for browsers that don't support svh */
-    height: 100vh;
-    height: 100svh;
+    /* Extend past viewport edges to cover Safari safe areas and gaps */
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    width: calc(100vw + 100px);
+    height: calc(100vh + 100px);
+    height: calc(100svh + 100px);
     z-index: 0;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s ease-out;
-    /* Prevent any layout shifts */
     overflow: hidden;
-    /* Hardware acceleration for smoother rendering */
+    /* Match the site background color exactly */
+    background-color: #0a0a0a;
+    background: var(--color-bg, #0a0a0a);
+    /* Hardware acceleration */
     transform: translateZ(0);
     will-change: opacity;
 }
@@ -243,19 +247,18 @@ body {
 
 .frame-sequence-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
-    min-width: 100%;
-    min-height: 100%;
+    /* Offset to center within the extended container */
+    top: 50px;
+    left: 50px;
+    /* Fill viewport (container is 100px larger on each axis) */
+    width: calc(100% - 100px);
+    height: calc(100% - 100px);
     /* Performance optimizations for smooth scrolling */
     transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    /* Hint browser this element will change */
     will-change: contents;
-    /* Use GPU compositing */
     contain: strict;
-    /* Disable pointer events for scroll passthrough */
     pointer-events: none;
     /* Optimize rendering */
     image-rendering: -webkit-optimize-contrast;
@@ -288,8 +291,8 @@ body {
 /* Ensure frame sequence works with iOS viewport quirks */
 @supports (-webkit-touch-callout: none) {
     .frame-sequence-container {
-        /* Use -webkit-fill-available as ultimate fallback for iOS */
-        height: -webkit-fill-available;
+        /* Extend to cover all iOS safe areas */
+        height: calc(-webkit-fill-available + 100px);
     }
 }
 
