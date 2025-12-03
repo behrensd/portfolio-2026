@@ -1,20 +1,26 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+}
 
 export function useDockNavigation() {
+    // Store our ScrollTriggers to clean up only ours
+    const triggersRef = useRef<ScrollTrigger[]>([]);
+    const clickHandlersRef = useRef<Map<Element, EventListener>>(new Map());
+
     useEffect(() => {
         const dockItems = document.querySelectorAll('.dock-item');
         const sections = document.querySelectorAll('section[id]');
         
         // Update active state on scroll
         sections.forEach((section) => {
-            ScrollTrigger.create({
+            const trigger = ScrollTrigger.create({
                 trigger: section,
                 start: 'top center',
                 end: 'bottom center',
@@ -30,10 +36,11 @@ export function useDockNavigation() {
                     }
                 }
             });
+            triggersRef.current.push(trigger);
         });
 
         // Force "Contact" active when reaching bottom of page
-        ScrollTrigger.create({
+        const bottomTrigger = ScrollTrigger.create({
             trigger: 'body',
             start: 'bottom bottom', 
             end: 'bottom bottom',
@@ -43,6 +50,7 @@ export function useDockNavigation() {
                 if (contactLink) contactLink.classList.add('active');
             }
         });
+        triggersRef.current.push(bottomTrigger);
         
         // Smooth scroll on click
         dockItems.forEach(item => {
@@ -64,12 +72,21 @@ export function useDockNavigation() {
             };
             
             item.addEventListener('click', handleClick);
+            clickHandlersRef.current.set(item, handleClick);
         });
         
         console.log('✨ Dock navigation initialized');
         
         return () => {
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            // Only kill our own ScrollTriggers
+            triggersRef.current.forEach(trigger => trigger.kill());
+            triggersRef.current = [];
+            
+            // Clean up click handlers
+            clickHandlersRef.current.forEach((handler, element) => {
+                element.removeEventListener('click', handler);
+            });
+            clickHandlersRef.current.clear();
         };
     }, []);
 }

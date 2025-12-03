@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
@@ -10,6 +10,10 @@ if (typeof window !== 'undefined') {
 }
 
 export function useLogoScrollAnimation() {
+  // Store our ScrollTriggers to clean up only ours
+  const triggersRef = useRef<ScrollTrigger[]>([]);
+  const tweensRef = useRef<gsap.core.Tween[]>([]);
+
   useEffect(() => {
     const logoLink = document.getElementById('bai-logo-link');
     const logo = document.getElementById('bai-logo');
@@ -40,7 +44,7 @@ export function useLogoScrollAnimation() {
       // Initial size and position (higher in viewport, well above text)
       const initialSize = Math.min(200, viewportWidth * 0.2);
       const initialLeft = (viewportWidth - initialSize) / 2;
-      const initialTop = (viewportHeight - initialSize) / 2 - 200; // Much higher up
+      const initialTop = (viewportHeight - initialSize) / 2 - 200;
       
       // Final position (top left corner)
       const finalSize = 60;
@@ -60,23 +64,25 @@ export function useLogoScrollAnimation() {
         height: initialSize
       });
       
-      // Animate to corner - smooth and buttery
-      gsap.to(logoLink, {
+      // Animate to corner
+      const linkTween = gsap.to(logoLink, {
         scrollTrigger: {
           trigger: '#hero',
-          start: 'top+=50 top', // Start almost immediately
-          end: '+=600', // Longer distance = smoother animation
-          scrub: 0.5, // Much smoother response (lower = smoother)
+          start: 'top+=50 top',
+          end: '+=600',
+          scrub: 0.5,
         },
         left: finalLeft,
         top: finalTop,
         width: finalSize,
         height: finalSize,
-        ease: 'power1.inOut' // Gentler easing
+        ease: 'power1.inOut'
       });
+      tweensRef.current.push(linkTween);
+      if (linkTween.scrollTrigger) triggersRef.current.push(linkTween.scrollTrigger);
       
       // Animate logo size
-      gsap.to(logo, {
+      const sizeTween = gsap.to(logo, {
         scrollTrigger: {
           trigger: '#hero',
           start: 'top+=50 top',
@@ -87,29 +93,37 @@ export function useLogoScrollAnimation() {
         height: finalSize,
         ease: 'power1.inOut'
       });
+      tweensRef.current.push(sizeTween);
+      if (sizeTween.scrollTrigger) triggersRef.current.push(sizeTween.scrollTrigger);
       
-      // Smooth 360° rotation - extra smooth
-      gsap.to(logo, {
+      // Smooth 360° rotation
+      const rotateTween = gsap.to(logo, {
         scrollTrigger: {
           trigger: '#hero',
           start: 'top+=50 top',
           end: '+=600',
-          scrub: 0.3 // Even smoother for rotation
+          scrub: 0.3
         },
         rotation: 360,
-        ease: 'none' // Linear for rotation looks best
+        ease: 'none'
       });
+      tweensRef.current.push(rotateTween);
+      if (rotateTween.scrollTrigger) triggersRef.current.push(rotateTween.scrollTrigger);
     };
     
     // Initialize after layout is ready
     const timer = setTimeout(setupAnimation, 100);
     
-    console.log('✨ Logo scroll animation with fixed overlay initialized');
+    console.log('✨ Logo scroll animation initialized');
     
     return () => {
       clearTimeout(timer);
       logoLink.removeEventListener('click', handleClick);
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      // Only kill our own ScrollTriggers and tweens
+      triggersRef.current.forEach(t => t.kill());
+      tweensRef.current.forEach(t => t.kill());
+      triggersRef.current = [];
+      tweensRef.current = [];
     };
   }, []);
 }

@@ -1,11 +1,16 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate, stagger } from 'animejs';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
+// Store ScrollTrigger for cleanup
+let contactScrollTrigger: ScrollTrigger | null = null;
 
 export function useAnimeInteractions() {
     useEffect(() => {
@@ -17,7 +22,7 @@ export function useAnimeInteractions() {
             initTagHoverEffects();
             
             // 3. Contact link animations
-            initContactLinkAnimations();
+            contactScrollTrigger = initContactLinkAnimations();
             
             // 4. Enhanced hero title animation
             initEnhancedHeroAnimation();
@@ -30,6 +35,11 @@ export function useAnimeInteractions() {
 
         return () => {
             clearTimeout(timer);
+            // Clean up our ScrollTrigger
+            if (contactScrollTrigger) {
+                contactScrollTrigger.kill();
+                contactScrollTrigger = null;
+            }
         };
     }, []);
 }
@@ -123,12 +133,12 @@ function initTagHoverEffects() {
     });
 }
 
-// Contact link stagger reveal
-function initContactLinkAnimations() {
+// Contact link stagger reveal - returns ScrollTrigger for cleanup
+function initContactLinkAnimations(): ScrollTrigger | null {
     const contactLinks = document.querySelectorAll('.contact-link');
     
     // Initial load animation
-    ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
         trigger: '.contact-links',
         start: 'top 80%',
         once: true,
@@ -164,6 +174,8 @@ function initContactLinkAnimations() {
         link.addEventListener('mouseenter', handleMouseEnter);
         link.addEventListener('mouseleave', handleMouseLeave);
     });
+    
+    return trigger;
 }
 
 // Enhanced hero title animation with character splitting

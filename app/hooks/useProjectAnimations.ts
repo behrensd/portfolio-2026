@@ -1,20 +1,25 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 export function useProjectAnimations() {
+    // Store our ScrollTriggers to clean up only ours
+    const triggersRef = useRef<ScrollTrigger[]>([]);
+    const tweensRef = useRef<gsap.core.Tween[]>([]);
+
     useEffect(() => {
-        // Detect mobile/Safari
+        // Detect mobile
         const isMobile = window.innerWidth < 768;
         
         // Note: normalizeScroll is handled centrally in useSafariScrollFix
-        // Do not call it here to avoid conflicts
         
-        // Longer delay for mobile to ensure DOM is ready
+        // Delay for DOM readiness
         const timer = setTimeout(() => {
             const projects = gsap.utils.toArray('.project-item');
             
@@ -28,7 +33,7 @@ export function useProjectAnimations() {
                 const projectNumber = project.querySelector('.project-number');
                 const mockupContainer = project.querySelector('.mockup-container');
                 
-                // Set initial state - simpler for better mobile performance
+                // Set initial state
                 gsap.set(project, { 
                     y: isMobile ? 30 : 50, 
                     opacity: 0,
@@ -38,8 +43,8 @@ export function useProjectAnimations() {
                 if (projectContent) gsap.set(projectContent, { opacity: 0 });
                 if (mockupContainer) gsap.set(mockupContainer, { opacity: 0, x: isMobile ? 30 : 60 });
 
-                // Use ScrollTrigger with toggleActions for reliable triggering
-                gsap.to(project, {
+                // Create tweens and store them
+                const projectTween = gsap.to(project, {
                     y: 0,
                     opacity: 1,
                     duration: isMobile ? 0.4 : 0.6,
@@ -49,13 +54,14 @@ export function useProjectAnimations() {
                         start: 'top 90%',
                         end: 'top 60%',
                         toggleActions: 'play none none none',
-                        // Critical for iOS Safari
                         invalidateOnRefresh: true,
                     }
                 });
+                tweensRef.current.push(projectTween);
+                if (projectTween.scrollTrigger) triggersRef.current.push(projectTween.scrollTrigger);
                 
                 if (projectNumber) {
-                    gsap.to(projectNumber, {
+                    const numberTween = gsap.to(projectNumber, {
                         opacity: 0.9,
                         duration: 0.4,
                         ease: 'power2.out',
@@ -66,10 +72,12 @@ export function useProjectAnimations() {
                             invalidateOnRefresh: true,
                         }
                     });
+                    tweensRef.current.push(numberTween);
+                    if (numberTween.scrollTrigger) triggersRef.current.push(numberTween.scrollTrigger);
                 }
                 
                 if (projectContent) {
-                    gsap.to(projectContent, {
+                    const contentTween = gsap.to(projectContent, {
                         opacity: 1,
                         duration: 0.5,
                         ease: 'power2.out',
@@ -80,11 +88,12 @@ export function useProjectAnimations() {
                             invalidateOnRefresh: true,
                         }
                     });
+                    tweensRef.current.push(contentTween);
+                    if (contentTween.scrollTrigger) triggersRef.current.push(contentTween.scrollTrigger);
                 }
                 
-                // Animate mockup container sliding in from the right
                 if (mockupContainer) {
-                    gsap.to(mockupContainer, {
+                    const mockupTween = gsap.to(mockupContainer, {
                         opacity: 1,
                         x: 0,
                         duration: isMobile ? 0.5 : 0.7,
@@ -96,30 +105,24 @@ export function useProjectAnimations() {
                             invalidateOnRefresh: true,
                         }
                     });
+                    tweensRef.current.push(mockupTween);
+                    if (mockupTween.scrollTrigger) triggersRef.current.push(mockupTween.scrollTrigger);
                 }
             });
             
-            // Multiple refreshes for Safari
+            // Single refresh after setup
             ScrollTrigger.refresh(true);
-            setTimeout(() => ScrollTrigger.refresh(true), 300);
-            setTimeout(() => ScrollTrigger.refresh(true), 1000);
             
             console.log('✨ Project animations initialized');
-        }, isMobile ? 500 : 200);
-
-        const handleResize = () => ScrollTrigger.refresh(true);
-        const handleOrientation = () => {
-            setTimeout(() => ScrollTrigger.refresh(true), 300);
-        };
-        
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('orientationchange', handleOrientation);
+        }, isMobile ? 300 : 150);
 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('orientationchange', handleOrientation);
-            ScrollTrigger.getAll().forEach(t => t.kill());
+            // Only kill our own ScrollTriggers and tweens
+            triggersRef.current.forEach(t => t.kill());
+            tweensRef.current.forEach(t => t.kill());
+            triggersRef.current = [];
+            tweensRef.current = [];
         };
     }, []);
 }
