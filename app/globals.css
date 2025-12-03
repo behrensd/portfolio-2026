@@ -1045,6 +1045,16 @@ body {
         touch-action: none;
         pointer-events: none !important;
     }
+    
+    /* Reduce heavy blur on mobile for performance */
+    .glass-card,
+    .about-description,
+    .project-content,
+    .contact-content,
+    .floating-dock {
+        -webkit-backdrop-filter: blur(8px) !important;
+        backdrop-filter: blur(8px) !important;
+    }
 }
 
 /* Ensure touch events work on iOS */

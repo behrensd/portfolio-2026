@@ -29,15 +29,6 @@ export function useSplineScroll(splineApp: Application | null) {
     const setupTimer = setTimeout(() => {
       setupAttemptedRef.current = true;
       
-      const isMobile = window.innerWidth < 768;
-
-      // Skip rotation logic entirely on mobile to save performance
-      if (isMobile) {
-        console.log('📱 Mobile detected - skipping 3D scroll rotation for performance');
-        // We still handle resize zooming below
-        return; 
-      }
-      
       // Try multiple approaches to find objects to animate
       let objectsFound: any[] = [];
       
@@ -88,7 +79,6 @@ export function useSplineScroll(splineApp: Application | null) {
         end: 'bottom bottom',
         scrub: 1, // Smooth interpolation
         onUpdate: (self) => {
-          // This loop runs every frame during scroll - strictly skipped on mobile now via early return above
           objectsToRotateRef.current.forEach((obj, index) => {
             if (obj?.rotation) {
               const initialY = initialRotationsRef.current[index] || 0;
