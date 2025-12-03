@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css"; 
 
@@ -7,6 +7,16 @@ const vhsGothic = localFont({
   variable: '--font-vhs',
   display: 'swap',
 });
+
+// Viewport configuration for iOS Safari safe area support
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  // Critical for iOS safe-area-inset-* to work
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   title: "BAI Solutions - Web Design & IT Services by Dom Behrens",
