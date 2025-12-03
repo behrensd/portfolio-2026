@@ -12,13 +12,13 @@ export default function Contact() {
                     </p>
                     <div className="contact-links" data-speed="0.95">
                         <a 
-                            href="mailto:dom@baisolutions.de" 
+                            href="mailto:info@behrens-ai.de" 
                             className="contact-link"
                         >
                             Email
                         </a>
                         <a 
-                            href="https://instagram.com/baisolutions.de" 
+                            href="https://instagram.com/040tech" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="contact-link"
