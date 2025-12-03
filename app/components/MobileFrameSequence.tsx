@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
 interface MobileVideoBackgroundProps {
   className?: string;
@@ -9,17 +9,21 @@ interface MobileVideoBackgroundProps {
 // Video URL from Vercel Blob
 const VIDEO_URL = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/mobile-background.mp4';
 
+// Reverse playback speed (0.5 = half speed for smoother seeking)
+const REVERSE_SPEED = 0.6;
+// Update interval for reverse (ms) - less frequent = smoother on mobile
+const REVERSE_UPDATE_INTERVAL = 50; // ~20fps for reverse
+
 /**
  * MobileVideoBackground Component
  * 
  * Seamless boomerang video background for mobile devices.
- * Uses a continuous RAF loop to control currentTime directly,
- * creating smooth forward/reverse playback without any pauses.
+ * - Forward: Uses native video.play() for smooth playback
+ * - Reverse: Uses throttled currentTime updates at slower speed
  * 
  * iOS Safari Notes:
- * - Native reverse playback (negative playbackRate) not supported
- * - We manually control currentTime using requestAnimationFrame
- * - Video is paused and we drive the playhead ourselves
+ * - Native reverse playback not supported
+ * - Manual reverse is throttled for smoother performance
  */
 export default function MobileFrameSequence({
   className = '',
@@ -28,16 +32,51 @@ export default function MobileFrameSequence({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const rafIdRef = useRef<number | null>(null);
-  const lastTimestampRef = useRef<number>(0);
-  const directionRef = useRef<1 | -1>(1); // 1 = forward, -1 = reverse
-  const isRunningRef = useRef(false);
+  const isReversingRef = useRef(false);
+  const reverseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Start reverse playback
+  const startReverse = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || isReversingRef.current) return;
+
+    console.log('🔄 Starting reverse');
+    isReversingRef.current = true;
+    video.pause();
+
+    // Use setInterval for more consistent timing than RAF
+    reverseIntervalRef.current = setInterval(() => {
+      if (!isReversingRef.current) return;
+
+      const step = (REVERSE_UPDATE_INTERVAL / 1000) * REVERSE_SPEED;
+      const newTime = video.currentTime - step;
+
+      if (newTime <= 0) {
+        // Reached start, switch to forward
+        video.currentTime = 0;
+        stopReverse();
+        video.play().catch(() => {});
+        console.log('🔄 Starting forward');
+      } else {
+        video.currentTime = newTime;
+      }
+    }, REVERSE_UPDATE_INTERVAL);
+  }, []);
+
+  // Stop reverse playback
+  const stopReverse = useCallback(() => {
+    isReversingRef.current = false;
+    if (reverseIntervalRef.current) {
+      clearInterval(reverseIntervalRef.current);
+      reverseIntervalRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    console.log('📹 Initializing seamless boomerang video...');
+    console.log('📹 Initializing boomerang video...');
 
     // Handle errors
     const handleError = () => {
@@ -45,90 +84,54 @@ export default function MobileFrameSequence({
       setHasError(true);
     };
 
-    // Continuous animation loop - drives video playback in both directions
-    const animate = (timestamp: number) => {
-      if (!isRunningRef.current || !video.duration) {
-        rafIdRef.current = requestAnimationFrame(animate);
-        return;
+    // Handle video ending - start reverse
+    const handleEnded = () => {
+      startReverse();
+    };
+
+    // Handle timeupdate to catch near-end (backup for ended event)
+    const handleTimeUpdate = () => {
+      if (!isReversingRef.current && video.duration && video.currentTime >= video.duration - 0.1) {
+        video.pause();
+        startReverse();
       }
-
-      // Calculate delta time
-      const delta = lastTimestampRef.current ? (timestamp - lastTimestampRef.current) / 1000 : 0;
-      lastTimestampRef.current = timestamp;
-
-      // Update video time based on direction
-      let newTime = video.currentTime + (delta * directionRef.current);
-
-      // Handle boundaries - seamless direction switch
-      if (newTime >= video.duration) {
-        // Reached end, reverse
-        newTime = video.duration - 0.001;
-        directionRef.current = -1;
-      } else if (newTime <= 0) {
-        // Reached start, go forward
-        newTime = 0.001;
-        directionRef.current = 1;
-      }
-
-      // Update video time
-      video.currentTime = newTime;
-
-      // Continue loop
-      rafIdRef.current = requestAnimationFrame(animate);
     };
 
     // Handle when video is ready
-    const handleCanPlayThrough = () => {
-      console.log('📹 Video ready, duration:', video.duration);
+    const handleCanPlay = () => {
+      console.log('📹 Video ready');
       setIsLoaded(true);
 
-      // Pause the video - we'll control it manually
-      video.pause();
-      video.currentTime = 0;
-
-      // Start the animation loop
-      isRunningRef.current = true;
-      directionRef.current = 1;
-      lastTimestampRef.current = 0;
-      rafIdRef.current = requestAnimationFrame(animate);
-
-      console.log('✅ Seamless boomerang started');
+      // Start playing forward
+      video.play().then(() => {
+        console.log('✅ Video playing forward');
+      }).catch((err) => {
+        console.log('⚠️ Auto-play blocked:', err.message);
+        // Try to play on first touch
+        const playOnTouch = () => {
+          video.play().catch(() => {});
+          document.removeEventListener('touchstart', playOnTouch);
+        };
+        document.addEventListener('touchstart', playOnTouch, { once: true });
+      });
     };
 
-    // Start loading
     video.addEventListener('error', handleError);
-    video.addEventListener('canplaythrough', handleCanPlayThrough);
-
-    // Also try on loadeddata as fallback
-    const handleLoadedData = () => {
-      if (!isLoaded && video.readyState >= 3) {
-        handleCanPlayThrough();
-      }
-    };
-    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('timeupdate', handleTimeUpdate);
 
     // Force load
     video.load();
 
-    // Fallback: if no canplaythrough after 3s, try anyway
-    const fallbackTimeout = setTimeout(() => {
-      if (!isLoaded && video.readyState >= 2) {
-        console.log('📹 Fallback: starting with readyState', video.readyState);
-        handleCanPlayThrough();
-      }
-    }, 3000);
-
     return () => {
       video.removeEventListener('error', handleError);
-      video.removeEventListener('canplaythrough', handleCanPlayThrough);
-      video.removeEventListener('loadeddata', handleLoadedData);
-      clearTimeout(fallbackTimeout);
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      isRunningRef.current = false;
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      stopReverse();
     };
-  }, [isLoaded]);
+  }, [startReverse, stopReverse]);
 
   return (
     <div
