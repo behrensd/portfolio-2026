@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { useHeroAnimation } from '../hooks/useHeroAnimation';
 import { useSplineScroll } from '../hooks/useSplineScroll';
 import SplineBackground from './SplineBackground';
@@ -44,7 +45,17 @@ export default function Hero() {
             )}
             <div className="tile-content" data-speed="1">
                 <div className="hero-content">
-                    <div className="logo-spacer"></div>
+                    <div className="hero-image-container">
+                        <Image 
+                            src="https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/dom-behrens.webp"
+                            alt="Dom Behrens"
+                            width={800}
+                            height={800}
+                            className="hero-image"
+                            priority
+                            unoptimized
+                        />
+                    </div>
                     <h1 className="hero-title" data-speed="0.8">
                         <span className="hero-line">BAI</span>
                         <span className="hero-line">SOLUTIONS</span>
