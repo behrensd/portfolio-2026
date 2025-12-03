@@ -60,8 +60,11 @@ export function useDockNavigation() {
                 const targetSection = targetId ? document.querySelector(targetId) : null;
                 
                 if (targetSection) {
+                    // Safari needs slightly longer duration for smooth rendering
+                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                    
                     gsap.to(window, {
-                        duration: 0.35,
+                        duration: isSafari ? 0.55 : 0.35,
                         scrollTo: {
                             y: targetSection,
                             offsetY: 0,
