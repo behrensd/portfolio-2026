@@ -61,12 +61,13 @@ export function useDockNavigation() {
                 
                 if (targetSection) {
                     gsap.to(window, {
-                        duration: 1,
+                        duration: 0.35,
                         scrollTo: {
                             y: targetSection,
-                            offsetY: 0
+                            offsetY: 0,
+                            autoKill: true
                         },
-                        ease: 'power2.inOut'
+                        ease: 'expo.out' // Instant start, smooth stop
                     });
                 }
             };
