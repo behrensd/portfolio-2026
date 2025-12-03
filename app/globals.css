@@ -776,6 +776,23 @@ body {
    RESPONSIVE
    ================================ */
 @media (max-width: 768px) {
+    /* Hero centering on mobile */
+    .hero-tile .tile-content,
+    .hero-content {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        text-align: center;
+        width: 100%;
+    }
+    
+    .hero-subtitle {
+        text-align: center;
+    }
+    
     .content-tile {
         width: 95%;
         padding: var(--spacing-md) var(--spacing-sm);
