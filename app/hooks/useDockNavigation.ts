@@ -64,11 +64,12 @@ export function useDockNavigation() {
         });
         triggersRef.current.push(bottomTrigger);
         
-        // Detect iOS Safari for specific touch handling
+        // Detect iOS/Safari - use native scrollIntoView for bulletproof scrolling
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-        // Smooth scroll on click - using data-href to avoid native anchor behavior
+        // Smooth scroll on click
         dockItems.forEach(item => {
             const handleNavigation = (e: Event) => {
                 e.preventDefault();
@@ -79,74 +80,55 @@ export function useDockNavigation() {
 
                 if (!targetSection || !targetId) return;
 
-                // Kill any existing scroll animation immediately
-                if (currentScrollTween) {
-                    currentScrollTween.kill();
-                    currentScrollTween = null;
-                }
-
-                // Also kill any other scroll tweens on window
-                gsap.killTweensOf(window, 'scrollTo');
-
-                // Set active state immediately on tap (don't wait for scroll)
+                // Set active state immediately
                 setActiveItem(targetId);
                 isNavigating = true;
 
-                // iOS Safari: Temporarily disable touch-action to prevent interference
-                if (isIOS) {
-                    document.body.style.touchAction = 'none';
-                    document.documentElement.style.touchAction = 'none';
-                }
+                // iOS Safari & mobile: Use native scrollIntoView (always works)
+                if (isIOS || isSafari) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
 
-                // Safari needs slightly longer duration for smooth rendering
-                const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                    // Reset navigation flag after scroll completes
+                    // Native smooth scroll takes ~500-800ms
+                    setTimeout(() => {
+                        isNavigating = false;
+                        ScrollTrigger.refresh();
+                    }, 800);
+                } else {
+                    // Desktop non-Safari: Use GSAP for more control
+                    if (currentScrollTween) {
+                        currentScrollTween.kill();
+                        currentScrollTween = null;
+                    }
 
-                currentScrollTween = gsap.to(window, {
-                    duration: isSafari ? 0.8 : 0.35,
-                    scrollTo: {
-                        y: targetSection,
-                        offsetY: 0,
-                        autoKill: false, // Prevent iOS touch from auto-killing
-                        onAutoKill: () => {
-                            // User interrupted - let scroll triggers take over
+                    gsap.killTweensOf(window, 'scrollTo');
+
+                    currentScrollTween = gsap.to(window, {
+                        duration: 0.6,
+                        scrollTo: {
+                            y: targetSection,
+                            offsetY: 0,
+                            autoKill: true
+                        },
+                        ease: 'power2.out',
+                        overwrite: 'auto',
+                        onComplete: () => {
                             isNavigating = false;
                             currentScrollTween = null;
-                            // Re-enable touch on iOS
-                            if (isIOS) {
-                                document.body.style.touchAction = 'pan-y';
-                                document.documentElement.style.touchAction = 'pan-y';
-                            }
+                            ScrollTrigger.refresh();
+                        },
+                        onInterrupt: () => {
+                            isNavigating = false;
+                            currentScrollTween = null;
                         }
-                    },
-                    ease: 'power2.out',
-                    overwrite: 'auto',
-                    onComplete: () => {
-                        isNavigating = false;
-                        currentScrollTween = null;
-                        // Re-enable touch on iOS
-                        if (isIOS) {
-                            document.body.style.touchAction = 'pan-y';
-                            document.documentElement.style.touchAction = 'pan-y';
-                        }
-                        // Refresh ScrollTrigger after navigation completes
-                        ScrollTrigger.refresh();
-                    },
-                    onInterrupt: () => {
-                        isNavigating = false;
-                        currentScrollTween = null;
-                        // Re-enable touch on iOS
-                        if (isIOS) {
-                            document.body.style.touchAction = 'pan-y';
-                            document.documentElement.style.touchAction = 'pan-y';
-                        }
-                    }
-                });
+                    });
+                }
             };
 
-            // On iOS, use touchend for immediate response and prevent scroll interference
-            // On other platforms, use click
-            const eventType = isIOS ? 'touchend' : 'click';
-            item.addEventListener(eventType, handleNavigation, { passive: false });
+            item.addEventListener('click', handleNavigation);
             clickHandlersRef.current.set(item, handleNavigation);
         });
         
@@ -165,9 +147,8 @@ export function useDockNavigation() {
             triggersRef.current = [];
             
             // Clean up event handlers
-            const eventType = isIOS ? 'touchend' : 'click';
             clickHandlersRef.current.forEach((handler, element) => {
-                element.removeEventListener(eventType, handler);
+                element.removeEventListener('click', handler);
             });
             clickHandlersRef.current.clear();
         };
