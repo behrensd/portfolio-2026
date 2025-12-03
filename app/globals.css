@@ -222,11 +222,19 @@ body {
     position: fixed;
     inset: 0;
     width: 100vw;
+    /* Use svh (small viewport height) for stable height on mobile */
+    /* Falls back to vh for browsers that don't support svh */
     height: 100vh;
+    height: 100svh;
     z-index: 0;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s ease-out;
+    /* Prevent any layout shifts */
+    overflow: hidden;
+    /* Hardware acceleration for smoother rendering */
+    transform: translateZ(0);
+    will-change: opacity;
 }
 
 .frame-sequence-container.loaded {
@@ -235,15 +243,52 @@ body {
 
 .frame-sequence-canvas {
     position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    /* Performance optimizations for smooth scrolling */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Hint browser this element will change */
+    will-change: contents;
+    /* Use GPU compositing */
+    contain: strict;
+    /* Disable pointer events for scroll passthrough */
+    pointer-events: none;
+    /* Optimize rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Loading indicator styles */
+.frame-loading-indicator {
+    position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+}
+
+.frame-loading-indicator .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-text-dim);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* Ensure frame sequence works with iOS viewport quirks */
 @supports (-webkit-touch-callout: none) {
     .frame-sequence-container {
+        /* Use -webkit-fill-available as ultimate fallback for iOS */
         height: -webkit-fill-available;
     }
 }

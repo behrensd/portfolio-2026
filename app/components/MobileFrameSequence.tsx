@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import frameData from '../data/frame-urls.json';
@@ -13,69 +13,109 @@ interface MobileFrameSequenceProps {
   className?: string;
 }
 
+// Configuration for progressive loading - optimized for smooth scrolling
+const SEGMENT_SIZE = 15; // Load 15 frames at a time
+const LOOKAHEAD_SEGMENTS = 3; // Preload 3 segments ahead for smoother playback
+
 /**
- * GSAP image sequence helper (from official GSAP docs)
- * Scrubs through a sequence of images based on scroll position
+ * Progressive Image Loader
+ * Loads frames on-demand in segments to avoid heavy initial data load
  */
-function imageSequence(config: {
-  urls: string[];
-  canvas: HTMLCanvasElement;
-  scrollTrigger: ScrollTrigger.Vars;
-  onUpdate?: () => void;
-}) {
-  const playhead = { frame: 0 };
-  const canvas = config.canvas;
-  const ctx = canvas.getContext('2d');
-  
-  if (!ctx) return null;
+class ProgressiveImageLoader {
+  private images: (HTMLImageElement | null)[];
+  private loadedSegments: Set<number>;
+  private urls: string[];
+  private onSegmentLoaded?: (segment: number) => void;
 
-  const images = config.urls.map((url) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous'; // Required for blob storage
-    img.src = url;
-    return img;
-  });
+  constructor(urls: string[], onSegmentLoaded?: (segment: number) => void) {
+    this.urls = urls;
+    this.images = new Array(urls.length).fill(null);
+    this.loadedSegments = new Set();
+    this.onSegmentLoaded = onSegmentLoaded;
+  }
 
-  const updateImage = () => {
-    const frame = Math.round(playhead.frame);
-    if (images[frame]?.complete && ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Calculate scaling to cover the canvas while maintaining aspect ratio
-      const img = images[frame];
-      const canvasRatio = canvas.width / canvas.height;
-      const imgRatio = img.naturalWidth / img.naturalHeight;
-      
-      let drawWidth, drawHeight, offsetX, offsetY;
-      
-      if (imgRatio > canvasRatio) {
-        // Image is wider - fit to height, center horizontally
-        drawHeight = canvas.height;
-        drawWidth = img.naturalWidth * (canvas.height / img.naturalHeight);
-        offsetX = (canvas.width - drawWidth) / 2;
-        offsetY = 0;
-      } else {
-        // Image is taller - fit to width, center vertically
-        drawWidth = canvas.width;
-        drawHeight = img.naturalHeight * (canvas.width / img.naturalWidth);
-        offsetX = 0;
-        offsetY = (canvas.height - drawHeight) / 2;
+  getSegmentForFrame(frameIndex: number): number {
+    return Math.floor(frameIndex / SEGMENT_SIZE);
+  }
+
+  isFrameLoaded(frameIndex: number): boolean {
+    return this.images[frameIndex]?.complete ?? false;
+  }
+
+  getImage(frameIndex: number): HTMLImageElement | null {
+    return this.images[frameIndex];
+  }
+
+  // Find nearest loaded frame (for smooth fallback when frame not yet loaded)
+  getNearestLoadedFrame(frameIndex: number): number {
+    if (this.isFrameLoaded(frameIndex)) return frameIndex;
+    
+    // Search nearby frames
+    for (let offset = 1; offset < 10; offset++) {
+      if (frameIndex - offset >= 0 && this.isFrameLoaded(frameIndex - offset)) {
+        return frameIndex - offset;
       }
-      
-      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+      if (frameIndex + offset < this.urls.length && this.isFrameLoaded(frameIndex + offset)) {
+        return frameIndex + offset;
+      }
     }
-    config.onUpdate?.();
-  };
+    return 0; // Fallback to first frame
+  }
 
-  // Wait for first image to load before drawing
-  images[0].onload = updateImage;
+  async loadSegment(segmentIndex: number): Promise<void> {
+    if (this.loadedSegments.has(segmentIndex)) return;
+    
+    this.loadedSegments.add(segmentIndex);
+    
+    const startFrame = segmentIndex * SEGMENT_SIZE;
+    const endFrame = Math.min(startFrame + SEGMENT_SIZE, this.urls.length);
+    
+    const loadPromises: Promise<void>[] = [];
+    
+    for (let i = startFrame; i < endFrame; i++) {
+      if (!this.images[i]) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        // Hint browser to decode images ahead of time
+        img.decoding = 'async';
+        this.images[i] = img;
+        
+        loadPromises.push(
+          new Promise<void>((resolve) => {
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            img.src = this.urls[i];
+          })
+        );
+      }
+    }
+    
+    await Promise.all(loadPromises);
+    this.onSegmentLoaded?.(segmentIndex);
+  }
 
-  return gsap.to(playhead, {
-    frame: images.length - 1,
-    ease: 'none',
-    onUpdate: updateImage,
-    scrollTrigger: config.scrollTrigger,
-  });
+  loadSegmentsForFrame(frameIndex: number): void {
+    const currentSegment = this.getSegmentForFrame(frameIndex);
+    const totalSegments = Math.ceil(this.urls.length / SEGMENT_SIZE);
+    
+    // Load current and nearby segments (non-blocking)
+    for (let i = 0; i <= LOOKAHEAD_SEGMENTS; i++) {
+      const segment = currentSegment + i;
+      if (segment < totalSegments) {
+        this.loadSegment(segment);
+      }
+      const behindSegment = currentSegment - i;
+      if (behindSegment >= 0) {
+        this.loadSegment(behindSegment);
+      }
+    }
+  }
+
+  async loadInitialFrames(): Promise<void> {
+    // Load first two segments for smooth start
+    await this.loadSegment(0);
+    this.loadSegment(1); // Start loading second segment non-blocking
+  }
 }
 
 export default function MobileFrameSequence({
@@ -85,57 +125,169 @@ export default function MobileFrameSequence({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const loaderRef = useRef<ProgressiveImageLoader | null>(null);
+  const lastDrawnFrameRef = useRef<number>(-1);
+  const initialDimensionsRef = useRef<{ width: number; height: number } | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+  const pendingFrameRef = useRef<number>(0);
+
+  // Optimized draw function with RAF batching
+  const drawFrame = useCallback((frameIndex: number, canvas: HTMLCanvasElement, force = false) => {
+    const loader = loaderRef.current;
+    if (!loader) return;
+    
+    // Skip if same frame already drawn (unless forced)
+    if (!force && frameIndex === lastDrawnFrameRef.current) return;
+    
+    // Get actual frame to draw (nearest loaded if target not ready)
+    const actualFrame = loader.isFrameLoaded(frameIndex) 
+      ? frameIndex 
+      : loader.getNearestLoadedFrame(frameIndex);
+    
+    const img = loader.getImage(actualFrame);
+    if (!img?.complete || !img.naturalWidth) return;
+    
+    // Get optimized 2D context (no alpha for better performance)
+    const ctx = canvas.getContext('2d', { 
+      alpha: false,
+      desynchronized: true // Allows canvas to update independently of DOM
+    });
+    if (!ctx) return;
+    
+    // Calculate scaling to cover canvas
+    const canvasRatio = canvas.width / canvas.height;
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    
+    let drawWidth, drawHeight, offsetX, offsetY;
+    
+    if (imgRatio > canvasRatio) {
+      drawHeight = canvas.height;
+      drawWidth = img.naturalWidth * (canvas.height / img.naturalHeight);
+      offsetX = (canvas.width - drawWidth) / 2;
+      offsetY = 0;
+    } else {
+      drawWidth = canvas.width;
+      drawHeight = img.naturalHeight * (canvas.width / img.naturalWidth);
+      offsetX = 0;
+      offsetY = (canvas.height - drawHeight) / 2;
+    }
+    
+    // Draw with black background (faster than clearRect + draw)
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    
+    lastDrawnFrameRef.current = actualFrame;
+  }, []);
+
+  // RAF-based drawing for smooth updates
+  const scheduleDrawFrame = useCallback((frameIndex: number, canvas: HTMLCanvasElement) => {
+    pendingFrameRef.current = frameIndex;
+    
+    if (rafIdRef.current !== null) return; // Already scheduled
+    
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = null;
+      drawFrame(pendingFrameRef.current, canvas);
+    });
+  }, [drawFrame]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Set canvas size to match viewport
-    const updateCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    // Initialize canvas with optimized size
+    const initializeCanvasSize = () => {
+      const width = window.innerWidth;
+      // Use stable height calculation
+      const height = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
+      
+      canvas.width = width;
+      canvas.height = height;
+      initialDimensionsRef.current = { width, height };
     };
     
-    updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
+    initializeCanvasSize();
 
-    // Get frame URLs from blob storage
-    const forwardUrls = frameData.frames.map(f => f.url);
-    
-    // Create ping-pong array: 1->N then N->1
-    const reverseUrls = [...forwardUrls].reverse().slice(1); // Skip first to avoid duplicate
-    const urls = [...forwardUrls, ...reverseUrls];
-
-    // Preload first few frames for faster initial render
-    const preloadCount = Math.min(10, forwardUrls.length);
-    let loadedCount = 0;
-    
-    for (let i = 0; i < preloadCount; i++) {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount >= preloadCount) {
-          setIsLoaded(true);
+    // Only resize on orientation change
+    const handleResize = () => {
+      if (!initialDimensionsRef.current) return;
+      
+      const newWidth = window.innerWidth;
+      const widthChanged = Math.abs(newWidth - initialDimensionsRef.current.width) > 50;
+      
+      if (widthChanged) {
+        const newHeight = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        initialDimensionsRef.current = { width: newWidth, height: newHeight };
+        
+        if (loaderRef.current) {
+          drawFrame(lastDrawnFrameRef.current, canvas, true);
         }
-      };
-      img.src = urls[i];
-    }
+      }
+    };
+    
+    const handleOrientation = () => {
+      setTimeout(() => {
+        const width = window.innerWidth;
+        const height = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
+        canvas.width = width;
+        canvas.height = height;
+        initialDimensionsRef.current = { width, height };
+        if (loaderRef.current) {
+          drawFrame(lastDrawnFrameRef.current, canvas, true);
+        }
+      }, 150);
+    };
+    
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('orientationchange', handleOrientation);
 
-    // Initialize the scroll-linked animation
-    tweenRef.current = imageSequence({
-      urls,
-      canvas,
-      scrollTrigger: {
-        trigger: document.body,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1.5, // Smooth scrubbing
-      },
+    // Build frame URLs - single forward pass for faster iteration
+    // The animation naturally loops due to ScrollTrigger behavior
+    const urls = frameData.frames.map(f => f.url);
+    const totalSegments = Math.ceil(urls.length / SEGMENT_SIZE);
+
+    // Initialize loader
+    loaderRef.current = new ProgressiveImageLoader(urls);
+
+    const loader = loaderRef.current;
+    const playhead = { frame: 0 };
+
+    // Start animation after initial load
+    loader.loadInitialFrames().then(() => {
+      setIsLoaded(true);
+      drawFrame(0, canvas, true);
+
+      // Smooth scroll-linked animation
+      tweenRef.current = gsap.to(playhead, {
+        frame: urls.length - 1,
+        ease: 'none',
+        onUpdate: () => {
+          const frameIndex = Math.round(playhead.frame);
+          
+          // Preload nearby segments
+          loader.loadSegmentsForFrame(frameIndex);
+          
+          // Schedule frame draw via RAF for smooth rendering
+          scheduleDrawFrame(frameIndex, canvas);
+        },
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.5, // Faster response for buttery smooth scrolling
+        },
+      });
     });
 
     return () => {
-      window.removeEventListener('resize', updateCanvasSize);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleOrientation);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
       if (tweenRef.current) {
         tweenRef.current.kill();
       }
@@ -145,7 +297,7 @@ export default function MobileFrameSequence({
         }
       });
     };
-  }, []);
+  }, [drawFrame, scheduleDrawFrame]);
 
   return (
     <div
@@ -156,6 +308,11 @@ export default function MobileFrameSequence({
         ref={canvasRef}
         className="frame-sequence-canvas"
       />
+      {!isLoaded && (
+        <div className="frame-loading-indicator">
+          <div className="loading-spinner" />
+        </div>
+      )}
     </div>
   );
 }
