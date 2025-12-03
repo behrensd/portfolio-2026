@@ -1,15 +1,18 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
+
 const projectsData = [
     {
         id: 0,
         number: '1',
         title: 'Creator Portfolio',
-        description: 'Eine Portfolio-Seite mit maßgeschneiderter 3D-Animation für eine Hamburger Creator-Kollektiv. Interaktives Storytelling trifft auf moderne Webtechnologie.',
+        description: 'Eine Portfolio-Seite mit maßgeschneiderter 3D-Animation für ein Hamburger Creator-Kollektiv. Interaktives Reißverschluss-Intro für maximale Wiedererkennung.',
         role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer lw25_3d.',
-        tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Vercel'],
+        tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Blender'],
         mockupSize: 'mockup-medium',
         mockupLabel: 'Warmanziehen Preview',
+        videoUrl: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/wa-mockup-v2.mp4',
         url: 'https://warmanziehen-v2.vercel.app',
         credits: {
             motionDesigner: 'lw25_3d',
@@ -19,7 +22,7 @@ const projectsData = [
     {
         id: 1,
         number: '2',
-        title: 'Premium E-Commerce Platform',
+        title: 'Der BANDOPRINZ Onlineshop',
         description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
         role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
         tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Stripe'],
@@ -31,7 +34,7 @@ const projectsData = [
     {
         id: 2,
         number: '3',
-        title: 'Corporate Digital Hub',
+        title: 'Giro di Pizza',
         description: 'Komplette digitale Präsenz für einen deutschen B2B-Dienstleister. SEO-optimiert, GDPR-konform mit integrierter E-Mail-Infrastruktur und umfassendem Analytics-Setup.',
         role: 'Konzeption und Entwicklung der gesamten Web-Lösung. Integration von Nodemailer für automatisierte E-Mail-Workflows, Google Analytics Setup und SEO-Optimierung.',
         tags: ['Next.js', 'Tailwind CSS', 'Nodemailer', 'Analytics'],
@@ -43,6 +46,37 @@ const projectsData = [
 ];
 
 export default function Projects() {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        // Force play and keep checking
+        const playVideo = () => {
+            if (video.paused) {
+                video.play().catch(() => {});
+            }
+        };
+
+        // Initial play
+        playVideo();
+
+        // Keep checking every 500ms to ensure video stays playing
+        const interval = setInterval(playVideo, 500);
+
+        // Also play on visibility change
+        const handleVisibility = () => {
+            if (!document.hidden) playVideo();
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+
+        return () => {
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibility);
+        };
+    }, []);
+
     return (
         <section id="projects" className="content-tile">
             <div className="tile-inner">
@@ -128,9 +162,26 @@ export default function Projects() {
                                 )}
                             </div>
                             <div className={`mockup-container ${project.mockupSize}`}>
-                                <div className="mockup-placeholder">
-                                    <span className="mockup-label">{project.mockupLabel}</span>
-                                </div>
+                                {project.videoUrl ? (
+                                    <video 
+                                        ref={project.id === 0 ? videoRef : undefined}
+                                        className="mockup-video"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        preload="auto"
+                                        src={project.videoUrl}
+                                        onCanPlay={(e) => {
+                                            const video = e.currentTarget;
+                                            video.play().catch(() => {});
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="mockup-placeholder">
+                                        <span className="mockup-label">{project.mockupLabel}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

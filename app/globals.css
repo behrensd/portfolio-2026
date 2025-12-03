@@ -442,9 +442,7 @@ body {
     backdrop-filter: blur(10px);
     transform-style: preserve-3d;
     will-change: transform, opacity;
-    /* Initial states for animations */
-    opacity: 0;
-    transform: translateX(100px);
+    /* Initial states controlled by GSAP */
 }
 
 /* Glass morphism effect */
@@ -487,13 +485,33 @@ body {
 }
 
 .mockup-medium {
-    max-width: 600px;
-    height: 400px;
+    max-width: 100%;
+    height: auto;
+    min-height: 300px;
 }
 
 .mockup-small {
     max-width: 500px;
     height: 350px;
+}
+
+/* Video in mockup */
+.mockup-video {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Video container needs proper sizing */
+.mockup-container:has(.mockup-video) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    max-height: none;
+    padding: 0;
 }
 
 /* Hover effect for mockup containers */
@@ -863,7 +881,7 @@ body {
     }
     
     .mockup-medium {
-        height: 250px;
+        min-height: 200px;
     }
     
     .mockup-small {
