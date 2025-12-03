@@ -154,6 +154,31 @@ body {
     height: 100% !important;
 }
 
+/* ================================
+   SECTION TILES
+   ================================ */
+.section-tile {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-tile {
+    position: relative;
+    overflow: hidden;
+}
+
+.tile-content {
+    position: relative;
+    z-index: var(--z-content);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
 .hero-spline {
     /* Additional hero-specific styles if needed */
 }
@@ -175,9 +200,9 @@ body {
     letter-spacing: var(--letter-spacing-normal);
     text-transform: uppercase;
     /* High contrast text shadow */
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8), 
-                 0 2px 8px rgba(0, 0, 0, 0.6);
-    mix-blend-mode: overlay; /* Optional: makes text interact with bg, remove if readability suffers */
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9), 
+                 0 2px 8px rgba(0, 0, 0, 0.7),
+                 0 0 60px rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
 
@@ -211,8 +236,7 @@ body {
     padding: var(--spacing-lg) var(--spacing-md);
     background: transparent; /* NO BACKGROUND BOX */
     z-index: var(--z-content);
-    opacity: 0;
-    transform: translateY(60px);
+    /* Let GSAP handle initial state - don't hide with CSS */
 }
 
 .tile-inner {
@@ -338,15 +362,22 @@ body {
 }
 
 .project-number {
-    font-size: clamp(4rem, 8vw, 6rem);
+    font-size: clamp(5rem, 12vw, 10rem);
     font-weight: var(--font-weight-normal);
-    color: rgba(255, 107, 53, 0.15);
+    color: var(--color-primary);
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1rem;
+    left: -1rem;
     z-index: 1;
     line-height: 1;
     letter-spacing: var(--letter-spacing-tight);
+    /* Flashy orange glow effect */
+    text-shadow: 
+        0 0 20px rgba(255, 107, 53, 0.8),
+        0 0 40px rgba(255, 107, 53, 0.6),
+        0 0 60px rgba(255, 107, 53, 0.4),
+        0 0 80px rgba(255, 107, 53, 0.2);
+    opacity: 0.9;
 }
 
 .project-content {
@@ -557,15 +588,7 @@ body {
     color: var(--color-text);
 }
 
-/* Initial clip-path state for animations */
-.project-item[data-project="0"] .project-content {
-    clip-path: polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);
-}
-
-/* 3D transform initial state for project 2 */
-.project-item[data-project="2"] .project-content {
-    transform-style: preserve-3d;
-}
+/* Project cards are animated by GSAP - removed clip-path that was hiding content */
 
 .project-title {
     font-size: var(--font-size-xl);
@@ -763,9 +786,12 @@ body {
         position: relative;
         display: block;
         margin-bottom: 0;
-        font-size: 4rem; /* Smaller number on mobile */
-        opacity: 0.3; /* More visible */
-        z-index: 0; /* Behind card */
+        font-size: 5rem;
+        opacity: 0.85;
+        z-index: 0;
+        text-shadow: 
+            0 0 15px rgba(255, 107, 53, 0.7),
+            0 0 30px rgba(255, 107, 53, 0.5);
     }
     
     .glass-card {
@@ -835,5 +861,79 @@ body {
 .project-item,
 .skill-item {
     will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    /* Force hardware acceleration for Safari */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* ================================
+   SAFARI MOBILE FIXES
+   ================================ */
+
+/* Fix for iOS Safari viewport height issues */
+@supports (-webkit-touch-callout: none) {
+    .section-tile {
+        min-height: -webkit-fill-available;
+    }
+    
+    .spline-wrapper {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Ensure touch events work on iOS */
+.contact-link,
+.project-link,
+.dock-item {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Fix backdrop-filter rendering on older Safari */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .glass-card,
+    .about-description,
+    .project-content,
+    .contact-content,
+    .floating-dock {
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+    }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-card,
+    .about-description,
+    .project-content,
+    .contact-content {
+        background: rgba(10, 10, 10, 0.95);
+    }
+    
+    .floating-dock {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}
+
+/* Smooth scrolling fix for iOS */
+html, body {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent iOS zoom on input focus */
+input, select, textarea {
+    font-size: 16px;
+}
+
+/* Fix position:fixed on iOS Safari */
+.floating-dock {
+    -webkit-transform: translateX(-50%) translate3d(0, 0, 0);
+    transform: translateX(-50%) translate3d(0, 0, 0);
+}
+
+.spline-wrapper {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }

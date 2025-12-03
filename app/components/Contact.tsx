@@ -11,9 +11,20 @@ export default function Contact() {
                         work together to create something exceptional.
                     </p>
                     <div className="contact-links" data-speed="0.95">
-                        <a href="mailto:your@email.com" className="contact-link">Email</a>
-                        <a href="#" className="contact-link">LinkedIn</a>
-                        <a href="#" className="contact-link">GitHub</a>
+                        <a 
+                            href="mailto:dom@baisolutions.de" 
+                            className="contact-link"
+                        >
+                            Email
+                        </a>
+                        <a 
+                            href="https://instagram.com/baisolutions.de" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="contact-link"
+                        >
+                            Instagram
+                        </a>
                     </div>
                 </div>
             </div>

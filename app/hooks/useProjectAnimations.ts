@@ -8,19 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function useProjectAnimations() {
     useEffect(() => {
-        // CRITICAL: Normalize scroll for mobile devices
-        // This fixes touch scrolling issues on iOS/Android
-        const isMobile = window.innerWidth < 768;
-        
-        if (isMobile) {
-            ScrollTrigger.normalizeScroll(true);
-        }
-
-        // Delay to ensure DOM is ready
+        // Delay to ensure DOM is ready - longer for Safari
         const timer = setTimeout(() => {
-            // Force ScrollTrigger to recalculate
-            ScrollTrigger.refresh(true);
-            
             // Select all project items
             const projects = gsap.utils.toArray('.project-item');
             
@@ -29,80 +18,85 @@ export function useProjectAnimations() {
                 return;
             }
             
-            // Simplified animations for better performance
+            // Simple fade-in animation for each project
             projects.forEach((project: any, index: number) => {
                 const projectContent = project.querySelector('.project-content');
                 const projectNumber = project.querySelector('.project-number');
                 
-                // Set initial state - less dramatic movement for mobile
-                const yOffset = isMobile ? 40 : 60;
-                gsap.set(project, { y: yOffset, opacity: 0 });
-                if (projectNumber) gsap.set(projectNumber, { opacity: 0 });
-                if (projectContent) gsap.set(projectContent, { opacity: 0 });
-
-                // Simple fade-in animation - NO scrub on mobile (causes jank)
-                gsap.to(project, {
-                    scrollTrigger: {
-                        trigger: project,
-                        start: isMobile ? 'top 95%' : 'top 85%',
-                        end: isMobile ? 'top 80%' : 'top 50%',
-                        toggleActions: 'play none none none', // Play once, don't reverse
-                        // NO scrub on mobile - it causes performance issues
-                        scrub: isMobile ? false : 0.8,
-                        invalidateOnRefresh: true,
-                    },
-                    y: 0,
-                    opacity: 1,
-                    duration: isMobile ? 0.6 : 1,
-                    ease: 'power2.out',
-                    delay: index * 0.1
+                // Set initial state
+                gsap.set(project, { 
+                    y: 40, 
+                    opacity: 0,
+                    visibility: 'visible' // Ensure visible for Safari
                 });
+                if (projectNumber) gsap.set(projectNumber, { opacity: 0 });
+                if (projectContent) gsap.set(projectContent, { y: 20, opacity: 0 });
 
-                // Number fade
-                if (projectNumber) {
-                    gsap.to(projectNumber, {
-                        scrollTrigger: {
-                            trigger: project,
-                            start: isMobile ? 'top 95%' : 'top 85%',
-                            toggleActions: 'play none none none',
-                            scrub: isMobile ? false : 1,
-                        },
-                        opacity: 0.3,
-                        duration: 0.6,
-                        ease: 'power2.out'
-                    });
-                }
-                
-                // Content fade
-                if (projectContent) {
-                    gsap.to(projectContent, {
-                        scrollTrigger: {
-                            trigger: project,
-                            start: isMobile ? 'top 95%' : 'top 85%',
-                            toggleActions: 'play none none none',
-                            scrub: isMobile ? false : 0.8,
-                        },
-                        opacity: 1,
-                        duration: 0.6,
-                        ease: 'power2.out'
-                    });
-                }
+                // Create scroll trigger
+                ScrollTrigger.create({
+                    trigger: project,
+                    start: 'top 95%',
+                    end: 'bottom 10%',
+                    onEnter: () => {
+                        gsap.to(project, {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.6,
+                            ease: 'power2.out',
+                        });
+                        
+                        if (projectNumber) {
+                            gsap.to(projectNumber, {
+                                opacity: 0.9,
+                                duration: 0.5,
+                                ease: 'power2.out',
+                            });
+                        }
+                        
+                        if (projectContent) {
+                            gsap.to(projectContent, {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.5,
+                                ease: 'power2.out',
+                                delay: 0.1
+                            });
+                        }
+                    },
+                    // Also trigger when scrolling back up (for Safari)
+                    onEnterBack: () => {
+                        gsap.to(project, { opacity: 1, y: 0, duration: 0.3 });
+                        if (projectNumber) gsap.to(projectNumber, { opacity: 0.9, duration: 0.3 });
+                        if (projectContent) gsap.to(projectContent, { opacity: 1, y: 0, duration: 0.3 });
+                    },
+                    once: false, // Allow re-triggering on Safari
+                    invalidateOnRefresh: true // Important for Safari resize/orientation
+                });
             });
             
+            // Force refresh after setup - critical for Safari
+            ScrollTrigger.refresh(true);
+            
+            // Additional refresh after a short delay for Safari
+            setTimeout(() => {
+                ScrollTrigger.refresh(true);
+            }, 500);
+            
             console.log('✨ Project animations initialized');
-        }, 300);
+        }, 200);
 
-        // Refresh on resize
+        // Refresh on resize and orientation change (Safari mobile)
         const handleResize = () => {
             ScrollTrigger.refresh(true);
         };
+        
         window.addEventListener('resize', handleResize);
+        window.addEventListener('orientationchange', handleResize);
 
         return () => {
             clearTimeout(timer);
             window.removeEventListener('resize', handleResize);
-            // Disable normalizeScroll on cleanup
-            ScrollTrigger.normalizeScroll(false);
+            window.removeEventListener('orientationchange', handleResize);
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
     }, []);

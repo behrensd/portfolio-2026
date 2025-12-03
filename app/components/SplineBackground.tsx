@@ -19,50 +19,55 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
     const [isLoaded, setIsLoaded] = useState(false);
     const [shouldRender, setShouldRender] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
 
-    // Check if mobile on mount
+    // Check device type on mount
     useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
+        const checkDevice = () => {
+            const width = window.innerWidth;
+            setIsMobile(width < 768);
+            setIsSmallScreen(width < 480);
         };
         
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
+        checkDevice();
+        window.addEventListener('resize', checkDevice);
         
-        return () => window.removeEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkDevice);
     }, []);
 
     // Delay rendering to improve initial page load performance
-    // On mobile, delay even more or skip entirely for performance
     useEffect(() => {
-        const delay = isMobile ? 1000 : 300; // Longer delay on mobile
+        // Skip Spline on very small screens
+        if (isSmallScreen) {
+            return;
+        }
+        
+        // Longer delay on mobile for better performance
+        const delay = isMobile ? 1500 : 500;
         const timer = setTimeout(() => {
             setShouldRender(true);
         }, delay);
 
         return () => clearTimeout(timer);
-    }, [isMobile]);
+    }, [isMobile, isSmallScreen]);
 
     const handleLoad = (splineApp: Application) => {
         setIsLoaded(true);
         console.log('✨ Spline scene loaded');
         
-        // On mobile, try to reduce quality/zoom for performance
+        // Optimize for mobile/tablet
         if (isMobile) {
             try {
-                splineApp.setZoom(0.5); // Zoom out more on mobile
+                splineApp.setZoom(0.5);
             } catch (e) {
-                // setZoom might not be available
+                console.log('Zoom not available');
             }
         }
     };
 
-    // Don't render Spline on very small screens (< 480px) for performance
-    const shouldSkipSpline = typeof window !== 'undefined' && window.innerWidth < 480;
-
     return (
         <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''}`}>
-            {shouldRender && !shouldSkipSpline && (
+            {shouldRender && !isSmallScreen && (
                 <Spline 
                     scene={scene} 
                     onLoad={handleLoad}
