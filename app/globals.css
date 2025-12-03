@@ -16,7 +16,8 @@
     --color-bg: #0a0a0a;
     --color-primary: #ff6b35;
     --color-text: #ffffff;
-    --color-text-dim: #a0a0a0;
+    --color-text-dim: #b8b8b8; /* Brighter grey for better contrast (WCAG AA compliant) */
+    --color-text-muted: #8a8a8a; /* For less important text */
     
     /* Typography - VHS Gothic System (Single-weight pixel font)
        Hierarchy achieved through SIZE, LETTER-SPACING, COLOR, and TEXT-TRANSFORM
@@ -344,8 +345,9 @@ body {
 .hero-tile {
     position: relative;
     overflow: hidden;
-    /* Slightly shorter than full viewport */
-    min-height: 85vh;
+    /* Fit exactly to viewport */
+    height: 100vh;
+    max-height: 100dvh; /* Dynamic viewport height for mobile */
 }
 
 .tile-content {
@@ -362,17 +364,15 @@ body {
     justify-content: center;
 }
 
-.hero-spline {
-    /* Additional hero-specific styles if needed */
-}
+/* .hero-spline - Additional hero-specific styles can be added here if needed */
 
 .hero-content {
     position: relative;
     z-index: var(--z-content);
     text-align: center;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     /* Add bottom padding to keep text above the floating dock */
-    padding-bottom: 8rem;
+    padding-bottom: 6rem;
     /* Ensure content is above Spline background */
     pointer-events: auto;
     /* Explicit centering - using all methods for maximum compatibility */
@@ -389,8 +389,8 @@ body {
 /* Hero Image - between BAI and SOLUTIONS */
 .hero-image-container {
     width: 100%;
-    max-width: 400px;
-    margin: var(--spacing-md) auto;
+    max-width: 320px;
+    margin: var(--spacing-sm) auto;
     display: flex;
     justify-content: center;
 }
@@ -416,7 +416,7 @@ body {
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-tight);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     letter-spacing: var(--letter-spacing-normal);
     text-transform: uppercase;
     /* High contrast text shadow */
@@ -448,22 +448,25 @@ body {
 
 /* Push BAI down from top */
 .hero-line:first-child {
-    margin-top: 4rem;
+    margin-top: 1.5rem;
 }
-
 .hero-subtitle {
-    font-size: var(--font-size-sm);
-    color: #ffffff;
-    font-weight: var(--font-weight-normal);
+    display: inline-block;
+    font-size: var(--font-size-lg);
+    color: #fff;
+    background-color: rgba(255, 107, 53, 0.2); /* Consistent 0.2 opacity background */
+    font-weight: 700;
     letter-spacing: var(--letter-spacing-widest);
     text-transform: uppercase;
     line-height: var(--line-height-snug);
-    /* Text shadow for readability */
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-    opacity: 0.9;
-    /* Force centering */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    opacity: 1; /* Text stays fully visible */
     text-align: center;
-    width: 100%;
+    width: auto;
+    padding: 0.5em 1.25em;
+    border-radius: 2em;
+    box-shadow: 0 4px 20px rgba(255, 107, 53, 0.07);
+    margin: 0 auto;
 }
 
 /* ================================
@@ -747,7 +750,6 @@ body {
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-text-dim);
-    opacity: 0.9;
 }
 
 .project-metrics {
@@ -927,10 +929,11 @@ body {
 }
 
 .contact-link {
-    padding: 0; /* NO PADDING */
-    background: transparent; /* NO BACKGROUND */
-    border: none; /* NO BORDER */
-    color: var(--color-primary); /* JUST COLOR */
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    border-radius: 10px; /* Rounded but not round */
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: var(--font-weight-normal);
     font-size: var(--font-size-sm);
@@ -940,23 +943,11 @@ body {
     position: relative;
 }
 
-.contact-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--color-primary);
-    transition: width 0.3s ease;
-}
-
-.contact-link:hover::after {
-    width: 100%;
-}
-
 .contact-link:hover {
-    color: var(--color-text);
+    background: var(--color-primary);
+    color: var(--color-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
 }
 
 /* ================================
@@ -969,9 +960,10 @@ body {
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(20px);
-    border: none; /* NO BORDER */
+    border-radius: 12px; /* Subtle rounded corners */
     padding: 1rem 2rem;
     display: flex;
+    align-items: center; /* Center items vertically */
     gap: 2rem;
     z-index: var(--z-dock);
 }
@@ -985,7 +977,7 @@ body {
     font-family: inherit;
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-widest);
-    padding-bottom: 0.5rem;
+    padding: 0.25rem 0 0.5rem 0; /* Top padding to center text with indicator */
     transition: color 0.3s ease;
     /* Reset button styles */
     background: none;
@@ -1119,6 +1111,14 @@ body {
     
     .contact-links {
         gap: var(--spacing-md);
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .contact-link {
+        width: 100%;
+        text-align: center;
+        padding: 1rem 1.5rem;
     }
     
     /* Responsive mockup sizes */
