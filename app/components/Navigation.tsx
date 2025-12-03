@@ -11,15 +11,16 @@ export default function Navigation() {
     return (
         <nav className="floating-dock">
             {navItems.map((item) => (
-                <a 
+                <button 
                     key={item.section} 
-                    href={item.href} 
+                    type="button"
                     className="dock-item" 
                     data-section={item.section}
+                    data-href={item.href}
                 >
                     <span className="dock-icon">{item.label}</span>
                     <span className="dock-indicator"></span>
-                </a>
+                </button>
             ))}
         </nav>
     );

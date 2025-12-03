@@ -24,13 +24,17 @@ export function useLogoScrollAnimation() {
     // Add click handler for smooth scroll to top
     const handleClick = (e: Event) => {
       e.preventDefault();
+      // Safari needs slightly longer duration for smooth rendering
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      
       gsap.to(window, {
-        duration: 1,
+        duration: isSafari ? 0.55 : 0.35,
         scrollTo: {
           y: '#hero',
-          offsetY: 0
+          offsetY: 0,
+          autoKill: true
         },
-        ease: 'power2.inOut'
+        ease: 'expo.out'
       });
     };
     

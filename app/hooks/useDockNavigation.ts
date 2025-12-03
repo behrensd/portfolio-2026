@@ -29,7 +29,8 @@ export function useDockNavigation() {
                         const id = section.getAttribute('id');
                         dockItems.forEach(item => {
                             item.classList.remove('active');
-                            if (item.getAttribute('href') === `#${id}`) {
+                            const itemHref = item.getAttribute('data-href') || item.getAttribute('href');
+                            if (itemHref === `#${id}`) {
                                 item.classList.add('active');
                             }
                         });
@@ -46,17 +47,20 @@ export function useDockNavigation() {
             end: 'bottom bottom',
             onEnter: () => {
                 dockItems.forEach(item => item.classList.remove('active'));
-                const contactLink = document.querySelector('.dock-item[href="#contact"]');
+                const contactLink = document.querySelector('.dock-item[data-href="#contact"]') || 
+                                   document.querySelector('.dock-item[href="#contact"]');
                 if (contactLink) contactLink.classList.add('active');
             }
         });
         triggersRef.current.push(bottomTrigger);
         
-        // Smooth scroll on click
+        // Smooth scroll on click - using data-href to avoid native anchor behavior
         dockItems.forEach(item => {
             const handleClick = (e: Event) => {
                 e.preventDefault();
-                const targetId = (item as HTMLAnchorElement).getAttribute('href');
+                e.stopPropagation();
+                
+                const targetId = item.getAttribute('data-href') || item.getAttribute('href');
                 const targetSection = targetId ? document.querySelector(targetId) : null;
                 
                 if (targetSection) {
@@ -64,13 +68,14 @@ export function useDockNavigation() {
                     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
                     
                     gsap.to(window, {
-                        duration: isSafari ? 0.55 : 0.35,
+                        duration: isSafari ? 0.6 : 0.4,
                         scrollTo: {
                             y: targetSection,
                             offsetY: 0,
                             autoKill: true
                         },
-                        ease: 'expo.out' // Instant start, smooth stop
+                        ease: 'power4.out', // Fast start, gentle stop - works better on Safari
+                        overwrite: 'auto' // Kill any conflicting scroll tweens
                     });
                 }
             };

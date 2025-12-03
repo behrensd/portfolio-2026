@@ -296,6 +296,38 @@ body {
     }
 }
 
+/* Handle landscape orientation on mobile */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .frame-sequence-container {
+        /* In landscape, use viewport width for height reference */
+        height: calc(100vmax + 100px);
+    }
+    
+    .frame-sequence-canvas {
+        /* Ensure canvas fills landscape viewport */
+        object-fit: cover;
+    }
+    
+    /* Adjust hero content for landscape */
+    .hero-content {
+        padding-bottom: 4rem;
+        padding-top: 1rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 6rem);
+    }
+    
+    .hero-image-container {
+        max-width: 200px;
+        margin: var(--spacing-sm) auto;
+    }
+    
+    .hero-line:first-child {
+        margin-top: 1rem;
+    }
+}
+
 /* ================================
    SECTION TILES
    ================================ */
@@ -952,10 +984,15 @@ body {
     text-decoration: none;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-normal);
+    font-family: inherit;
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-widest);
     padding-bottom: 0.5rem;
     transition: color 0.3s ease;
+    /* Reset button styles */
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .dock-item.active {

@@ -229,16 +229,22 @@ export default function MobileFrameSequence({
     };
     
     const handleOrientation = () => {
-      setTimeout(() => {
+      // Multiple redraws to handle Safari's delayed viewport updates
+      const redraw = () => {
         const width = window.innerWidth;
         const height = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
         canvas.width = width;
         canvas.height = height;
         initialDimensionsRef.current = { width, height };
-        if (loaderRef.current) {
+        if (loaderRef.current && lastDrawnFrameRef.current >= 0) {
           drawFrame(lastDrawnFrameRef.current, canvas, true);
         }
-      }, 150);
+      };
+      
+      // Safari needs multiple attempts as viewport size settles after rotation
+      setTimeout(redraw, 100);
+      setTimeout(redraw, 300);
+      setTimeout(redraw, 500);
     };
     
     window.addEventListener('resize', handleResize, { passive: true });

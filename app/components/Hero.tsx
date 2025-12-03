@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useHeroAnimation } from '../hooks/useHeroAnimation';
 import { useSplineScroll } from '../hooks/useSplineScroll';
@@ -8,24 +8,45 @@ import SplineBackground from './SplineBackground';
 import MobileFrameSequence from './MobileFrameSequence';
 import type { Application } from '@splinetool/runtime';
 
+// Detect if device is truly mobile (not just small screen)
+function detectMobileDevice(): boolean {
+    if (typeof window === 'undefined') return false;
+    
+    // Check for touch capability
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // Check user agent for mobile devices
+    const mobileUA = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+    );
+    
+    // Check if screen is small in either dimension (handles landscape)
+    const smallScreen = Math.min(window.screen.width, window.screen.height) < 768;
+    
+    // It's mobile if it has touch + mobile UA, OR touch + small physical screen
+    return (hasTouch && mobileUA) || (hasTouch && smallScreen);
+}
+
 export default function Hero() {
     const [splineApp, setSplineApp] = useState<Application | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isClient, setIsClient] = useState(false);
+    const initialMobileRef = useRef<boolean | null>(null);
     
     useHeroAnimation();
     // Only use Spline scroll on desktop
     useSplineScroll(isMobile ? null : splineApp);
 
-    // Detect mobile on client side
+    // Detect mobile on client side - only once on mount to prevent switching
     useEffect(() => {
         setIsClient(true);
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-        checkMobile();
-        window.addEventListener('resize', checkMobile, { passive: true });
-        return () => window.removeEventListener('resize', checkMobile);
+        
+        // Only detect once - don't switch between Spline/MobileFrameSequence on orientation change
+        if (initialMobileRef.current === null) {
+            const mobile = detectMobileDevice();
+            initialMobileRef.current = mobile;
+            setIsMobile(mobile);
+        }
     }, []);
 
     const handleSplineLoad = useCallback((app: Application) => {
