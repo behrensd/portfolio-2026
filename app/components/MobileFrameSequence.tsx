@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { animate } from 'animejs';
 import frameData from '../data/frame-urls.json';
 
 if (typeof window !== 'undefined') {
@@ -12,6 +13,22 @@ if (typeof window !== 'undefined') {
 interface MobileFrameSequenceProps {
   className?: string;
 }
+
+/**
+ * MobileFrameSequence Component
+ *
+ * Scroll-linked canvas animation with frame sequence playback.
+ *
+ * KEY IMPROVEMENTS:
+ * - Canvas uses FIXED positioning (no movement, only content changes)
+ * - Dimensions locked to exact viewport size
+ * - GSAP ScrollTrigger with 0.5s scrub for smooth scroll sync
+ * - Optional Anime.js interpolation available (disabled by default)
+ * - Hardware-accelerated rendering with translate3d
+ *
+ * To enable ultra-smooth frame interpolation (at cost of slight scroll lag):
+ * Change scheduleDrawFrame() call to: scheduleDrawFrame(frameIndex, canvas, true)
+ */
 
 // Configuration for progressive loading - optimized for smooth scrolling
 const SEGMENT_SIZE = 15; // Load 15 frames at a time
@@ -140,65 +157,90 @@ export default function MobileFrameSequence({
   const initialDimensionsRef = useRef<{ width: number; height: number } | null>(null);
   const rafIdRef = useRef<number | null>(null);
   const pendingFrameRef = useRef<number>(0);
+  const smoothFrameRef = useRef<{ value: number }>({ value: 0 });
 
-  // Optimized draw function with RAF batching
+  // Optimized draw function with RAF batching - NO POSITION SHIFTS
   const drawFrame = useCallback((frameIndex: number, canvas: HTMLCanvasElement, force = false) => {
     const loader = loaderRef.current;
     if (!loader) return;
-    
+
     // Skip if same frame already drawn (unless forced)
     if (!force && frameIndex === lastDrawnFrameRef.current) return;
-    
+
     // Get actual frame to draw (nearest loaded if target not ready)
-    const actualFrame = loader.isFrameLoaded(frameIndex) 
-      ? frameIndex 
+    const actualFrame = loader.isFrameLoaded(frameIndex)
+      ? frameIndex
       : loader.getNearestLoadedFrame(frameIndex);
-    
+
     const img = loader.getImage(actualFrame);
     if (!img?.complete || !img.naturalWidth) return;
-    
+
     // Get optimized 2D context (no alpha for better performance)
-    const ctx = canvas.getContext('2d', { 
+    const ctx = canvas.getContext('2d', {
       alpha: false,
       desynchronized: true // Allows canvas to update independently of DOM
     });
     if (!ctx) return;
-    
-    // Calculate scaling to cover canvas
+
+    // FIXED POSITIONING: Calculate cover dimensions WITHOUT offsets
+    // This ensures the image is always drawn from the same position
     const canvasRatio = canvas.width / canvas.height;
     const imgRatio = img.naturalWidth / img.naturalHeight;
-    
-    let drawWidth, drawHeight, offsetX, offsetY;
-    
+
+    let drawWidth, drawHeight;
+
+    // Cover logic: fill entire canvas, crop if needed
     if (imgRatio > canvasRatio) {
+      // Image is wider - fit to height, crop sides
       drawHeight = canvas.height;
       drawWidth = img.naturalWidth * (canvas.height / img.naturalHeight);
-      offsetX = (canvas.width - drawWidth) / 2;
-      offsetY = 0;
     } else {
+      // Image is taller - fit to width, crop top/bottom
       drawWidth = canvas.width;
       drawHeight = img.naturalHeight * (canvas.width / img.naturalWidth);
-      offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
     }
-    
-    // Draw with black background (faster than clearRect + draw)
+
+    // IMPORTANT: Always center-crop from the same position
+    // Calculate source crop area to center the content
+    const offsetX = (canvas.width - drawWidth) / 2;
+    const offsetY = (canvas.height - drawHeight) / 2;
+
+    // Clear with black background
     ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw centered (this positioning is LOCKED and won't shift)
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-    
+
     lastDrawnFrameRef.current = actualFrame;
   }, []);
 
-  // RAF-based drawing for smooth updates
-  const scheduleDrawFrame = useCallback((frameIndex: number, canvas: HTMLCanvasElement) => {
+  // RAF-based drawing with optional smooth interpolation
+  const scheduleDrawFrame = useCallback((frameIndex: number, canvas: HTMLCanvasElement, useSmoothing = false) => {
     pendingFrameRef.current = frameIndex;
-    
+
     if (rafIdRef.current !== null) return; // Already scheduled
-    
+
     rafIdRef.current = requestAnimationFrame(() => {
       rafIdRef.current = null;
-      drawFrame(pendingFrameRef.current, canvas);
+
+      // Optional: Use Anime.js for ultra-smooth frame interpolation
+      // Set useSmoothing = true for even smoother transitions (at cost of slight scroll lag)
+      if (useSmoothing && Math.abs(smoothFrameRef.current.value - frameIndex) > 1) {
+        animate(smoothFrameRef.current, {
+          value: frameIndex,
+          duration: 80, // Very short duration for smooth transition
+          ease: 'outQuad',
+          onUpdate: () => {
+            const smoothFrame = Math.floor(smoothFrameRef.current.value);
+            drawFrame(smoothFrame, canvas);
+          }
+        });
+      } else {
+        // Direct draw - keeps perfect 1:1 scroll sync
+        smoothFrameRef.current.value = frameIndex;
+        drawFrame(frameIndex, canvas);
+      }
     });
   }, [drawFrame]);
 
@@ -206,33 +248,46 @@ export default function MobileFrameSequence({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Initialize canvas with optimized size
+    // Initialize canvas with FIXED size - lock to viewport dimensions
     const initializeCanvasSize = () => {
+      // Lock to exact viewport dimensions
       const width = window.innerWidth;
-      // Use stable height calculation
-      const height = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
-      
+      const height = window.innerHeight;
+
       canvas.width = width;
       canvas.height = height;
+
+      // Set explicit CSS size to prevent any browser scaling/shifting
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
       initialDimensionsRef.current = { width, height };
     };
-    
+
     initializeCanvasSize();
 
-    // Only resize on orientation change
+    // Only resize on significant orientation/dimension change
     const handleResize = () => {
       if (!initialDimensionsRef.current) return;
-      
+
       const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      // Only resize if dimensions actually changed (not just scrollbar appearance)
       const widthChanged = Math.abs(newWidth - initialDimensionsRef.current.width) > 50;
-      
-      if (widthChanged) {
-        const newHeight = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
+      const heightChanged = Math.abs(newHeight - initialDimensionsRef.current.height) > 50;
+
+      if (widthChanged || heightChanged) {
         canvas.width = newWidth;
         canvas.height = newHeight;
+
+        // Lock CSS dimensions
+        canvas.style.width = `${newWidth}px`;
+        canvas.style.height = `${newHeight}px`;
+
         initialDimensionsRef.current = { width: newWidth, height: newHeight };
-        
-        if (loaderRef.current) {
+
+        if (loaderRef.current && lastDrawnFrameRef.current >= 0) {
           drawFrame(lastDrawnFrameRef.current, canvas, true);
         }
       }
@@ -242,15 +297,22 @@ export default function MobileFrameSequence({
       // Multiple redraws to handle Safari's delayed viewport updates
       const redraw = () => {
         const width = window.innerWidth;
-        const height = Math.max(window.innerHeight, window.screen.availHeight * 0.85);
+        const height = window.innerHeight;
+
         canvas.width = width;
         canvas.height = height;
+
+        // Lock CSS dimensions to prevent shifting
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
         initialDimensionsRef.current = { width, height };
+
         if (loaderRef.current && lastDrawnFrameRef.current >= 0) {
           drawFrame(lastDrawnFrameRef.current, canvas, true);
         }
       };
-      
+
       // Safari needs multiple attempts as viewport size settles after rotation
       setTimeout(redraw, 100);
       setTimeout(redraw, 300);
@@ -286,13 +348,15 @@ export default function MobileFrameSequence({
       
       tweenRef.current = gsap.to(playhead, {
         frame: totalAnimationFrames,
-        ease: 'none',
+        ease: 'none', // Linear for 1:1 scroll sync
         onUpdate: () => {
-          const rawFrame = Math.round(playhead.frame);
-          
+          // Use floor instead of round for smoother frame progression
+          const rawFrame = playhead.frame;
+          const flooredFrame = Math.floor(rawFrame);
+
           // Calculate position within current ping-pong cycle
-          const positionInCycle = rawFrame % cycleLength;
-          
+          const positionInCycle = flooredFrame % cycleLength;
+
           // Boomerang logic: forward then reverse
           let frameIndex;
           if (positionInCycle <= totalFrames - 1) {
@@ -302,10 +366,13 @@ export default function MobileFrameSequence({
             // Reverse half: 129 → 1 (bounce back, skipping endpoints)
             frameIndex = cycleLength - positionInCycle;
           }
-          
+
+          // Clamp frame index to valid range
+          frameIndex = Math.max(0, Math.min(totalFrames - 1, frameIndex));
+
           // Preload nearby segments (accounting for both directions)
           loader.loadSegmentsForFrame(frameIndex);
-          
+
           // Preload frames in both directions for smooth playback
           if (frameIndex < 20) {
             loader.loadSegmentsForFrame(0);
@@ -313,7 +380,7 @@ export default function MobileFrameSequence({
           if (frameIndex > totalFrames - 20) {
             loader.loadSegmentsForFrame(totalFrames - 1);
           }
-          
+
           // Schedule frame draw via RAF for smooth rendering
           scheduleDrawFrame(frameIndex, canvas);
         },
@@ -321,7 +388,8 @@ export default function MobileFrameSequence({
           trigger: document.body,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.3, // Faster response for buttery smooth scrolling with multiple loops
+          scrub: 0.5, // Slightly smoother scrub for buttery frame transitions
+          invalidateOnRefresh: true,
         },
       });
     });

@@ -221,14 +221,14 @@ body {
    ================================ */
 .frame-sequence-container {
     position: fixed;
-    /* Extend past viewport edges to cover Safari safe areas and gaps */
-    top: -50px;
-    left: -50px;
-    right: -50px;
-    bottom: -50px;
-    width: calc(100vw + 100px);
-    height: calc(100vh + 100px);
-    height: calc(100svh + 100px);
+    /* Lock to viewport edges - NO EXTENSION for fixed positioning */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
     z-index: 0;
     pointer-events: none;
     opacity: 0;
@@ -238,7 +238,7 @@ body {
     background-color: #0a0a0a;
     background: var(--color-bg, #0a0a0a);
     /* Hardware acceleration */
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     will-change: opacity;
 }
 
@@ -247,23 +247,26 @@ body {
 }
 
 .frame-sequence-canvas {
-    position: absolute;
-    /* Offset to center within the extended container */
-    top: 50px;
-    left: 50px;
-    /* Fill viewport (container is 100px larger on each axis) */
-    width: calc(100% - 100px);
-    height: calc(100% - 100px);
+    position: fixed; /* Changed from absolute to fixed for true locked positioning */
+    /* Lock to exact viewport position - NO OFFSETS */
+    top: 0;
+    left: 0;
+    /* Fill viewport exactly */
+    width: 100vw !important;
+    height: 100vh !important;
     /* Performance optimizations for smooth scrolling */
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    will-change: contents;
-    contain: strict;
+    will-change: transform;
+    contain: layout style paint;
     pointer-events: none;
-    /* Optimize rendering */
+    /* Optimize rendering - smooth edges */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+    /* Lock object-fit for consistent rendering */
+    object-fit: cover;
+    object-position: center center;
 }
 
 /* Loading indicator styles */
@@ -292,23 +295,31 @@ body {
 /* Ensure frame sequence works with iOS viewport quirks */
 @supports (-webkit-touch-callout: none) {
     .frame-sequence-container {
-        /* Extend to cover all iOS safe areas */
-        height: calc(-webkit-fill-available + 100px);
+        /* Use -webkit-fill-available for iOS viewport stability */
+        height: -webkit-fill-available;
+    }
+
+    .frame-sequence-canvas {
+        height: -webkit-fill-available !important;
     }
 }
 
 /* Handle landscape orientation on mobile */
 @media screen and (orientation: landscape) and (max-height: 500px) {
     .frame-sequence-container {
-        /* In landscape, use viewport width for height reference */
-        height: calc(100vmax + 100px);
+        /* In landscape, lock to viewport */
+        width: 100vw;
+        height: 100vh;
     }
-    
+
     .frame-sequence-canvas {
-        /* Ensure canvas fills landscape viewport */
+        /* Ensure canvas fills landscape viewport with locked positioning */
+        width: 100vw !important;
+        height: 100vh !important;
         object-fit: cover;
+        object-position: center center;
     }
-    
+
     /* Adjust hero content for landscape */
     .hero-content {
         padding-bottom: 4rem;
