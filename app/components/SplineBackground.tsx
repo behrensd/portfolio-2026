@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import type { Application } from '@splinetool/runtime';
 
@@ -13,12 +13,14 @@ const Spline = dynamic(() => import('@splinetool/react-spline'), {
 interface SplineBackgroundProps {
     scene: string;
     className?: string;
+    onSplineLoad?: (app: Application) => void;
 }
 
-export default function SplineBackground({ scene, className = '' }: SplineBackgroundProps) {
+export default function SplineBackground({ scene, className = '', onSplineLoad }: SplineBackgroundProps) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [shouldRender, setShouldRender] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const splineAppRef = useRef<Application | null>(null);
 
     // Check device type on mount
     useEffect(() => {
@@ -43,7 +45,8 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
         return () => clearTimeout(timer);
     }, [isMobile]);
 
-    const handleLoad = (splineApp: Application) => {
+    const handleLoad = useCallback((splineApp: Application) => {
+        splineAppRef.current = splineApp;
         setIsLoaded(true);
         console.log('✨ Spline scene loaded');
         
@@ -55,10 +58,19 @@ export default function SplineBackground({ scene, className = '' }: SplineBackgr
                 console.log('Zoom not available');
             }
         }
-    };
+        
+        // Expose the app to parent component for scroll animations
+        if (onSplineLoad) {
+            onSplineLoad(splineApp);
+        }
+    }, [isMobile, onSplineLoad]);
+
+    // On mobile, keep pointer-events: none to allow touch scrolling through the scene
+    // On desktop, allow pointer events for interaction
+    const pointerClass = isMobile ? 'mobile-no-pointer' : '';
 
     return (
-        <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''}`}>
+        <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''} ${pointerClass}`}>
             {shouldRender && (
                 <Spline 
                     scene={scene} 

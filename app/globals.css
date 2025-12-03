@@ -86,13 +86,14 @@ body {
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
     overflow-x: hidden;
-    /* Allow scrolling - iOS Safari needs this */
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
     /* Pixel font rendering optimization */
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: auto;
     text-rendering: optimizeSpeed;
+    /* Mobile touch optimization */
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ================================
@@ -147,6 +148,12 @@ body {
     pointer-events: auto;
 }
 
+/* On mobile, keep pointer-events none to allow touch scrolling through the 3D scene */
+.spline-wrapper.mobile-no-pointer,
+.spline-wrapper.mobile-no-pointer.loaded {
+    pointer-events: none !important;
+}
+
 /* Force Spline viewer to fill viewport */
 .spline-wrapper > div,
 .spline-wrapper canvas {
@@ -197,12 +204,15 @@ body {
     padding: var(--spacing-md);
     /* Ensure content is above Spline background */
     pointer-events: auto;
-    /* Explicit centering */
+    /* Explicit centering - using all methods for maximum compatibility */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+    box-sizing: border-box;
 } 
 
 .hero-title {
@@ -217,12 +227,16 @@ body {
                  0 2px 8px rgba(0, 0, 0, 0.7),
                  0 0 60px rgba(0, 0, 0, 0.5);
     color: #ffffff;
-    /* Force centering */
+    /* Force centering - explicit on all axes */
     text-align: center;
     width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-line {
@@ -806,21 +820,38 @@ body {
    RESPONSIVE
    ================================ */
 @media (max-width: 768px) {
-    /* Hero centering on mobile */
+    /* Hero centering on mobile - explicit full centering */
+    #hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
     .hero-tile .tile-content,
     .hero-content {
         text-align: center;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
     }
     
     .hero-title {
+        text-align: center;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hero-line {
         text-align: center;
         width: 100%;
     }
     
     .hero-subtitle {
         text-align: center;
+        width: 100%;
     }
     
     .content-tile {
@@ -929,7 +960,7 @@ body {
 }
 
 /* ================================
-   SAFARI MOBILE FIXES
+   MOBILE & SAFARI FIXES
    ================================ */
 
 /* Fix for iOS Safari viewport height issues */
@@ -940,6 +971,27 @@ body {
     
     .spline-wrapper {
         height: -webkit-fill-available;
+    }
+    
+    /* Ensure hero is properly centered on iOS */
+    #hero {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Mobile scroll optimization */
+@media (max-width: 768px) {
+    html, body {
+        /* Enable smooth momentum scrolling */
+        overflow-y: auto;
+        overscroll-behavior-y: none;
+    }
+    
+    /* Ensure Spline doesn't block touch scrolling on mobile */
+    .spline-wrapper,
+    .spline-wrapper canvas {
+        touch-action: none;
+        pointer-events: none !important;
     }
 }
 
@@ -975,11 +1027,6 @@ body {
     .floating-dock {
         background: rgba(0, 0, 0, 0.95);
     }
-}
-
-/* Smooth scrolling fix for iOS */
-html, body {
-    -webkit-overflow-scrolling: touch;
 }
 
 /* Prevent iOS zoom on input focus */

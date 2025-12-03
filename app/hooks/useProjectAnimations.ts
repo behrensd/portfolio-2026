@@ -10,12 +10,9 @@ export function useProjectAnimations() {
     useEffect(() => {
         // Detect mobile/Safari
         const isMobile = window.innerWidth < 768;
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
         
-        // On iOS, use normalizeScroll for reliable scroll detection
-        if (isIOS) {
-            ScrollTrigger.normalizeScroll(true);
-        }
+        // Note: normalizeScroll is handled centrally in useSafariScrollFix
+        // Do not call it here to avoid conflicts
         
         // Longer delay for mobile to ensure DOM is ready
         const timer = setTimeout(() => {
