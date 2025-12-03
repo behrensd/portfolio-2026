@@ -16,7 +16,7 @@ interface MobileFrameSequenceProps {
 // Configuration for progressive loading - optimized for smooth scrolling
 const SEGMENT_SIZE = 15; // Load 15 frames at a time
 const LOOKAHEAD_SEGMENTS = 3; // Preload 3 segments ahead for smoother playback
-const LOOP_COUNT = 5; // Number of times to loop through frames during full scroll
+const LOOP_COUNT = 3; // Number of times to loop through frames during full scroll
 
 /**
  * Progressive Image Loader
