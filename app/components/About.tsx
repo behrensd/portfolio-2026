@@ -4,25 +4,24 @@ export default function About() {
     return (
         <section id="about" className="content-tile">
             <div className="tile-inner">
-                <h2 className="section-title">About Me</h2>
+                <h2 className="section-title">
+                    <span>
+                        <span style={{ color: 'var(--color-primary)' }}>moin</span>
+                        <span style={{ marginLeft: '0.5em' }}>moin</span>
+                    </span>
+                </h2>
                 <p className="about-description">
-                    I&apos;m a freelance web developer and designer specializing in creating 
-                    engaging digital experiences. From Shopify stores to interactive 
-                    portfolios, I bring ideas to life through clean code and compelling 
-                    motion design.
+                    Ich erstelle maßgeschneiderte Webseiten und Web-Applikationen für deine <span style={{ color: 'var(--color-primary)' }}>Brand</span> oder dein <span style={{ color: 'var(--color-primary)' }}>Business</span>. 
+                    Von Shopify Development, über Web-Design bis hin zu 3D-Animationen, ich bringe <span style={{ color: 'var(--color-primary)' }}>deine Ideen</span> zum Leben.
                 </p>
                 <div className="about-skills">
                     <div className="skill-item">
                         <h3>Development</h3>
-                        <p>Shopify, JavaScript, React, Three.js</p>
+                        <p>NextJS, Shopify Liquid, Three.js, AnimeJS, GSAP</p>
                     </div>
                     <div className="skill-item">
                         <h3>Design</h3>
-                        <p>Motion Design, 3D Animation, Blender</p>
-                    </div>
-                    <div className="skill-item">
-                        <h3>Strategy</h3>
-                        <p>SEO, Performance, User Experience</p>
+                        <p>Spline, Blender, Figma, Canva</p>
                     </div>
                 </div>
             </div>

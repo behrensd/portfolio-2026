@@ -9,15 +9,17 @@ import { useProjectAnimations } from './hooks/useProjectAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
+import { useAvatarScrollAnimation } from './hooks/useAvatarScrollAnimation';
 
 export default function Home() {
   // Safari mobile scroll fix - must be first
   useSafariScrollFix();
-  
+
   // Initialize all animations and interactions
   useProjectAnimations();
   useDockNavigation();
   useAnimeInteractions();
+  useAvatarScrollAnimation();
 
   return (
     <>

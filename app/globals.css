@@ -395,16 +395,124 @@ body {
     margin: var(--spacing-sm) auto;
     display: flex;
     justify-content: center;
+    /* NO transition - let JS handle animations */
 }
 
 .hero-image {
     width: 100%;
     height: auto;
-    max-width: 100%;
+    max-width: 320px;
     border-radius: 24px;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /* Animation-ready: no conflicting transforms or transitions */
+    /* The scroll animation will control these properties directly */
+}
+
+/* ================================
+   AVATAR SCROLL ANIMATION STATES
+   Proxy avatar that animates during scroll
+   ================================ */
+.avatar-proxy {
+    position: fixed;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 100;
+    /* Hardware acceleration for buttery smooth animation */
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Performance optimization */
+    will-change: transform, opacity, width, height, left, top;
+    /* Subtle glow effect with orange accent */
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 0 2px rgba(255, 107, 53, 0.25);
+}
+
+.avatar-proxy img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    /* Prevent image from affecting layout during animation */
+    display: block;
+}
+
+/* Fixed avatar state (legacy support) */
+.avatar-fixed {
+    position: fixed;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 50;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 0 2px rgba(255, 107, 53, 0.2);
+    transition: left 0.1s ease-out, top 0.1s ease-out;
+}
+
+.avatar-fixed img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Hover glow effect on fixed avatar */
+.avatar-fixed:hover {
+    box-shadow: 
+        0 6px 30px rgba(0, 0, 0, 0.4),
+        0 0 0 3px rgba(255, 107, 53, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.2);
+}
+
+/* Reduced motion: disable scroll-linked animations */
+@media (prefers-reduced-motion: reduce) {
+    .avatar-proxy,
+    .avatar-fixed {
+        transition: none;
+        animation: none;
+        /* Hide the proxy avatar entirely when reduced motion is preferred */
+        display: none !important;
+    }
+}
+
+/* ================================
+   SAFARI-SPECIFIC FIXES FOR AVATAR ANIMATION
+   ================================ */
+@supports (-webkit-touch-callout: none) {
+    /* Safari: Only apply hardware acceleration to proxy, not hero-image */
+    /* hero-image transforms are controlled by JS animation */
+    
+    .avatar-proxy {
+        /* Force compositing layer in Safari */
+        -webkit-transform: translate3d(0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /* Prevent flicker during animation */
+        -webkit-perspective: 1000;
+        perspective: 1000;
+    }
+    
+    .avatar-proxy img {
+        /* Ensure image doesn't cause repaints */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+
+/* iOS Safari specific adjustments */
+@supports (-webkit-overflow-scrolling: touch) {
+    .avatar-proxy {
+        /* No transitions - JS controls animations */
+        transition: none;
+    }
 }
 
 /* Ensure title displays as column with image in middle */

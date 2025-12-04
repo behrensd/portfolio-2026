@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { useHeroAnimation } from '../hooks/useHeroAnimation';
 import { useSplineScroll } from '../hooks/useSplineScroll';
 import SplineBackground from './SplineBackground';
@@ -69,14 +68,14 @@ export default function Hero() {
                     <h1 className="hero-title" data-speed="0.8">
                         <span className="hero-line">BAI</span>
                         <div className="hero-image-container">
-                            <Image 
+                            {/* Using native img tag for scroll animation compatibility */}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img 
                                 src="https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/dom-behrens.webp"
                                 alt="Dom Behrens"
-                                width={800}
-                                height={800}
                                 className="hero-image"
-                                priority
-                                unoptimized
+                                loading="eager"
+                                decoding="async"
                             />
                         </div>
                         <span className="hero-line">SOLUTIONS</span>
