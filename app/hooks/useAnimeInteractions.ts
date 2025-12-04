@@ -196,22 +196,55 @@ function initEnhancedHeroAnimation() {
     
     // Add hover effect to hero lines
     heroLines.forEach(line => {
-        const handleMouseEnter = function(this: HTMLElement) {
-            animate(this, {
-                scale: 1.05,
+        const isSolutions = line.classList.contains('hero-line-solutions');
+        
+        // Set SOLUTIONS to orange by default
+        if (isSolutions) {
+            animate(line, {
                 color: '#ff6b35',
-                duration: 400,
-                ease: 'outCubic'
+                duration: 0, // Instant
+                ease: 'linear'
             });
+        }
+        
+        const handleMouseEnter = function(this: HTMLElement) {
+            if (isSolutions) {
+                // SOLUTIONS: white on hover
+                animate(this, {
+                    scale: 1.05,
+                    color: '#ffffff',
+                    duration: 400,
+                    ease: 'outCubic'
+                });
+            } else {
+                // BAI: orange on hover (unchanged)
+                animate(this, {
+                    scale: 1.05,
+                    color: '#ff6b35',
+                    duration: 400,
+                    ease: 'outCubic'
+                });
+            }
         };
         
         const handleMouseLeave = function(this: HTMLElement) {
-            animate(this, {
-                scale: 1,
-                color: '#ffffff',
-                duration: 400,
-                ease: 'inOutQuad'
-            });
+            if (isSolutions) {
+                // SOLUTIONS: back to orange
+                animate(this, {
+                    scale: 1,
+                    color: '#ff6b35',
+                    duration: 400,
+                    ease: 'inOutQuad'
+                });
+            } else {
+                // BAI: back to white (unchanged)
+                animate(this, {
+                    scale: 1,
+                    color: '#ffffff',
+                    duration: 400,
+                    ease: 'inOutQuad'
+                });
+            }
         };
         
         line.addEventListener('mouseenter', handleMouseEnter);

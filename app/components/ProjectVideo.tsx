@@ -42,10 +42,10 @@ export default function ProjectVideo({ src, className = '' }: ProjectVideoProps)
     }, [hasStarted]);
 
     return (
-        <div ref={containerRef} className={`relative group ${className}`}>
+        <div ref={containerRef} className="relative group">
             <video
                 ref={videoRef}
-                className="w-full h-auto object-contain rounded-lg block"
+                className={`w-full h-auto object-contain rounded-lg block ${className}`}
                 muted
                 loop
                 playsInline

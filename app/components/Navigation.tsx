@@ -2,9 +2,9 @@
 
 const navItems = [
     { href: '#hero', label: 'Start', section: 'hero' },
-    { href: '#about', label: 'About', section: 'about' },
-    { href: '#projects', label: 'Work', section: 'projects' },
-    { href: '#contact', label: 'Contact', section: 'contact' }
+    { href: '#about', label: 'moin', section: 'about' },
+    { href: '#projects', label: 'Projekte', section: 'projects' },
+    { href: '#contact', label: 'Kontakt', section: 'contact' }
 ];
 
 export default function Navigation() {

@@ -10,7 +10,7 @@ interface MobileVideoBackgroundProps {
 const VIDEO_URL = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/mobile-background.mp4';
 
 // Reverse playback speed (0.5 = half speed for smoother seeking)
-const REVERSE_SPEED = 0.6;
+const REVERSE_SPEED = 1;
 // Update interval for reverse (ms) - less frequent = smoother on mobile
 const REVERSE_UPDATE_INTERVAL = 50; // ~20fps for reverse
 

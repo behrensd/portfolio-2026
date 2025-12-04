@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import ProjectVideo from './ProjectVideo';
 
 // Projects ordered chronologically: newest (top) to oldest (bottom)
@@ -8,13 +9,12 @@ const projectsData = [
         id: 1,
         number: '12/2025',
         title: 'Der BANDOPRINZ Onlineshop',
-        description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
+        description: 'Shopify-Store mit 3D-Produktviewer und Google Veo Intro-Video. Performance-optimiert für maximale Conversion-Raten.',
         role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
-        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Stripe'],
+        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Blender'],
         mockupSize: 'mockup-large',
         mockupLabel: 'E-Commerce Preview',
         url: '#',
-        metrics: ['40% höhere Conversion-Rate', 'Ladezeit unter 1,5s', '60% mehr Mobile-Traffic']
     },
     {
         id: 0,
@@ -35,22 +35,50 @@ const projectsData = [
     {
         id: 2,
         number: '07/2025',
-        title: 'Giro di Pizza',
-        description: 'Komplette digitale Präsenz für einen deutschen B2B-Dienstleister. SEO-optimiert, GDPR-konform mit integrierter E-Mail-Infrastruktur und umfassendem Analytics-Setup.',
-        role: 'Konzeption und Entwicklung der gesamten Web-Lösung. Integration von Nodemailer für automatisierte E-Mail-Workflows, Google Analytics Setup und SEO-Optimierung.',
-        tags: ['Next.js', 'Tailwind CSS', 'Nodemailer', 'Analytics'],
-        mockupSize: 'mockup-small',
+        title: 'Girooo!',
+        description: 'Online Präsenz für Giro di Pizza. SEO-optimiert, mit integriertem Event-Kalendar und einem modernen Design.',
+        role: 'Konzeption und Entwicklung der Webseite. Integration von Event Kalendar, Kontaktformular, Google Analytics und SEO-Optimierung.',
+        tags: ['Next.js', 'Tailwind CSS', 'Google Analytics', 'Resend'],
+        mockupSize: 'mockup-medium',
         mockupLabel: 'Business Preview',
-        url: '#',
-        metrics: ['95+ Lighthouse Score', '100% GDPR-Konformität', 'Top-10 Google Rankings']
+        mockups: [
+            {
+                type: 'video',
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/gdp-desktop-mockup.mp4',
+                label: 'Desktop'
+            },
+            {
+                type: 'image',
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-about-page.jpg',
+                label: 'About Page'
+            },
+            {
+                type: 'image',
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-screenshot.png',
+                label: 'Home Page'
+            },
+            {
+                type: 'video',
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/gdp-mobile-mockup.mp4',
+                label: 'Mobile'
+            }
+        ],
+        url: 'girodipizza.de',
     }
 ];
 
 export default function Projects() {
+    const [expandedMockup, setExpandedMockup] = useState<string | null>(null);
+
+    const toggleMockup = (projectId: number, mockupIndex: number) => {
+        const key = `${projectId}-${mockupIndex}`;
+        setExpandedMockup(expandedMockup === key ? null : key);
+    };
+
     return (
         <section id="projects" className="content-tile">
             <div className="tile-inner">
-                <h2 className="section-title">Selected Work</h2>
+                <h2 className="section-title">Meine Werke</h2>
                 
                 {projectsData.map((project) => (
                     <div 
@@ -75,22 +103,15 @@ export default function Projects() {
                                 {project.role && (
                                     <p className="project-role">{project.role}</p>
                                 )}
+                            
                                 
-                                {project.metrics && (
-                                    <div className="project-metrics">
-                                        {project.metrics.map((metric, index) => (
-                                            <span key={index} className="metric-item">
-                                                {metric}
-                                            </span>
+                                {project.tags && (
+                                    <div className="project-tags">
+                                        {project.tags.map((tag, index) => (
+                                            <span key={index} className="tag">{tag}</span>
                                         ))}
                                     </div>
                                 )}
-                                
-                                <div className="project-tags">
-                                    {project.tags.map((tag, index) => (
-                                        <span key={index} className="tag">{tag}</span>
-                                    ))}
-                                </div>
                                 
                                 {project.url && project.url !== '#' && (
                                     <a 
@@ -132,8 +153,65 @@ export default function Projects() {
                                 )}
                             </div>
                             <div className={`mockup-container ${project.mockupSize}`}>
-                                {project.videoUrl ? (
-                                    <ProjectVideo 
+                                {project.mockups ? (
+                                    <div className="mockup-grid">
+                                        {project.mockups.map((mockup, index) => {
+                                            const mockupKey = `${project.id}-${index}`;
+                                            const isExpanded = expandedMockup === mockupKey;
+
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className={`mockup-item ${isExpanded ? 'expanded' : ''}`}
+                                                    onClick={() => toggleMockup(project.id, index)}
+                                                >
+                                                    {isExpanded && (
+                                                        <button
+                                                            className="mockup-close"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setExpandedMockup(null);
+                                                            }}
+                                                            aria-label="Close"
+                                                        >
+                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                                                <path
+                                                                    d="M18 6L6 18M6 6L18 18"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                    strokeLinecap="round"
+                                                                />
+                                                            </svg>
+                                                        </button>
+                                                    )}
+                                                    <div className="mockup-expand-icon">
+                                                        <svg viewBox="0 0 24 24" fill="none">
+                                                            <path
+                                                                d="M9 3H5C3.89543 3 3 3.89543 3 5V9M21 9V5C21 3.89543 20.1046 3 19 3H15M15 21H19C20.1046 21 21 20.1046 21 19V15M3 15V19C3 20.1046 3.89543 21 5 21H9"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                    {mockup.type === 'video' ? (
+                                                        <ProjectVideo
+                                                            src={mockup.url}
+                                                            className="mockup-media"
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src={mockup.url}
+                                                            alt={mockup.label}
+                                                            className="mockup-media"
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : project.videoUrl ? (
+                                    <ProjectVideo
                                         src={project.videoUrl}
                                         className="mockup-video"
                                     />
