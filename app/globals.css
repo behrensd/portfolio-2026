@@ -424,8 +424,8 @@ body {
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    /* Performance optimization */
-    will-change: transform, opacity, width, height, left, top;
+    /* Performance optimization - only GPU-accelerated properties */
+    will-change: transform, opacity;
     /* Subtle glow effect with orange accent */
     box-shadow: 
         0 4px 20px rgba(0, 0, 0, 0.3),
@@ -606,7 +606,7 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-snug);
     letter-spacing: var(--letter-spacing-wide);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
     color: var(--color-text);
     text-transform: uppercase;
 }
@@ -1402,6 +1402,34 @@ body {
     /* Contact uses solid black background - no blur needed */
     .contact-content {
         background: #0a0a0a;
+    }
+    
+    /* ================================
+       iOS SAFARI PERFORMANCE FIXES
+       ================================ */
+    
+    /* Disable will-change on mobile to reduce compositing layers */
+    .project-item,
+    .skill-item,
+    .hero-image,
+    .hero-image-container {
+        will-change: auto !important;
+    }
+    
+    /* Simplify text shadows on mobile */
+    .project-number {
+        text-shadow: 0 0 8px rgba(255, 107, 53, 0.4) !important;
+    }
+    
+    /* Reduce box-shadow complexity */
+    .glass-card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Force GPU layer for animated elements only */
+    #avatar-proxy {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
     }
 }
 

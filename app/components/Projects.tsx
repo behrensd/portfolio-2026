@@ -2,7 +2,20 @@
 
 import ProjectVideo from './ProjectVideo';
 
+// Projects ordered chronologically: newest (top) to oldest (bottom)
 const projectsData = [
+    {
+        id: 1,
+        number: '12/2025',
+        title: 'Der BANDOPRINZ Onlineshop',
+        description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
+        role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
+        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Stripe'],
+        mockupSize: 'mockup-large',
+        mockupLabel: 'E-Commerce Preview',
+        url: '#',
+        metrics: ['40% höhere Conversion-Rate', 'Ladezeit unter 1,5s', '60% mehr Mobile-Traffic']
+    },
     {
         id: 0,
         number: '09/2025',
@@ -18,18 +31,6 @@ const projectsData = [
             motionDesigner: 'lw25_3d',
             instagramHandle: '@lw25_3d'
         }
-    },
-    {
-        id: 1,
-        number: '12/2025',
-        title: 'Der BANDOPRINZ Onlineshop',
-        description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
-        role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
-        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Stripe'],
-        mockupSize: 'mockup-large',
-        mockupLabel: 'E-Commerce Preview',
-        url: '#',
-        metrics: ['40% höhere Conversion-Rate', 'Ladezeit unter 1,5s', '60% mehr Mobile-Traffic']
     },
     {
         id: 2,
