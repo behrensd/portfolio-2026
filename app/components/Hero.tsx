@@ -71,7 +71,7 @@ export default function Hero() {
                             {/* Using native img tag for scroll animation compatibility */}
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src="/pics/heroavatars/onload.png"
+                                src="https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/heroavatars/onload.png"
                                 alt="Dom Behrens"
                                 className="hero-image"
                                 loading="eager"

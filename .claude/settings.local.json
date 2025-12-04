@@ -4,7 +4,9 @@
       "Bash(cat:*)",
       "Bash(node -e:*)",
       "WebSearch",
-      "WebFetch(domain:animejs.com)"
+      "WebFetch(domain:animejs.com)",
+      "mcp__MCP_DOCKER__resolve-library-id",
+      "mcp__MCP_DOCKER__search"
     ],
     "deny": [],
     "ask": []
