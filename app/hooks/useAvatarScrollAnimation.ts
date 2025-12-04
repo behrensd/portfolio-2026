@@ -1,27 +1,33 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { animate } from 'animejs';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 /**
- * Avatar Scroll Animation - ANIME.JS IMPLEMENTATION (FIXED)
+ * Avatar Scroll Animation - SCROLL-TIED IMPLEMENTATION
  *
  * CRITICAL FIX: Uses viewport-percentage positioning instead of getBoundingClientRect
  * on About section (which is off-screen during trigger).
  *
- * Simple 2-phase animation using the ACTUAL hero image (no proxy):
+ * Scroll-tied animation using GSAP ScrollTrigger with scrub:
  * 1. Phase 1: Avatar in hero center (onload.png)
- * 2. Phase 2: Avatar locks to fixed viewport position (onclick.png) - stays locked
+ * 2. Phase 2: Avatar smoothly follows scroll to fixed viewport position (onclick.png)
+ * 3. Phase 3: Avatar locks in place once scroll completes
  *
  * Key improvements:
  * - Target position calculated as viewport percentages (always visible)
  * - Bounds validation ensures avatar stays within viewport
- * - No conflicts with GSAP (useHeroAnimation) - different timing and properties
+ * - ScrollTrigger with scrub ties animation to scroll progress (visible throughout)
  * - Uses scale transform instead of width/height for better performance
- * - Text lines animated with translateY only (GSAP owns initial y/opacity)
+ * - Text lines animated with translateY only
  */
 export function useAvatarScrollAnimation() {
-    const isLockedRef = useRef(false);
+    const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
     const heroImageRef = useRef<HTMLImageElement | null>(null);
     const heroContainerRef = useRef<HTMLElement | null>(null);
 
@@ -31,6 +37,8 @@ export function useAvatarScrollAnimation() {
             const heroSection = document.getElementById('hero');
             const heroImage = document.querySelector('.hero-image') as HTMLImageElement;
             const heroContainer = document.querySelector('.hero-image-container') as HTMLElement;
+            const baiLine = document.querySelector('.hero-line:not(.hero-line-solutions)') as HTMLElement;
+            const solutionsLine = document.querySelector('.hero-line-solutions') as HTMLElement;
 
             if (!heroSection || !heroImage || !heroContainer) {
                 console.warn('Avatar animation: Required elements not found');
@@ -42,9 +50,6 @@ export function useAvatarScrollAnimation() {
 
             const isMobile = window.innerWidth < 768;
             const lockedSize = isMobile ? 200 : 300;
-
-            // Calculate lock threshold (when hero exits viewport)
-            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
 
             /**
              * Calculate target position as viewport percentages
@@ -80,135 +85,112 @@ export function useAvatarScrollAnimation() {
                 return { x: safeX, y: safeY };
             };
 
-            // Scroll handler with RAF
-            let rafId: number | null = null;
+            // Get initial and target positions
+            const initialRect = heroImage.getBoundingClientRect();
+            const lockPos = calculateLockPosition();
 
-            const handleScroll = () => {
-                if (rafId) cancelAnimationFrame(rafId);
+            // Calculate gap size (avatar height + some spacing)
+            const avatarHeight = initialRect.height;
+            const gapSize = avatarHeight + (isMobile ? 20 : 40); // Avatar height + spacing
 
-                rafId = requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    const scrollThreshold = heroBottom - window.innerHeight * 0.5;
-
-                    if (!isLockedRef.current && scrollY > scrollThreshold) {
-                        lockAvatar();
-                    }
-
-                    rafId = null;
+            // Set initial text line separation after useHeroAnimation completes
+            // This creates space for the avatar between BAI and SOLUTIONS
+            if (baiLine) {
+                gsap.to(baiLine, {
+                    y: -gapSize / 2,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    delay: 0.2 // Small delay to let hero animation settle
                 });
-            };
-
-            function lockAvatar() {
-                isLockedRef.current = true;
-
-                console.log('🔒 Locking avatar to fixed position');
-
-                // Get current position before changing to fixed
-                const rect = heroImage.getBoundingClientRect();
-                const lockPos = calculateLockPosition();
-
-                console.log('📍 Current position:', { x: rect.left, y: rect.top });
-                console.log('📍 Target position:', lockPos);
-                console.log('✅ Avatar will be VISIBLE in viewport');
-
-                // Get hero text lines for animation
-                const baiLine = document.querySelector('.hero-line:not(.hero-line-solutions)') as HTMLElement;
-                const solutionsLine = document.querySelector('.hero-line-solutions') as HTMLElement;
-
-                // Change hero image to fixed positioning
-                heroImage.style.position = 'fixed';
-                heroImage.style.left = '0';
-                heroImage.style.top = '0';
-                heroImage.style.zIndex = '10002';
-                heroImage.style.margin = '0';
-                heroImage.style.transformOrigin = 'top left';
-
-                // Set initial transform to current position
-                heroImage.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0)`;
-
-                // Switch to onclick image
-                heroImage.src = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/heroavatars/onclick.png';
-
-                // Fade out container to remove it from layout
-                animate(heroContainer, {
-                    opacity: [1, 0],
-                    duration: 600,
-                    ease: 'out(3)',
-                    onComplete: () => {
-                        heroContainer.style.pointerEvents = 'none';
-                        heroContainer.style.visibility = 'hidden';
-                    }
-                });
-
-                // Animate text lines moving toward each other (closing the gap)
-                // Note: GSAP animations from useHeroAnimation are complete by now
-                // We only animate translateY here - no conflict with GSAP's initial y/opacity
-                if (baiLine) {
-                    animate(baiLine, {
-                        translateY: [0, 50],  // Move BAI down
-                        duration: 600,
-                        ease: 'out(3)'
-                    });
-                }
-
-                if (solutionsLine) {
-                    animate(solutionsLine, {
-                        translateY: [0, -50],  // Move SOLUTIONS up
-                        duration: 600,
-                        ease: 'out(3)'
-                    });
-                }
-
-                // Animate avatar to lock position
-                // Use scale instead of width/height for better performance
-                const currentSize = rect.width;
-                const scaleFactor = lockedSize / currentSize;
-
-                animate(heroImage, {
-                    translateX: [rect.left, lockPos.x],
-                    translateY: [rect.top, lockPos.y],
-                    scale: [1, scaleFactor],
-                    duration: 800,
-                    ease: 'out(3)',
-                    onBegin: () => {
-                        console.log('🎨 Animation started');
-                    },
-                    onComplete: () => {
-                        console.log('✅ Avatar locked successfully at viewport position');
-                        console.log('   Final position:', lockPos);
-                    }
+            }
+            if (solutionsLine) {
+                gsap.to(solutionsLine, {
+                    y: gapSize / 2,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    delay: 0.2
                 });
             }
 
-            // Attach scroll listener
-            window.addEventListener('scroll', handleScroll, { passive: true });
+            console.log('📏 Text gap size:', gapSize);
 
-            // Handle window resize - recalculate with new viewport dimensions
-            const handleResize = () => {
-                if (isLockedRef.current && heroImageRef.current) {
-                    const lockPos = calculateLockPosition();
+            // Prepare hero image for fixed positioning and animation
+            heroImage.style.position = 'fixed';
+            heroImage.style.left = '0';
+            heroImage.style.top = '0';
+            heroImage.style.zIndex = '10002';
+            heroImage.style.margin = '0';
+            heroImage.style.transformOrigin = 'top left';
+            heroImage.style.transform = `translate3d(${initialRect.left}px, ${initialRect.top}px, 0)`;
 
-                    // Animate to new position based on new viewport size
-                    animate(heroImageRef.current, {
-                        translateX: lockPos.x,
-                        translateY: lockPos.y,
-                        duration: 300,
-                        ease: 'out(2)'
-                    });
+            const initialSize = initialRect.width;
+            const scaleFactor = lockedSize / initialSize;
 
-                    console.log('🔄 Viewport resized, avatar repositioned to:', lockPos);
+            console.log('📍 Initial avatar position:', { x: initialRect.left, y: initialRect.top, size: initialSize });
+            console.log('📍 Target avatar position:', { x: lockPos.x, y: lockPos.y, size: lockedSize });
+
+            // Create scroll-tied animation with ScrollTrigger
+            scrollTriggerRef.current = ScrollTrigger.create({
+                trigger: heroSection,
+                start: 'bottom 80%', // Start when hero bottom reaches 80% of viewport
+                end: 'bottom 20%',   // End when hero bottom reaches 20% of viewport
+                scrub: 1,            // Smooth scrubbing with 1 second lag
+                invalidateOnRefresh: true,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+
+                    // Apply easeIn to text line animation for smoother closing
+                    // easeIn: slow start, fast end (accelerates as lines come together)
+                    const easeInProgress = progress * progress; // Simple easeIn quadratic
+
+                    // Interpolate avatar position (linear with scroll)
+                    const currentX = initialRect.left + (lockPos.x - initialRect.left) * progress;
+                    const currentY = initialRect.top + (lockPos.y - initialRect.top) * progress;
+                    const currentScale = 1 + (scaleFactor - 1) * progress;
+
+                    // Update avatar transform
+                    heroImage.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${currentScale})`;
+
+                    // Fade out container
+                    heroContainer.style.opacity = String(1 - progress);
+
+                    // Animate text lines moving toward each other with easeIn
+                    // Start position: -gapSize/2 (BAI up) and +gapSize/2 (SOLUTIONS down)
+                    // End position: 0 (both centered)
+                    // Use GSAP's y property to avoid conflicts with useHeroAnimation
+                    if (baiLine) {
+                        const baiY = -gapSize / 2 + (gapSize / 2) * easeInProgress;
+                        gsap.set(baiLine, { y: baiY });
+                    }
+                    if (solutionsLine) {
+                        const solutionsY = gapSize / 2 - (gapSize / 2) * easeInProgress;
+                        gsap.set(solutionsLine, { y: solutionsY });
+                    }
+
+                    // Switch image at 50% progress
+                    if (progress > 0.5 && heroImage.src.includes('onload.png')) {
+                        heroImage.src = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/heroavatars/onclick.png';
+                        console.log('🎨 Image switched to onclick.png at 50% progress');
+                    }
+
+                    // When animation completes (progress = 1)
+                    if (progress === 1) {
+                        heroContainer.style.pointerEvents = 'none';
+                        heroContainer.style.visibility = 'hidden';
+                        console.log('✅ Avatar locked successfully at viewport position');
+                        console.log('   Final position:', lockPos);
+                    }
                 }
-            };
+            });
 
-            window.addEventListener('resize', handleResize, { passive: true });
-
-            console.log('✨ Avatar scroll animation initialized (Anime.js, viewport-based positioning)');
+            console.log('✨ Avatar scroll animation initialized (GSAP ScrollTrigger with scrub)');
 
             // Cleanup function
             return () => {
-                if (rafId) cancelAnimationFrame(rafId);
-                window.removeEventListener('scroll', handleScroll);
-                window.removeEventListener('resize', handleResize);
+                if (scrollTriggerRef.current) {
+                    scrollTriggerRef.current.kill();
+                    scrollTriggerRef.current = null;
+                }
 
                 // Reset hero image to original state
                 if (heroImageRef.current) {
@@ -217,23 +199,21 @@ export function useAvatarScrollAnimation() {
                     heroImageRef.current.style.top = '';
                     heroImageRef.current.style.zIndex = '';
                     heroImageRef.current.style.transform = '';
-                    heroImageRef.current.style.width = '';
-                    heroImageRef.current.style.height = '';
                     heroImageRef.current.src = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/heroavatars/onload.png';
                 }
 
                 if (heroContainerRef.current) {
                     heroContainerRef.current.style.opacity = '';
                     heroContainerRef.current.style.pointerEvents = '';
-                    heroContainerRef.current.style.transform = '';
                     heroContainerRef.current.style.visibility = '';
                 }
 
-                // Reset hero text lines
-                const heroLines = document.querySelectorAll('.hero-line');
-                heroLines.forEach((line) => {
-                    (line as HTMLElement).style.transform = '';
-                });
+                // Reset hero text lines using GSAP to clear y property
+                const currentBaiLine = document.querySelector('.hero-line:not(.hero-line-solutions)') as HTMLElement;
+                const currentSolutionsLine = document.querySelector('.hero-line-solutions') as HTMLElement;
+
+                if (currentBaiLine) gsap.set(currentBaiLine, { clearProps: 'y' });
+                if (currentSolutionsLine) gsap.set(currentSolutionsLine, { clearProps: 'y' });
             };
         }, 300); // 300ms delay ensures DOM is ready and GSAP initial animations started
 

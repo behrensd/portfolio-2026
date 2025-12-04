@@ -7,7 +7,8 @@ export function useHeroAnimation() {
     useEffect(() => {
         // Delay to ensure DOM is ready
         const timer = setTimeout(() => {
-            // Animate hero title lines
+            // Animate hero title lines - fade in from below
+            // End at y:0, then useAvatarScrollAnimation will separate them
             gsap.from('.hero-line', {
                 opacity: 0,
                 y: 100,
@@ -16,7 +17,7 @@ export function useHeroAnimation() {
                 ease: 'power4.out',
                 delay: 0.3
             });
-            
+
             // Animate hero subtitle
             gsap.from('.hero-subtitle', {
                 opacity: 0,
@@ -25,7 +26,7 @@ export function useHeroAnimation() {
                 ease: 'power3.out',
                 delay: 1
             });
-            
+
             console.log('✨ Hero animations initialized');
         }, 100);
 

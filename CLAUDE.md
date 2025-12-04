@@ -435,3 +435,4 @@ For comprehensive Anime.js documentation, see:
 - Verify Spline is not being SSR'd (should have `ssr: false`)
 - Try clearing browser cache if scene appears corrupted
 - Mobile should fallback to MobileFrameSequence automatically
+- memorize that we made significant progress witht his last chaneg and should go forward from here
