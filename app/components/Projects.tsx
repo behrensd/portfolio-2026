@@ -5,7 +5,7 @@ import ProjectVideo from './ProjectVideo';
 const projectsData = [
     {
         id: 0,
-        number: '1',
+        number: '09/2025',
         title: 'Creator Portfolio',
         description: 'Eine Portfolio-Seite mit maßgeschneiderter 3D-Animation für ein Hamburger Creator-Kollektiv. Interaktives Reißverschluss-Intro für maximale Wiedererkennung.',
         role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer lw25_3d.',
@@ -21,7 +21,7 @@ const projectsData = [
     },
     {
         id: 1,
-        number: '2',
+        number: '12/2025',
         title: 'Der BANDOPRINZ Onlineshop',
         description: 'Hochwertige Shopify-E-Commerce-Lösung mit immersiver 3D-Produktvisualisierung und nahtloser Checkout-Experience. Performance-optimiert für maximale Conversion-Raten.',
         role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
@@ -33,7 +33,7 @@ const projectsData = [
     },
     {
         id: 2,
-        number: '3',
+        number: '07/2025',
         title: 'Giro di Pizza',
         description: 'Komplette digitale Präsenz für einen deutschen B2B-Dienstleister. SEO-optimiert, GDPR-konform mit integrierter E-Mail-Infrastruktur und umfassendem Analytics-Setup.',
         role: 'Konzeption und Entwicklung der gesamten Web-Lösung. Integration von Nodemailer für automatisierte E-Mail-Workflows, Google Analytics Setup und SEO-Optimierung.',

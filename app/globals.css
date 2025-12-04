@@ -718,28 +718,71 @@ body {
 .project-item {
     position: relative;
     margin-bottom: var(--spacing-xl);
-    padding: 0; /* NO PADDING */
+    padding-top: 2rem; /* Space for the date number above */
     border: none; /* NO BORDER */
     perspective: 1200px; /* Enable 3D perspective for child elements */
 }
 
+/* Responsive padding for project items */
+@media (min-width: 768px) {
+    .project-item {
+        padding-top: 2.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .project-item {
+        padding-top: 3rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .project-item {
+        padding-top: 3.5rem;
+    }
+}
+
 .project-number {
-    font-size: clamp(5rem, 12vw, 10rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: var(--font-weight-normal);
     color: var(--color-primary);
     position: absolute;
-    top: -1rem;
-    left: -1rem;
-    z-index: 1;
+    top: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
     line-height: 1;
     letter-spacing: var(--letter-spacing-tight);
-    /* Flashy orange glow effect */
+    /* Subtle orange glow effect */
     text-shadow: 
-        0 0 20px rgba(255, 107, 53, 0.8),
-        0 0 40px rgba(255, 107, 53, 0.6),
-        0 0 60px rgba(255, 107, 53, 0.4),
-        0 0 80px rgba(255, 107, 53, 0.2);
-    opacity: 0.9;
+        0 0 15px rgba(255, 107, 53, 0.6),
+        0 0 30px rgba(255, 107, 53, 0.4);
+    opacity: 0.85;
+    white-space: nowrap;
+}
+
+/* Tablet breakpoint (768px+) */
+@media (min-width: 768px) {
+    .project-number {
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        top: -3rem;
+    }
+}
+
+/* Desktop breakpoint (1024px+) */
+@media (min-width: 1024px) {
+    .project-number {
+        font-size: clamp(3.5rem, 4vw, 5rem);
+        top: -3.5rem;
+    }
+}
+
+/* Large desktop breakpoint (1280px+) */
+@media (min-width: 1280px) {
+    .project-number {
+        font-size: 5rem;
+        top: -4rem;
+    }
 }
 
 .project-content {
@@ -1203,14 +1246,16 @@ body {
     }
     
     .project-number {
-        position: relative;
+        position: absolute;
         display: block;
-        margin-bottom: 0;
-        font-size: 5rem;
-        opacity: 0.85;
-        z-index: 0;
+        font-size: 2rem;
+        top: -1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.8;
+        z-index: 10;
         /* OPTIMIZED SHADOWS FOR MOBILE - REMOVED MULTI-LAYER GLOW */
-        text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
     }
     
     .glass-card {
