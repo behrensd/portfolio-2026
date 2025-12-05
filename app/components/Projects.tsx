@@ -1,10 +1,34 @@
 'use client';
 
-import { useState } from 'react';
 import ProjectVideo from './ProjectVideo';
+import ProjectCarousel from './ProjectCarousel';
+
+type MockupType = {
+    type: 'video' | 'image';
+    url: string;
+    label: string;
+};
+
+type ProjectType = {
+    id: number;
+    number: string;
+    title: string;
+    description: string;
+    role?: string;
+    tags?: string[];
+    mockupSize: string;
+    mockupLabel: string;
+    mockups?: MockupType[];
+    videoUrl?: string;
+    url?: string;
+    credits?: {
+        motionDesigner: string;
+        instagramHandle: string;
+    };
+};
 
 // Projects ordered chronologically: newest (top) to oldest (bottom)
-const projectsData = [
+const projectsData: ProjectType[] = [
     {
         id: 1,
         number: '12/2025',
@@ -36,7 +60,7 @@ const projectsData = [
         id: 2,
         number: '07/2025',
         title: 'Girooo!',
-        description: 'Online Präsenz für Giro di Pizza. SEO-optimiert, mit integriertem Event-Kalendar und einem modernen Design.',
+        description: 'Online Präsenz für Giro di Pizza. SEO-optimiert, mit integriertem Event-Kalendar und einem modernen One-Page Design.',
         role: 'Konzeption und Entwicklung der Webseite. Integration von Event Kalendar, Kontaktformular, Google Analytics und SEO-Optimierung.',
         tags: ['Next.js', 'Tailwind CSS', 'Google Analytics', 'Resend'],
         mockupSize: 'mockup-medium',
@@ -68,13 +92,6 @@ const projectsData = [
 ];
 
 export default function Projects() {
-    const [expandedMockup, setExpandedMockup] = useState<string | null>(null);
-
-    const toggleMockup = (projectId: number, mockupIndex: number) => {
-        const key = `${projectId}-${mockupIndex}`;
-        setExpandedMockup(expandedMockup === key ? null : key);
-    };
-
     return (
         <section id="projects" className="content-tile">
             <div className="tile-inner">
@@ -154,62 +171,7 @@ export default function Projects() {
                             </div>
                             <div className={`mockup-container ${project.mockupSize}`}>
                                 {project.mockups ? (
-                                    <div className="mockup-grid">
-                                        {project.mockups.map((mockup, index) => {
-                                            const mockupKey = `${project.id}-${index}`;
-                                            const isExpanded = expandedMockup === mockupKey;
-
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className={`mockup-item ${isExpanded ? 'expanded' : ''}`}
-                                                    onClick={() => toggleMockup(project.id, index)}
-                                                >
-                                                    {isExpanded && (
-                                                        <button
-                                                            className="mockup-close"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setExpandedMockup(null);
-                                                            }}
-                                                            aria-label="Close"
-                                                        >
-                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                                                <path
-                                                                    d="M18 6L6 18M6 6L18 18"
-                                                                    stroke="currentColor"
-                                                                    strokeWidth="2"
-                                                                    strokeLinecap="round"
-                                                                />
-                                                            </svg>
-                                                        </button>
-                                                    )}
-                                                    <div className="mockup-expand-icon">
-                                                        <svg viewBox="0 0 24 24" fill="none">
-                                                            <path
-                                                                d="M9 3H5C3.89543 3 3 3.89543 3 5V9M21 9V5C21 3.89543 20.1046 3 19 3H15M15 21H19C20.1046 21 21 20.1046 21 19V15M3 15V19C3 20.1046 3.89543 21 5 21H9"
-                                                                stroke="currentColor"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                    {mockup.type === 'video' ? (
-                                                        <ProjectVideo
-                                                            src={mockup.url}
-                                                            className="mockup-media"
-                                                        />
-                                                    ) : (
-                                                        <img
-                                                            src={mockup.url}
-                                                            alt={mockup.label}
-                                                            className="mockup-media"
-                                                        />
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                    <ProjectCarousel mockups={project.mockups} />
                                 ) : project.videoUrl ? (
                                     <ProjectVideo
                                         src={project.videoUrl}
