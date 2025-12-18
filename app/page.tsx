@@ -5,11 +5,12 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import { useProjectAnimations } from './hooks/useProjectAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
-import { useAvatarScrollAnimation } from './hooks/useAvatarScrollAnimation';
+// import { useAvatarScrollAnimation } from './hooks/useAvatarScrollAnimation'; // Kept for reference
 
 export default function Home() {
   // Safari mobile scroll fix - must be first
@@ -19,7 +20,7 @@ export default function Home() {
   useProjectAnimations();
   useDockNavigation();
   useAnimeInteractions();
-  useAvatarScrollAnimation();
+  // useAvatarScrollAnimation(); // Disabled - using simple CSS float animation instead
 
   return (
     <>
@@ -32,6 +33,7 @@ export default function Home() {
           <About />
           <Projects />
           <Contact />
+          <Footer />
         </div>
       </div>
     </>

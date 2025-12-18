@@ -406,8 +406,19 @@ body {
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    /* Animation-ready: no conflicting transforms or transitions */
-    /* The scroll animation will control these properties directly */
+    /* Gentle floating animation like on a cloud */
+    animation: float 3s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Keyframe animation for gentle up/down hover */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
 }
 
 /* ================================
@@ -1714,6 +1725,80 @@ body {
 .dock-item {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+}
+
+/* ================================
+   FOOTER - MINIMAL LEGAL
+   ================================ */
+.footer {
+    position: fixed;
+    bottom: var(--spacing-sm);
+    left: var(--spacing-sm);
+    z-index: var(--z-dock);
+    max-width: 90vw;
+}
+
+.footer-toggle {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.footer-toggle:hover {
+    color: var(--color-primary);
+}
+
+.footer-legal {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: var(--spacing-xs);
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    max-width: min(600px, 85vw);
+    backdrop-filter: blur(12px);
+    animation: fadeInUp 0.3s ease;
+}
+
+.footer-legal-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.footer-legal section h3 {
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-legal section p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-dim);
+    letter-spacing: var(--letter-spacing-normal);
+    line-height: var(--line-height-relaxed);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Fix backdrop-filter rendering on older Safari */

@@ -38,22 +38,27 @@ const projectsData: ProjectType[] = [
         tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Blender'],
         mockupSize: 'mockup-large',
         mockupLabel: 'E-Commerce Preview',
-        url: '#',
+        videoUrl: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/bp-shop-mockup.mp4',
+        url: 'https://bandoprinz.com',
+        credits: {
+            motionDesigner: 'olerichter__',
+            instagramHandle: '@olerichter__'
+        }
     },
     {
         id: 0,
         number: '09/2025',
         title: 'Creator Portfolio',
         description: 'Eine Portfolio-Seite mit maßgeschneiderter 3D-Animation für ein Hamburger Creator-Kollektiv. Interaktives Reißverschluss-Intro für maximale Wiedererkennung.',
-        role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer lw25_3d.',
+        role: 'Vollständige technische Entwicklung und Implementierung. Design in enger Zusammenarbeit mit dem Kunden. 3D-Modell und Animation von Motion Designer olerichter__.',
         tags: ['Next.js', 'Tailwind CSS', 'GSAP', 'Blender'],
         mockupSize: 'mockup-medium',
         mockupLabel: 'Warmanziehen Preview',
         videoUrl: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/wa-mockup-v2.mp4',
         url: 'https://warmanziehen-v2.vercel.app',
         credits: {
-            motionDesigner: 'lw25_3d',
-            instagramHandle: '@lw25_3d'
+            motionDesigner: 'olerichter__',
+            instagramHandle: '@olerichter__'
         }
     },
     {
@@ -87,7 +92,7 @@ const projectsData: ProjectType[] = [
                 label: 'Mobile'
             }
         ],
-        url: 'girodipizza.de',
+        url: 'https://girodipizza.de',
     }
 ];
 
