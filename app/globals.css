@@ -1733,7 +1733,8 @@ body {
 .footer {
     position: fixed;
     bottom: var(--spacing-sm);
-    left: var(--spacing-sm);
+    left: 50%;
+    transform: translateX(-50%);
     z-index: var(--z-dock);
     max-width: 90vw;
 }
@@ -1745,10 +1746,12 @@ body {
     font-family: var(--font-vhs), 'Courier New', monospace;
     font-size: var(--font-size-xs);
     letter-spacing: var(--letter-spacing-wide);
-    text-transform: uppercase;
+    text-transform: lowercase;
     cursor: pointer;
     padding: 0.5rem;
     transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .footer-toggle:hover {
@@ -1758,7 +1761,8 @@ body {
 .footer-legal {
     position: absolute;
     bottom: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     margin-bottom: var(--spacing-xs);
     background: rgba(10, 10, 10, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1788,6 +1792,34 @@ body {
     color: var(--color-text-dim);
     letter-spacing: var(--letter-spacing-normal);
     line-height: var(--line-height-relaxed);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .footer {
+        bottom: clamp(0.75rem, 3vw, 1rem);
+        left: clamp(0.75rem, 3vw, 1rem);
+    }
+
+    .footer-toggle {
+        font-size: clamp(0.65rem, 2.5vw, 0.75rem);
+        padding: 0.4rem;
+    }
+
+    .footer-legal {
+        max-width: calc(100vw - 2rem);
+        padding: clamp(1rem, 4vw, 1.5rem);
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-legal section h3 {
+        font-size: clamp(0.75rem, 3vw, 0.875rem);
+    }
+
+    .footer-legal section p {
+        font-size: clamp(0.65rem, 2.5vw, 0.75rem);
+        line-height: 1.6;
+    }
 }
 
 @keyframes fadeInUp {

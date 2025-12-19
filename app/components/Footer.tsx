@@ -12,34 +12,47 @@ export default function Footer() {
                 onClick={() => setShowLegal(!showLegal)}
                 aria-expanded={showLegal}
             >
-                {showLegal ? 'Close' : 'Legal'}
+                {showLegal ? 'weniger...' : 'mehr...'}
             </button>
 
             {showLegal && (
                 <div className="footer-legal">
                     <div className="footer-legal-content">
                         <section>
-                            <h3>Privacy</h3>
+                            <h3>Impressum</h3>
                             <p>
-                                This site does not collect or store personal data.
-                                No cookies, no tracking, no analytics.
+                                Dominik Behrens<br />
+                                BAI Solutions<br />
+                                Manshardtstraße 13a<br />
+                                22119 Hamburg
+                            </p>
+                            <p>
+                                Telefon: +49 170 6967961<br />
+                                E-Mail: info@behrens-ai.de
                             </p>
                         </section>
 
                         <section>
-                            <h3>Copyright</h3>
+                            <h3>Datenschutz</h3>
                             <p>
-                                © {new Date().getFullYear()} Dom Behrens. All rights reserved.
-                                Design, code, and content created by Dom Behrens.
+                                Diese Website erhebt keine personenbezogenen Daten.
+                                Keine Cookies, kein Tracking, keine Analyse.
                             </p>
                         </section>
 
                         <section>
-                            <h3>Terms of Use</h3>
+                            <h3>Urheberrecht</h3>
                             <p>
-                                This portfolio is for demonstration purposes.
-                                Projects shown may be subject to their own licenses and terms.
-                                Contact for permissions regarding content reuse.
+                                © {new Date().getFullYear()} Dominik Behrens. Alle Rechte vorbehalten.
+                                Design, Code und Inhalte erstellt von Dominik Behrens.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h3>Haftung für Inhalte</h3>
+                            <p>
+                                Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte
+                                auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
                             </p>
                         </section>
                     </div>
