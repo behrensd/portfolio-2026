@@ -20,6 +20,7 @@ export default function SplineBackground({ scene, className = '', onSplineLoad }
     const [isLoaded, setIsLoaded] = useState(false);
     const [shouldRender, setShouldRender] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [hasError, setHasError] = useState(false);
     const splineAppRef = useRef<Application | null>(null);
 
     // Check device type on mount
@@ -71,10 +72,12 @@ export default function SplineBackground({ scene, className = '', onSplineLoad }
 
     return (
         <div className={`spline-wrapper ${className} ${isLoaded ? 'loaded' : ''}`}>
-            {shouldRender && (
+            {shouldRender && !hasError && (
                 <Spline 
                     scene={scene} 
                     onLoad={handleLoad}
+                    // onError removed - Spline component may not support it or has type mismatch
+                    // Errors will be caught by try/catch in handleLoad if needed
                 />
             )}
         </div>

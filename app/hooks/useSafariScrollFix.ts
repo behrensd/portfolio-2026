@@ -6,6 +6,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
+    // Expose ScrollTrigger early for tests (this hook runs first in page.tsx)
+    if (!(window as any).ScrollTrigger) {
+        (window as any).ScrollTrigger = ScrollTrigger;
+    }
+    if (!(window as any).gsap) {
+        (window as any).gsap = gsap;
+    }
 }
 
 /**

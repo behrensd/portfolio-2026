@@ -2,6 +2,7 @@
 
 import ProjectVideo from './ProjectVideo';
 import ProjectCarousel from './ProjectCarousel';
+import MatrixScramble from './MatrixScramble';
 
 type MockupType = {
     type: 'video' | 'image';
@@ -35,7 +36,7 @@ const projectsData: ProjectType[] = [
         title: 'Der BANDOPRINZ Onlineshop',
         description: 'Shopify-Store mit 3D-Produktviewer und Google Veo Intro-Video. Performance-optimiert für maximale Conversion-Raten.',
         role: 'Full-Stack Shopify Development inklusive Custom Theme, Three.js Produktviewer und optimiertem Checkout-Flow. Mobile-First Responsive Design.',
-        tags: ['Shopify Liquid', 'Three.js', 'GSAP', 'Blender'],
+        tags: ['Shopify Liquid', 'Three.js', 'Blender'],
         mockupSize: 'mockup-large',
         mockupLabel: 'E-Commerce Preview',
         videoUrl: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/bp-shop-mockup.mp4',
@@ -78,18 +79,23 @@ const projectsData: ProjectType[] = [
             },
             {
                 type: 'image',
-                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-about-page.jpg',
-                label: 'About Page'
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-events.jpg',
+                label: 'Events'
             },
             {
                 type: 'image',
-                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-screenshot.png',
-                label: 'Home Page'
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-about-page.jpg',
+                label: 'About Page'
             },
             {
                 type: 'video',
                 url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/gdp-mobile-mockup.mp4',
                 label: 'Mobile'
+            },
+            {
+                type: 'image',
+                url: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/images/gdp-screenshot.png',
+                label: 'Home Page'
             }
         ],
         url: 'https://girodipizza.de',
@@ -112,7 +118,13 @@ export default function Projects() {
                             className="project-number" 
                             data-speed={project.id === 0 || project.id === 2 ? "0.5" : undefined}
                         >
-                            {project.number}
+                            <MatrixScramble 
+                                className="project-number-scramble"
+                                intensity={0.20}
+                                speed={1000}
+                            >
+                                {project.number}
+                            </MatrixScramble>
                         </div>
                         <div className="project-content">
                             <div 

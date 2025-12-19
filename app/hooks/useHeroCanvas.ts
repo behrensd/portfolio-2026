@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
+    const canvasTriggersRef = useRef<ScrollTrigger[]>([]);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -192,16 +194,17 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
         // Setup scroll-based behavior changes
         function setupParticleBehaviorTriggers() {
             // Reset to default when in hero section
-            ScrollTrigger.create({
+            const heroTrigger = ScrollTrigger.create({
                 trigger: '#hero',
                 start: 'top top',
                 end: 'bottom top',
                 onEnter: () => currentBehavior = 'default',
                 onEnterBack: () => currentBehavior = 'default'
             });
-            
+            canvasTriggersRef.current.push(heroTrigger);
+
             // Project 01 behavior
-            ScrollTrigger.create({
+            const project01Trigger = ScrollTrigger.create({
                 trigger: '.project-item[data-project="0"]',
                 start: 'top center',
                 end: 'bottom center',
@@ -210,9 +213,10 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                 onLeave: () => currentBehavior = 'default',
                 onLeaveBack: () => currentBehavior = 'default'
             });
-            
+            canvasTriggersRef.current.push(project01Trigger);
+
             // Project 02 behavior
-            ScrollTrigger.create({
+            const project02Trigger = ScrollTrigger.create({
                 trigger: '.project-item[data-project="1"]',
                 start: 'top center',
                 end: 'bottom center',
@@ -221,9 +225,10 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                 onLeave: () => currentBehavior = 'default',
                 onLeaveBack: () => currentBehavior = 'default'
             });
-            
+            canvasTriggersRef.current.push(project02Trigger);
+
             // Project 03 behavior
-            ScrollTrigger.create({
+            const project03Trigger = ScrollTrigger.create({
                 trigger: '.project-item[data-project="2"]',
                 start: 'top center',
                 end: 'bottom center',
@@ -232,6 +237,7 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
                 onLeave: () => currentBehavior = 'default',
                 onLeaveBack: () => currentBehavior = 'default'
             });
+            canvasTriggersRef.current.push(project03Trigger);
         }
         
         animate();
@@ -245,7 +251,9 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
             }
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            // Only kill canvas-specific triggers, not all triggers globally
+            canvasTriggersRef.current.forEach(trigger => trigger.kill());
+            canvasTriggersRef.current = [];
         };
     }, [canvasRef]);
 }

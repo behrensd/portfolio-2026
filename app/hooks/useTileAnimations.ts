@@ -14,29 +14,59 @@ export function useTileAnimations() {
   const tweensRef = useRef<gsap.core.Tween[]>([]);
 
   useEffect(() => {
+    // Respect user's motion preferences
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      console.log('⚠️ Reduced motion preferred - skipping tile animations');
+      return;
+    }
+
     const timer = setTimeout(() => {
       // Get all content tiles
       const tiles = gsap.utils.toArray<HTMLElement>('.content-tile');
-      
-      tiles.forEach((tile) => {
-        const tween = gsap.to(tile, {
-          scrollTrigger: {
-            trigger: tile,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 1,
-          },
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power2.out'
-        });
+
+      if (tiles.length === 0) {
+        console.warn('⚠️ No .content-tile elements found');
+        return;
+      }
+
+      console.log(`✨ Found ${tiles.length} content tiles to animate`);
+
+      tiles.forEach((tile, index) => {
+        const tween = gsap.fromTo(tile,
+          // FROM state (explicit initial)
+          { opacity: 0, y: 30 },
+          // TO state
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: tile,
+              start: 'top 90%',  // Earlier trigger (was 80%)
+              toggleActions: 'play none none reverse',  // Reverse on scroll back
+              invalidateOnRefresh: true,
+              onEnter: () => {
+                console.log(`📍 Tile ${index + 1} entered viewport - animating`);
+              }
+            }
+          }
+        );
         tweensRef.current.push(tween);
         if (tween.scrollTrigger) triggersRef.current.push(tween.scrollTrigger);
       });
       
       // Animate skill items
       const skills = gsap.utils.toArray<HTMLElement>('.skill-item');
+
+      if (skills.length === 0) {
+        console.warn('⚠️ No .skill-item elements found');
+      } else {
+        console.log(`✨ Found ${skills.length} skill items to animate`);
+      }
+
       skills.forEach((skill, index) => {
         const skillTween = gsap.from(skill, {
           scrollTrigger: {

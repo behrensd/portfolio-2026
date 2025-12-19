@@ -6,6 +6,7 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Navigation from './components/Navigation';
 import { useProjectAnimations } from './hooks/useProjectAnimations';
+import { useTileAnimations } from './hooks/useTileAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
@@ -16,6 +17,7 @@ export default function Home() {
   useSafariScrollFix();
 
   // Initialize all animations and interactions
+  useTileAnimations();
   useProjectAnimations();
   useDockNavigation();
   useAnimeInteractions();

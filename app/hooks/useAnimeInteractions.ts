@@ -27,11 +27,11 @@ export function useAnimeInteractions() {
             // 4. Enhanced hero title animation
             initEnhancedHeroAnimation();
             
-            // 5. Skill item animations
-            initSkillItemAnimations();
-            
+            // 5. Skill item animations - removed hover animations
+            // initSkillItemAnimations();
+
             console.log('✨ Anime.js micro-interactions initialized');
-        }, 100);
+        }, 150); // Changed from 100ms to prevent timing conflicts with useTileAnimations
 
         return () => {
             clearTimeout(timer);
@@ -253,33 +253,34 @@ function initEnhancedHeroAnimation() {
 }
 
 // Skill item hover enhancement
-function initSkillItemAnimations() {
-    const skillItems = document.querySelectorAll('.skill-item');
-    
-    skillItems.forEach(item => {
-        const handleMouseEnter = function(this: HTMLElement) {
-            const h3 = this.querySelector('h3');
-            if (h3) {
-                animate(h3, {
-                    scale: 1.1,
-                    duration: 300,
-                    ease: 'out(2)'
-                });
-            }
-        };
-        
-        const handleMouseLeave = function(this: HTMLElement) {
-            const h3 = this.querySelector('h3');
-            if (h3) {
-                animate(h3, {
-                    scale: 1,
-                    duration: 300,
-                    ease: 'inOutQuad'
-                });
-            }
-        };
-        
-        item.addEventListener('mouseenter', handleMouseEnter);
-        item.addEventListener('mouseleave', handleMouseLeave);
-    });
-}
+// Removed skill item hover animations - no longer needed
+// function initSkillItemAnimations() {
+//     const skillItems = document.querySelectorAll('.skill-item');
+//     
+//     skillItems.forEach(item => {
+//         const handleMouseEnter = function(this: HTMLElement) {
+//             const h3 = this.querySelector('h3');
+//             if (h3) {
+//                 animate(h3, {
+//                     scale: 1.1,
+//                     duration: 300,
+//                     ease: 'out(2)'
+//                 });
+//             }
+//         };
+//         
+//         const handleMouseLeave = function(this: HTMLElement) {
+//             const h3 = this.querySelector('h3');
+//             if (h3) {
+//                 animate(h3, {
+//                     scale: 1,
+//                     duration: 300,
+//                     ease: 'inOutQuad'
+//                 });
+//             }
+//         };
+//         
+//         item.addEventListener('mouseenter', handleMouseEnter);
+//         item.addEventListener('mouseleave', handleMouseLeave);
+//     });
+// }
