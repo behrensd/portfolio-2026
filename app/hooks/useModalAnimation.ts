@@ -16,7 +16,7 @@ import gsap from 'gsap';
 export function useModalAnimation(
     modalState: 'closed' | 'opening' | 'open' | 'closing',
     onAnimationComplete: (finalState: 'open' | 'closed') => void
-): RefObject<HTMLDivElement> {
+): RefObject<HTMLDivElement | null> {
     const modalRef = useRef<HTMLDivElement>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
     const prevStateRef = useRef(modalState);
