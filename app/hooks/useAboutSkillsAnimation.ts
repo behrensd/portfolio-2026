@@ -36,6 +36,7 @@ export function useAboutSkillsAnimation() {
     const lastUpdateTimeRef = useRef<number>(0);
     const isInitializedRef = useRef(false);
     const scrollProgressRef = useRef<number>(0);
+    const isVisibleRef = useRef<boolean>(false); // Track if section is in viewport
 
     useEffect(() => {
         // Respect user's motion preferences
@@ -249,6 +250,7 @@ export function useAboutSkillsAnimation() {
             },
             onEnter: () => {
                 console.log('📍 Skills card pinned - matrix scramble continues');
+                isVisibleRef.current = true; // Mark as visible when entering viewport
                 scrollProgressRef.current = 0; // Reset progress when entering
                 hasCorrectedPosition = false; // Reset correction flag
                 // Ensure animation is running (it should already be from load)
@@ -258,12 +260,14 @@ export function useAboutSkillsAnimation() {
             },
             onEnterBack: () => {
                 console.log('📍 Skills card pinned (scrolled back)');
+                isVisibleRef.current = true; // Mark as visible when re-entering
                 // Reset progress when entering from bottom
                 scrollProgressRef.current = scrollTriggerRef.current?.progress || 0;
                 startAnimation();
             },
             onLeave: () => {
-                console.log('📍 Skills card unpinned');
+                console.log('📍 Skills card left viewport - stopping animation for performance');
+                isVisibleRef.current = false; // Mark as not visible when leaving
                 // Ensure all characters are revealed before stopping
                 skillLinesRef.current.forEach((line) => {
                     line.chars.forEach((char) => {
@@ -277,7 +281,8 @@ export function useAboutSkillsAnimation() {
                 stopAnimation();
             },
             onLeaveBack: () => {
-                console.log('📍 Skills card unpinned (scrolled back)');
+                console.log('📍 Skills card exited (scrolled up) - stopping animation');
+                isVisibleRef.current = false; // Mark as not visible when leaving back
                 stopAnimation();
                 resetSkills();
             }
@@ -540,15 +545,11 @@ export function useAboutSkillsAnimation() {
         // 4. Always run scramble animation (even when not pinned) to show continuous effect
         // isActive and isComplete are already defined above, reuse them
         
-        // Continue animation if:
-        // - Pinned and not complete, OR
-        // - Not all revealed, OR
-        // - Not pinned (show scramble continuously), OR
-        // - Always run to show scramble effect
-        // Only stop when pinned AND complete AND all revealed
-        if (!isActive || !isComplete || !allCharsRevealed) {
+        // Continue animation ONLY if section is visible AND (not complete OR not revealed)
+        // This prevents continuous animation when scrolled away - major performance improvement
+        if (isVisibleRef.current && (!isComplete || !allCharsRevealed)) {
             animationRef.current = requestAnimationFrame(animateMatrix);
-        } else {
+        } else if (isComplete && allCharsRevealed) {
             // Final safety check - ensure ALL characters are revealed before stopping
             skillLinesRef.current.forEach((line) => {
                 line.chars.forEach((char) => {

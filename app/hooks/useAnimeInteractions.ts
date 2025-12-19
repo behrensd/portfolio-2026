@@ -251,36 +251,3 @@ function initEnhancedHeroAnimation() {
         line.addEventListener('mouseleave', handleMouseLeave);
     });
 }
-
-// Skill item hover enhancement
-// Removed skill item hover animations - no longer needed
-// function initSkillItemAnimations() {
-//     const skillItems = document.querySelectorAll('.skill-item');
-//     
-//     skillItems.forEach(item => {
-//         const handleMouseEnter = function(this: HTMLElement) {
-//             const h3 = this.querySelector('h3');
-//             if (h3) {
-//                 animate(h3, {
-//                     scale: 1.1,
-//                     duration: 300,
-//                     ease: 'out(2)'
-//                 });
-//             }
-//         };
-//         
-//         const handleMouseLeave = function(this: HTMLElement) {
-//             const h3 = this.querySelector('h3');
-//             if (h3) {
-//                 animate(h3, {
-//                     scale: 1,
-//                     duration: 300,
-//                     ease: 'inOutQuad'
-//                 });
-//             }
-//         };
-//         
-//         item.addEventListener('mouseenter', handleMouseEnter);
-//         item.addEventListener('mouseleave', handleMouseLeave);
-//     });
-// }

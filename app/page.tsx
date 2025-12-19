@@ -10,7 +10,6 @@ import { useTileAnimations } from './hooks/useTileAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
-// import { useAvatarScrollAnimation } from './hooks/useAvatarScrollAnimation'; // Kept for reference
 
 export default function Home() {
   // Safari mobile scroll fix - must be first
@@ -21,7 +20,6 @@ export default function Home() {
   useProjectAnimations();
   useDockNavigation();
   useAnimeInteractions();
-  // useAvatarScrollAnimation(); // Disabled - using simple CSS float animation instead
 
   return (
     <>

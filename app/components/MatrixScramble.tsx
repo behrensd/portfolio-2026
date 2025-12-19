@@ -74,11 +74,12 @@ export default function MatrixScramble({
     }, [intensity, speed]);
 
     return (
-        <span 
+        <span
             ref={containerRef}
             className={`matrix-scramble ${className}`}
             style={{
                 display: 'inline-block',
+                whiteSpace: 'nowrap',
             }}
         >
             {children}

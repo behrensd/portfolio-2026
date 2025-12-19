@@ -75,8 +75,6 @@ html {
     /* Removed scroll-behavior: smooth to prevent conflicts with GSAP scrollTo */
     overflow-x: hidden;
     overflow-y: auto;
-    /* Enable scroll snapping - snaps to project cards (desktop only) */
-    scroll-snap-type: y proximity;
     /* Prevent scroll chaining for better performance */
     overscroll-behavior-y: contain;
     /* Optimize scroll rendering */
@@ -804,9 +802,6 @@ body {
     overflow: visible; /* Allow slide-in from sides */
     /* GSAP handles opacity and transform - don't set them in CSS to avoid conflicts */
     /* Initial state: GSAP will set opacity and x position */
-    /* Scroll snap point - each project card is a snap target */
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
     /* Optimize scroll performance: contain layout recalculations */
     contain: layout style paint;
     /* Ensure proper layout and prevent overlapping */
@@ -866,18 +861,7 @@ body {
 .matrix-scramble {
     font-family: 'Courier New', monospace;
     letter-spacing: 0.1em;
-    display: inline-block;
-}
-
-.project-number-scramble {
-    /* Subtle matrix effect on project numbers */
-    transition: opacity 0.1s ease;
-}
-
-/* Matrix scramble styling for project number */
-.matrix-scramble {
-    font-family: 'Courier New', monospace;
-    letter-spacing: 0.1em;
+    white-space: nowrap;
 }
 
 .project-number-scramble {
@@ -1932,11 +1916,7 @@ body {
 
 /* Mobile scroll optimization */
 @media (max-width: 768px) {
-    html {
-        /* Disable scroll-snap on mobile for better performance */
-        scroll-snap-type: none;
-    }
-    
+
     html, body {
         /* Enable smooth momentum scrolling with elastic bounce */
         overflow-y: auto;
@@ -1944,13 +1924,7 @@ body {
         overscroll-behavior-y: contain;
         -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
     }
-    
-    /* Disable scroll-snap on project items for mobile performance */
-    .project-item {
-        scroll-snap-align: none;
-        scroll-snap-stop: normal;
-    }
-    
+
     /* 
      * IMPORTANT: Spline has native scroll-based animations.
      * We use touch-action: pan-y to allow vertical scrolling to pass through
@@ -2000,7 +1974,14 @@ body {
     .hero-image,
     .hero-image-container,
     .about-skills,
-    .content-tile {
+    .content-tile,
+    .tile-inner,
+    .link-arrow,
+    .dock,
+    .avatar-proxy,
+    .project-content,
+    .about-description,
+    .mockup-item {
         will-change: auto !important;
     }
     
