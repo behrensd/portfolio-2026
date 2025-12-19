@@ -1694,9 +1694,10 @@ body {
 /* Mobile scroll optimization */
 @media (max-width: 768px) {
     html, body {
-        /* Enable smooth momentum scrolling */
+        /* Enable smooth momentum scrolling with elastic bounce */
         overflow-y: auto;
-        overscroll-behavior-y: none;
+        overscroll-behavior-y: auto; /* Allows natural iOS bounce/elastic scroll */
+        -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
     }
     
     /* 
