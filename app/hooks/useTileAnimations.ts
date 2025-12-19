@@ -47,7 +47,8 @@ export function useTileAnimations() {
               trigger: tile,
               start: 'top 90%',  // Earlier trigger (was 80%)
               toggleActions: 'play none none reverse',  // Reverse on scroll back
-              invalidateOnRefresh: true,
+              invalidateOnRefresh: false, // Layout is stable
+              refreshPriority: 1, // Batch with other content tiles
               onEnter: () => {
                 console.log(`📍 Tile ${index + 1} entered viewport - animating`);
               }
@@ -72,7 +73,9 @@ export function useTileAnimations() {
           scrollTrigger: {
             trigger: skill,
             start: 'top 85%',
-            toggleActions: 'play none none none'
+            toggleActions: 'play none none none',
+            invalidateOnRefresh: false, // Layout is stable
+            refreshPriority: 1 // Batch with other content
           },
           opacity: 0,
           y: 30,

@@ -230,7 +230,9 @@ export function useHeroMatrixAnimation() {
         // Total animation duration: ~2.5 seconds
         const totalDuration = 2500;
         const revealDuration = 1800; // Time to reveal all characters
-        const updateInterval = 30; // Update scramble every 30ms for smooth matrix effect
+        // Adaptive update interval based on device performance
+        const isMobile = window.innerWidth < 768;
+        const updateInterval = isMobile ? 50 : 30; // Slower updates on mobile for better performance
         
         if (elapsed < totalDuration) {
             // Update scrambling characters at regular intervals

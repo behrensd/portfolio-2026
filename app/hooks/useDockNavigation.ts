@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { batchedScrollTriggerRefresh } from '../utils/scrollOptimization';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -39,6 +40,8 @@ export function useDockNavigation() {
                 trigger: section,
                 start: 'top center',
                 end: 'bottom center',
+                refreshPriority: 3, // Lower priority for navigation tracking
+                invalidateOnRefresh: false, // Section positions are stable
                 onToggle: (self) => {
                     // Don't update during programmatic navigation
                     if (isNavigating) return;
@@ -57,6 +60,8 @@ export function useDockNavigation() {
             trigger: 'body',
             start: 'bottom bottom', 
             end: 'bottom bottom',
+            refreshPriority: 3, // Lower priority for navigation tracking
+            invalidateOnRefresh: false,
             onEnter: () => {
                 if (isNavigating) return;
                 setActiveItem('#contact');
@@ -98,7 +103,7 @@ export function useDockNavigation() {
                     // Native smooth scroll takes ~500-800ms
                     setTimeout(() => {
                         isNavigating = false;
-                        ScrollTrigger.refresh();
+                        batchedScrollTriggerRefresh();
                     }, 800);
                 } else {
                     // Desktop non-Safari: Use GSAP for more control
@@ -121,7 +126,7 @@ export function useDockNavigation() {
                         onComplete: () => {
                             isNavigating = false;
                             currentScrollTween = null;
-                            ScrollTrigger.refresh();
+                            batchedScrollTriggerRefresh();
                         },
                         onInterrupt: () => {
                             isNavigating = false;

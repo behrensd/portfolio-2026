@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { batchedScrollTriggerRefresh } from '../utils/scrollOptimization';
 import { animate, stagger } from 'animejs';
 
 if (typeof window !== 'undefined') {
@@ -430,7 +431,8 @@ export function useProjectAnimations() {
                     trigger: project,
                     start: 'top 90%',
                     end: 'bottom 10%',
-                    invalidateOnRefresh: true,
+                    invalidateOnRefresh: false, // Layout is stable, no need to recalculate
+                    refreshPriority: 1, // Batch with other project triggers
                     // Observe both directions
                     onEnter: () => {
                         console.log('⬇️ onEnter triggered');
@@ -515,7 +517,7 @@ export function useProjectAnimations() {
                 setTimeout(checkInitialVisibility, 300);
             });
 
-            ScrollTrigger.refresh(true);
+            batchedScrollTriggerRefresh(true); // Force immediate refresh after cleanup
         }, isMobile ? 350 : 200); // Changed from 150/300 to prevent timing conflicts
 
         return () => {

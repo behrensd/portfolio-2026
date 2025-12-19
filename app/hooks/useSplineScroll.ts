@@ -111,7 +111,8 @@ export function useSplineScroll(splineApp: Application | null) {
         trigger: document.body,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.5, // Smoother rotation (lower = smoother)
+        refreshPriority: 2, // Lower priority for background animation
         onUpdate: (self) => {
           objectsToRotateRef.current.forEach((obj, index) => {
             if (obj?.rotation) {

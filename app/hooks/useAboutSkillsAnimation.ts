@@ -211,7 +211,8 @@ export function useAboutSkillsAnimation() {
             pinSpacing: true,
             pinType: 'transform', // Use transform for pinning (more stable)
             anticipatePin: 1, // Prevent flash by anticipating pin
-            invalidateOnRefresh: true,
+            invalidateOnRefresh: false, // Dimensions are locked, no need to recalculate
+            refreshPriority: 0, // High priority for pinned elements
             onUpdate: (self) => {
                 // Update progress - this drives the reveal
                 scrollProgressRef.current = self.progress;
@@ -426,7 +427,10 @@ export function useAboutSkillsAnimation() {
 
     function animateMatrix() {
         const now = performance.now();
-        const updateInterval = 30; // Update scramble every 30ms for smooth matrix effect
+        // Adaptive update interval based on device performance
+        // Mobile devices get longer intervals to reduce CPU usage
+        const isMobile = window.innerWidth < 768;
+        const updateInterval = isMobile ? 50 : 30; // Slower updates on mobile
         const shouldUpdateScramble = now - lastUpdateTimeRef.current >= updateInterval;
 
         const totalLines = skillLinesRef.current.length;

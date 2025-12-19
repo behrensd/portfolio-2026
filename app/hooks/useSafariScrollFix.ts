@@ -39,6 +39,19 @@ export function useSafariScrollFix() {
             // 'pan-y' allows vertical scrolling but prevents horizontal swipes/zooms
             document.body.style.touchAction = 'pan-y';
             document.documentElement.style.touchAction = 'pan-y';
+            
+            // Optimize overscroll behavior for better performance
+            // This prevents scroll chaining and improves momentum scrolling
+            document.documentElement.style.overscrollBehaviorY = 'contain';
+            document.body.style.overscrollBehaviorY = 'contain';
+        }
+        
+        // Safari-specific optimizations (both mobile and desktop)
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari) {
+            // Optimize scroll performance on Safari
+            document.documentElement.style.overscrollBehaviorY = 'contain';
+            document.body.style.overscrollBehaviorY = 'contain';
         }
         
         return () => {

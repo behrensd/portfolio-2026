@@ -75,8 +75,12 @@ html {
     /* Removed scroll-behavior: smooth to prevent conflicts with GSAP scrollTo */
     overflow-x: hidden;
     overflow-y: auto;
-    /* Enable scroll snapping - snaps to project cards */
+    /* Enable scroll snapping - snaps to project cards (desktop only) */
     scroll-snap-type: y proximity;
+    /* Prevent scroll chaining for better performance */
+    overscroll-behavior-y: contain;
+    /* Optimize scroll rendering */
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -558,6 +562,10 @@ body {
     background: transparent; /* NO BACKGROUND BOX */
     z-index: var(--z-content);
     /* Let GSAP handle initial state - don't hide with CSS */
+    /* Optimize scroll performance: contain layout recalculations */
+    contain: layout style paint;
+    /* Use transform for animations instead of position changes */
+    will-change: transform, opacity;
 }
 
 /* Last section (Contact) - extra bottom spacing to prevent decentering */
@@ -799,6 +807,8 @@ body {
     /* Scroll snap point - each project card is a snap target */
     scroll-snap-align: start;
     scroll-snap-stop: always;
+    /* Optimize scroll performance: contain layout recalculations */
+    contain: layout style paint;
     /* Ensure proper layout and prevent overlapping */
     width: 100%;
     display: block;
@@ -1880,6 +1890,13 @@ body {
 
 /* Fix for iOS Safari viewport height issues */
 @supports (-webkit-touch-callout: none) {
+    html {
+        /* Optimize momentum scrolling on Safari */
+        -webkit-overflow-scrolling: touch;
+        /* Prevent scroll chaining for better performance */
+        overscroll-behavior-y: contain;
+    }
+    
     .section-tile {
         min-height: -webkit-fill-available;
     }
@@ -1915,11 +1932,23 @@ body {
 
 /* Mobile scroll optimization */
 @media (max-width: 768px) {
+    html {
+        /* Disable scroll-snap on mobile for better performance */
+        scroll-snap-type: none;
+    }
+    
     html, body {
         /* Enable smooth momentum scrolling with elastic bounce */
         overflow-y: auto;
-        overscroll-behavior-y: auto; /* Allows natural iOS bounce/elastic scroll */
+        /* Optimize scroll performance - prevent chaining */
+        overscroll-behavior-y: contain;
         -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
+    }
+    
+    /* Disable scroll-snap on project items for mobile performance */
+    .project-item {
+        scroll-snap-align: none;
+        scroll-snap-stop: normal;
     }
     
     /* 
@@ -1965,6 +1994,7 @@ body {
        ================================ */
     
     /* Disable will-change on mobile to reduce compositing layers (Safari optimization) */
+    /* Only use will-change for actively scrolling elements */
     .project-item,
     .skill-item,
     .hero-image,
@@ -1972,6 +2002,22 @@ body {
     .about-skills,
     .content-tile {
         will-change: auto !important;
+    }
+    
+    /* Reduce animation complexity during scroll on mobile */
+    .project-item {
+        /* Simplify transforms during scroll */
+        transform: translateZ(0); /* Minimal GPU acceleration */
+    }
+    
+    /* Reduce backdrop-filter blur during scroll for better performance */
+    .glass-card,
+    .about-description,
+    .about-skills,
+    .project-content {
+        /* Further reduce blur on mobile during scroll */
+        -webkit-backdrop-filter: blur(6px) !important;
+        backdrop-filter: blur(6px) !important;
     }
     
     /* Simplify text shadows on mobile for better performance */
