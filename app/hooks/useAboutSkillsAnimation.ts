@@ -279,19 +279,6 @@ export function useAboutSkillsAnimation() {
                 console.log('📍 Skills card unpinned (scrolled back)');
                 stopAnimation();
                 resetSkills();
-            },
-            onComplete: () => {
-                console.log('✅ ScrollTrigger complete - ensuring all characters are revealed');
-                // Final completion check - reveal any remaining characters
-                skillLinesRef.current.forEach((line) => {
-                    line.chars.forEach((char) => {
-                        if (!char.isRevealed) {
-                            char.element.textContent = char.originalChar;
-                            char.element.style.color = '#ffffff';
-                            char.isRevealed = true;
-                        }
-                    });
-                });
             }
         });
 

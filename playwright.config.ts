@@ -85,19 +85,18 @@ export default defineConfig({
     },
 
     // Accessibility: Reduced motion testing
+    // Note: reducedMotion is set via context options in tests, not in config
     {
       name: 'Desktop Reduced Motion',
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
-        reducedMotion: 'reduce', // Simulates prefers-reduced-motion
       },
     },
     {
       name: 'Mobile Reduced Motion',
       use: {
         ...devices['iPhone 13'],
-        reducedMotion: 'reduce',
       },
     },
 

@@ -372,11 +372,12 @@ export function useProjectAnimations() {
                     }
                     if (tags.length > 0) {
                         // Reset all tag spans if they exist
-                        tags.forEach(tag => {
-                            const tagSpans = tag.querySelectorAll('span');
+                        tags.forEach((tag: Element) => {
+                            const tagElement = tag as HTMLElement;
+                            const tagSpans = tagElement.querySelectorAll('span');
                             if (tagSpans.length > 0) {
-                                const originalText = tag.textContent || '';
-                                tag.textContent = originalText;
+                                const originalText = tagElement.textContent || '';
+                                tagElement.textContent = originalText;
                             }
                         });
                         gsap.set(tags, { opacity: 0, visibility: 'visible' });
