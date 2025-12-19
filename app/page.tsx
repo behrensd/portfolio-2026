@@ -5,7 +5,6 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Navigation from './components/Navigation';
-import Footer from './components/Footer';
 import { useProjectAnimations } from './hooks/useProjectAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
@@ -33,7 +32,6 @@ export default function Home() {
           <About />
           <Projects />
           <Contact />
-          <Footer />
         </div>
       </div>
     </>

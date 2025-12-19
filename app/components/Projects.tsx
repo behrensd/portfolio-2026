@@ -163,7 +163,7 @@ export default function Projects() {
                                 
                                 {project.credits && (
                                     <p className="project-credits">
-                                        3D Animation: <a 
+                                        3D Modell und Animation: <a 
                                             href={`https://instagram.com/${project.credits.motionDesigner}`}
                                             target="_blank"
                                             rel="noopener noreferrer"

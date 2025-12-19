@@ -1134,6 +1134,12 @@ body {
     border-color: rgba(255, 107, 53, 0.1);
 }
 
+.embla__button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-color: var(--color-primary);
+}
+
 .embla__button svg {
     width: 20px;
     height: 20px;
@@ -1173,8 +1179,8 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .embla__button {
-        width: 40px;
-        height: 40px;
+        width: 44px; /* Maintain 44px for accessibility (iOS minimum) */
+        height: 44px;
     }
 
     .embla__button svg {
@@ -1256,6 +1262,13 @@ body {
     transform: rotate(45deg);
 }
 
+.project-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    background: transparent;
+    color: var(--color-primary);
+}
+
 .link-arrow {
     transition: transform 0.3s ease;
     will-change: transform;
@@ -1324,14 +1337,29 @@ body {
 }
 
 .tag {
-    padding: 0; /* NO PADDING */
-    background: transparent; /* NO BACKGROUND */
-    border: none; /* NO BORDER */
-    color: var(--color-primary); /* JUST COLOR */
+    padding: 0.5rem 0.75rem; /* Touch-friendly padding (44px min height with font) */
+    background: transparent;
+    border: 1px solid rgba(255, 107, 53, 0.2); /* Subtle border for tap area visibility */
+    border-radius: 6px;
+    color: var(--color-primary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-normal);
     letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
+    cursor: default;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.tag:hover {
+    background: rgba(255, 107, 53, 0.1);
+    border-color: rgba(255, 107, 53, 0.4);
+}
+
+.tag:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    background: rgba(255, 107, 53, 0.1);
 }
 
 /* ================================
@@ -1397,6 +1425,13 @@ body {
     box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
 }
 
+.contact-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    background: var(--color-primary);
+    color: var(--color-bg);
+}
+
 /* ================================
    FLOATING DOCK - MINIMAL
    ================================ */
@@ -1442,6 +1477,12 @@ body {
 }
 
 .dock-item:hover {
+    color: var(--color-text);
+}
+
+.dock-item:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
     color: var(--color-text);
 }
 
@@ -1719,6 +1760,84 @@ body {
     }
 }
 
+/* ================================
+   SMALL PHONE BREAKPOINT (480px)
+   ================================ */
+@media (max-width: 480px) {
+    /* Hero - Reduce title size further */
+    .hero-title {
+        font-size: clamp(2.5rem, 9vw, 8rem);
+    }
+
+    /* Dock - Tighter spacing */
+    .floating-dock {
+        gap: 0.75rem;
+        padding: 0.6rem 0.8rem;
+        width: 95%;
+    }
+
+    .dock-item {
+        font-size: 0.6rem;
+        letter-spacing: var(--letter-spacing-normal);
+    }
+
+    /* Project numbers */
+    .project-number {
+        font-size: 1.75rem;
+    }
+
+    /* Carousel buttons - keep 44px for accessibility */
+    .embla__button {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Modal scroll padding optimization */
+    .legal-modal-scroll {
+        padding: var(--spacing-md);
+        padding-right: calc(var(--spacing-md) + 2rem);
+    }
+}
+
+/* ================================
+   EXTRA SMALL PHONE BREAKPOINT (360px)
+   ================================ */
+@media (max-width: 360px) {
+    /* Hero - Even smaller */
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 6rem);
+    }
+
+    /* Dock - Minimal spacing, consider abbreviating or icons */
+    .floating-dock {
+        gap: 0.5rem;
+        padding: 0.5rem 0.6rem;
+        width: 98%;
+    }
+
+    .dock-item {
+        font-size: 0.55rem;
+        padding: 0.25rem 0;
+    }
+
+    /* Project content - More breathing room */
+    .project-content {
+        padding: var(--spacing-sm);
+    }
+
+    /* Tags - Slightly smaller but still tappable */
+    .tag {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.65rem;
+    }
+
+    /* Contact links - Maintain size */
+    .contact-link {
+        padding: 0.65rem 1.2rem;
+        font-size: 0.75rem;
+    }
+}
+
 /* Ensure touch events work on iOS */
 .contact-link,
 .project-link,
@@ -1728,108 +1847,141 @@ body {
 }
 
 /* ================================
-   FOOTER - MINIMAL LEGAL
+   LEGAL MODAL - SLIDE IN FROM RIGHT
    ================================ */
-.footer {
+
+/* Modal backdrop (unused - full-screen modal) */
+.legal-modal-backdrop {
     position: fixed;
-    bottom: var(--spacing-sm);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: var(--z-dock);
-    max-width: 90vw;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
 }
 
-.footer-toggle {
+/* Modal container */
+.legal-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--color-bg);
+    z-index: 9999;
+    overflow: hidden;
+    will-change: transform; /* GSAP optimization */
+}
+
+/* Modal content */
+.legal-modal-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Close button */
+.legal-modal-close {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
     background: none;
     border: none;
-    color: var(--color-text-muted);
-    font-family: var(--font-vhs), 'Courier New', monospace;
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-wide);
-    text-transform: lowercase;
+    color: var(--color-text-dim);
+    font-size: 2.5rem;
+    line-height: 1;
     cursor: pointer;
     padding: 0.5rem;
     transition: color 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    z-index: 10;
+    font-family: Arial, sans-serif;
 }
 
-.footer-toggle:hover {
+.legal-modal-close:hover {
     color: var(--color-primary);
 }
 
-.footer-legal {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: var(--spacing-xs);
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: var(--spacing-md);
-    max-width: min(600px, 85vw);
-    backdrop-filter: blur(12px);
-    animation: fadeInUp 0.3s ease;
+.legal-modal-close:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    color: var(--color-primary);
 }
 
-.footer-legal-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+/* Scrollable content */
+.legal-modal-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+    padding-right: calc(var(--spacing-xl) + 3rem); /* Space for close button */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.footer-legal section h3 {
-    font-size: var(--font-size-sm);
+/* Legal sections */
+.legal-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.legal-section:last-child {
+    margin-bottom: 0;
+}
+
+.legal-section h2 {
+    font-size: var(--font-size-lg);
     color: var(--color-primary);
     letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+    line-height: var(--line-height-snug);
 }
 
-.footer-legal section p {
-    font-size: var(--font-size-xs);
+.legal-section p {
+    font-size: var(--font-size-sm);
     color: var(--color-text-dim);
     letter-spacing: var(--letter-spacing-normal);
     line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-sm);
 }
 
-/* Mobile responsive adjustments */
+.legal-section p:last-child {
+    margin-bottom: 0;
+}
+
+.legal-section a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    word-break: break-all;
+}
+
+.legal-section a:hover {
+    opacity: 0.8;
+}
+
+/* Mobile responsive */
 @media (max-width: 768px) {
-    .footer {
-        bottom: clamp(0.75rem, 3vw, 1rem);
-        left: clamp(0.75rem, 3vw, 1rem);
+    .legal-modal-scroll {
+        padding: var(--spacing-lg);
+        padding-right: calc(var(--spacing-lg) + 2.5rem);
+        max-width: 100%;
     }
 
-    .footer-toggle {
-        font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-        padding: 0.4rem;
+    .legal-modal-close {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        font-size: 2rem;
     }
 
-    .footer-legal {
-        max-width: calc(100vw - 2rem);
-        padding: clamp(1rem, 4vw, 1.5rem);
-        margin-bottom: 0.5rem;
+    .legal-section h2 {
+        font-size: clamp(1rem, 4vw, 1.25rem);
     }
 
-    .footer-legal section h3 {
+    .legal-section p {
         font-size: clamp(0.75rem, 3vw, 0.875rem);
-    }
-
-    .footer-legal section p {
-        font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-        line-height: 1.6;
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 

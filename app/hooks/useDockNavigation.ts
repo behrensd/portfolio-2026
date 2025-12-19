@@ -71,6 +71,9 @@ export function useDockNavigation() {
 
         // Smooth scroll on click
         dockItems.forEach(item => {
+            // Skip items without data-section (e.g., "mehr" button)
+            if (!item.hasAttribute('data-section')) return;
+
             const handleNavigation = (e: Event) => {
                 e.preventDefault();
                 e.stopPropagation();
