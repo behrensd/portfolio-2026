@@ -97,6 +97,13 @@ body {
     /* Mobile touch optimization */
     touch-action: pan-y;
     -webkit-tap-highlight-color: transparent;
+    /* Prevent single-letter word breaks (orphans/widows) */
+    word-break: normal;
+    overflow-wrap: break-word;
+    orphans: 2;
+    widows: 2;
+    hyphens: auto;
+    -webkit-hyphens: auto;
 }
 
 /* ================================
@@ -1837,15 +1844,34 @@ body {
 /* ================================
    PERFORMANCE OPTIMIZATIONS
    ================================ */
-.content-tile,
-.project-item,
-.skill-item {
-    will-change: transform, opacity;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    /* Force hardware acceleration for Safari */
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+/* Desktop: Enable GPU acceleration for animated elements */
+@media (min-width: 769px) {
+    .content-tile,
+    .project-item,
+    .skill-item {
+        will-change: transform, opacity;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /* Force hardware acceleration for Safari */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Mobile: Reduce compositing layers for better performance */
+@media (max-width: 768px) {
+    .content-tile,
+    .project-item,
+    .skill-item {
+        /* Only use will-change for actively animating elements */
+        will-change: auto;
+        /* Keep backface-visibility for smooth transforms */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /* Use simpler transform for mobile */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
 }
 
 /* ================================
@@ -1860,11 +1886,30 @@ body {
     
     .spline-wrapper {
         height: -webkit-fill-available;
+        /* Safari performance: reduce compositing */
+        contain: layout style paint;
     }
     
     /* Ensure hero is properly centered on iOS */
     #hero {
         min-height: -webkit-fill-available;
+    }
+    
+    /* Safari-specific text rendering optimizations */
+    body {
+        /* Improve text rendering on Safari */
+        -webkit-font-smoothing: none;
+        text-rendering: optimizeSpeed;
+    }
+    
+    /* Reduce backdrop-filter complexity on Safari for better performance */
+    .glass-card,
+    .about-description,
+    .about-skills,
+    .project-content {
+        /* Safari handles backdrop-filter better with lower blur */
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
     }
 }
 
@@ -1887,6 +1932,8 @@ body {
     .spline-wrapper {
         touch-action: pan-y;
         pointer-events: none;
+        /* Optimize for Safari: reduce compositing layers */
+        contain: layout style paint;
     }
     
     .spline-wrapper canvas {
@@ -1894,7 +1941,7 @@ body {
         pointer-events: none;
     }
     
-    /* Reduce heavy blur on mobile for performance */
+    /* Reduce heavy blur on mobile for performance (especially Safari) */
     .glass-card,
     .about-description,
     .about-skills,
@@ -1902,6 +1949,8 @@ body {
     .floating-dock {
         -webkit-backdrop-filter: blur(8px) !important;
         backdrop-filter: blur(8px) !important;
+        /* Contain layout recalculations */
+        contain: layout style paint;
     }
     
     /* Contact uses solid black background - no blur needed */
@@ -1915,22 +1964,69 @@ body {
        iOS SAFARI PERFORMANCE FIXES
        ================================ */
     
-    /* Disable will-change on mobile to reduce compositing layers */
+    /* Disable will-change on mobile to reduce compositing layers (Safari optimization) */
     .project-item,
     .skill-item,
     .hero-image,
-    .hero-image-container {
+    .hero-image-container,
+    .about-skills,
+    .content-tile {
         will-change: auto !important;
     }
     
-    /* Simplify text shadows on mobile */
+    /* Simplify text shadows on mobile for better performance */
     .project-number {
         text-shadow: 0 0 8px rgba(255, 107, 53, 0.4) !important;
     }
     
-    /* Reduce box-shadow complexity */
-    .glass-card {
+    /* Reduce box-shadow complexity on mobile */
+    .glass-card,
+    .about-description,
+    .about-skills,
+    .project-content {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Optimize text rendering for mobile */
+    body,
+    p,
+    .project-description,
+    .about-description,
+    .skill-line {
+        /* Prevent text reflow during animations */
+        text-rendering: optimizeSpeed;
+        /* Improve text wrapping - prevent single-letter breaks */
+        word-break: normal;
+        overflow-wrap: break-word;
+        orphans: 2;
+        widows: 2;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
+    
+    /* Responsive text sizing - ensure all text scales properly on mobile */
+    .project-title {
+        font-size: clamp(1.25rem, 5vw, 2rem) !important;
+    }
+    
+    .project-description {
+        font-size: clamp(0.875rem, 3vw, 1.125rem) !important;
+    }
+    
+    .section-title {
+        font-size: clamp(1.5rem, 6vw, 3rem) !important;
+    }
+    
+    .about-description {
+        font-size: clamp(0.875rem, 3vw, 1.125rem) !important;
+    }
+    
+    .skill-item h3 {
+        font-size: clamp(1.1rem, 4vw, 1.5rem) !important;
+    }
+    
+    .skill-line {
+        font-size: clamp(0.9rem, 3vw, 1.1rem) !important;
     }
     
     /* Force GPU layer for animated elements only */
@@ -2135,7 +2231,10 @@ body {
     color: var(--color-primary);
     text-decoration: none;
     transition: opacity 0.2s ease;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: break-word;
+    /* Allow long URLs to break but prefer word boundaries */
+    word-break: break-word;
 }
 
 .legal-section a:hover {
