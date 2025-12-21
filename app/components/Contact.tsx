@@ -83,7 +83,7 @@ export default function Contact() {
                 <div className="contact-content">
                     <h2 className="section-title" data-speed="0.8">Erstgespräch vereinbaren</h2>
                     <p className="contact-description" data-speed="0.9">
-                        Keine Lust auf generische Designs? Lass uns deine Webpräsenz zum Leben erwecken!
+                        Keine Lust auf generische Designs? 
                     </p>
                     <div className="contact-links" data-speed="0.95">
                         <a 
