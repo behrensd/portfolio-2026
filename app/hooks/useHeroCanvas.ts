@@ -236,8 +236,6 @@ export function useHeroCanvas(canvasRef: React.RefObject<HTMLCanvasElement | nul
         
         animate();
         
-        console.log('✨ Enhanced scroll-reactive canvas initialized');
-        
         // Cleanup
         return () => {
             window.removeEventListener('resize', resizeHandler);

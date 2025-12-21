@@ -93,7 +93,6 @@ export function useDockNavigation() {
                 // iOS Safari & mobile: Use native scrollIntoView (always works)
                 // Also use for Instagram in-app browser
                 if (viewport.isIOS || viewport.isSafari || viewport.isInstagramBrowser || viewport.isMobile) {
-                    console.log('📱 Using native scrollIntoView for mobile/Safari/Instagram');
                     targetSection.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
@@ -139,8 +138,6 @@ export function useDockNavigation() {
             item.addEventListener('click', handleNavigation);
             clickHandlersRef.current.set(item, handleNavigation);
         });
-        
-        console.log('✨ Dock navigation initialized');
         
         return () => {
             // Kill any active scroll tween

@@ -20,7 +20,6 @@ export function useTileAnimations() {
 
     // Respect user's motion preferences
     if (viewport.shouldUseReducedAnimations) {
-      console.log('⚠️ Reduced motion preferred - skipping tile animations');
       // Set elements to visible immediately
       const tiles = gsap.utils.toArray<HTMLElement>('.content-tile, .skill-item');
       tiles.forEach(tile => {
@@ -37,11 +36,8 @@ export function useTileAnimations() {
       const tiles = gsap.utils.toArray<HTMLElement>('.content-tile');
 
       if (tiles.length === 0) {
-        console.warn('⚠️ No .content-tile elements found');
         return;
       }
-
-      console.log(`✨ Found ${tiles.length} content tiles to animate on ${viewport.breakpoint}`);
 
       tiles.forEach((tile, index) => {
         const tween = gsap.fromTo(tile,
@@ -57,9 +53,6 @@ export function useTileAnimations() {
               tile,
               {
                 toggleActions: 'play none none none',  // Stay visible after first animation
-                onEnter: () => {
-                  console.log(`📍 Tile ${index + 1} entered viewport`);
-                }
               },
               'content-reveal'
             )
@@ -71,12 +64,6 @@ export function useTileAnimations() {
 
       // Animate skill items
       const skills = gsap.utils.toArray<HTMLElement>('.skill-item');
-
-      if (skills.length === 0) {
-        console.warn('⚠️ No .skill-item elements found');
-      } else {
-        console.log(`✨ Found ${skills.length} skill items to animate`);
-      }
 
       skills.forEach((skill, index) => {
         const skillTween = gsap.from(skill, {
@@ -96,8 +83,6 @@ export function useTileAnimations() {
         tweensRef.current.push(skillTween);
         if (skillTween.scrollTrigger) triggersRef.current.push(skillTween.scrollTrigger);
       });
-
-      console.log('✨ Tile animations initialized');
     }, delay);
 
     return () => {

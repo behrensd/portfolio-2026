@@ -39,7 +39,6 @@ export function useSplineScroll(splineApp: Application | null) {
     // This means we skip the scroll-linked rotation logic entirely on mobile.
     // The Spline scene will simply play its default state/animation without JS interference.
     if (isMobile) {
-      console.log('📱 Mobile detected - disabling scroll-driven spin for smooth performance');
       // Ensure correct zoom for mobile
       try {
         splineApp.setZoom(0.6);
@@ -73,7 +72,6 @@ export function useSplineScroll(splineApp: Application | null) {
 
       // Retry logic for desktop to ensure we get the cubes
       if (objectsFound.length === 0 && attempts < maxAttempts) {
-        console.log(`🔄 Spline objects not found, retrying... (${attempts + 1}/${maxAttempts})`);
         attempts++;
         setTimeout(initAnimation, retryDelay);
         return;
@@ -97,14 +95,11 @@ export function useSplineScroll(splineApp: Application | null) {
 
       // If absolutely nothing found
       if (objectsFound.length === 0) {
-        console.log('ℹ️ No Spline objects found for rotation');
         return;
       }
 
       objectsToRotateRef.current = objectsFound;
       initialRotationsRef.current = objectsFound.map(obj => obj.rotation?.y || 0);
-
-      console.log(`✨ Found ${objectsFound.length} Spline object(s) for scroll animation`);
 
       // Use GSAP ScrollTrigger for consistent scroll tracking (DESKTOP ONLY)
       scrollTriggerRef.current = ScrollTrigger.create({

@@ -27,17 +27,14 @@ export default function LegalModal({ isOpen, onClose }: LegalModalProps) {
     // Sync external isOpen prop with internal animation state
     useEffect(() => {
         if (isOpen && modalState === 'closed') {
-            console.log('🔘 Opening legal modal');
             setModalState('opening');
         } else if (!isOpen && (modalState === 'open' || modalState === 'opening')) {
-            console.log('🔘 Closing legal modal');
             setModalState('closing');
         }
     }, [isOpen, modalState]);
 
     // Close handler
     const handleClose = () => {
-        console.log('🔘 User clicked close button');
         setModalState('closing');
     };
 

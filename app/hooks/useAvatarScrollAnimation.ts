@@ -41,7 +41,6 @@ export function useAvatarScrollAnimation() {
             const solutionsLine = document.querySelector('.hero-line-solutions') as HTMLElement;
 
             if (!heroSection || !heroImage || !heroContainer) {
-                console.warn('Avatar animation: Required elements not found');
                 return;
             }
 
@@ -75,13 +74,6 @@ export function useAvatarScrollAnimation() {
                 const safeX = Math.max(minX, Math.min(targetX, maxX));
                 const safeY = Math.max(minY, Math.min(targetY, maxY));
 
-                console.log('🎯 Calculated lock position:', {
-                    target: { x: targetX, y: targetY },
-                    validated: { x: safeX, y: safeY },
-                    viewport: { w: viewportWidth, h: viewportHeight },
-                    avatarSize: lockedSize
-                });
-
                 return { x: safeX, y: safeY };
             };
 
@@ -112,8 +104,6 @@ export function useAvatarScrollAnimation() {
                 });
             }
 
-            console.log('📏 Text gap size:', gapSize);
-
             // Prepare hero image for fixed positioning and animation
             heroImage.style.position = 'fixed';
             heroImage.style.left = '0';
@@ -125,9 +115,6 @@ export function useAvatarScrollAnimation() {
 
             const initialSize = initialRect.width;
             const scaleFactor = lockedSize / initialSize;
-
-            console.log('📍 Initial avatar position:', { x: initialRect.left, y: initialRect.top, size: initialSize });
-            console.log('📍 Target avatar position:', { x: lockPos.x, y: lockPos.y, size: lockedSize });
 
             // Create scroll-tied animation with ScrollTrigger
             scrollTriggerRef.current = ScrollTrigger.create({
@@ -170,20 +157,15 @@ export function useAvatarScrollAnimation() {
                     // Switch image at 50% progress
                     if (progress > 0.5 && heroImage.src.includes('onload.png')) {
                         heroImage.src = 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/heroavatars/onclick.png';
-                        console.log('🎨 Image switched to onclick.png at 50% progress');
                     }
 
                     // When animation completes (progress = 1)
                     if (progress === 1) {
                         heroContainer.style.pointerEvents = 'none';
                         heroContainer.style.visibility = 'hidden';
-                        console.log('✅ Avatar locked successfully at viewport position');
-                        console.log('   Final position:', lockPos);
                     }
                 }
             });
-
-            console.log('✨ Avatar scroll animation initialized (GSAP ScrollTrigger with scrub)');
 
             // Cleanup function
             return () => {

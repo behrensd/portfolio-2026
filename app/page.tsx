@@ -17,7 +17,6 @@ export default function Home() {
   // Initialize ScrollTrigger with cross-browser optimizations - FIRST
   useEffect(() => {
     initScrollTrigger();
-    console.log('✅ ScrollTrigger initialized with cross-browser optimizations');
   }, []);
 
   // Safari mobile scroll fix - must be second

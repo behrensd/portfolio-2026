@@ -24,9 +24,8 @@ export function useModalAnimation(
     useEffect(() => {
         const isMobile = window.innerWidth < 768;
 
-        // Debug: State change detection
+        // State change detection
         if (prevStateRef.current !== modalState) {
-            console.log('🔄 Modal state:', prevStateRef.current, '→', modalState);
             prevStateRef.current = modalState;
         }
 
@@ -37,23 +36,13 @@ export function useModalAnimation(
         }
 
         if (!modalRef.current) {
-            if (modalState !== 'closed') {
-                console.warn('⚠️ Modal element not found', { modalState });
-            }
             return;
         }
 
         // OPENING ANIMATION - Slide in from right
         if (modalState === 'opening') {
-            console.log('▶️ Modal opening animation started', {
-                duration: isMobile ? 400 : 500,
-                ease: 'power3.out',
-                mobile: isMobile
-            });
-
             const timeline = gsap.timeline({
                 onComplete: () => {
-                    console.log('✅ Modal opened successfully');
                     onAnimationComplete('open');
                 }
             });
@@ -76,15 +65,8 @@ export function useModalAnimation(
 
         // CLOSING ANIMATION - Slide out to right
         if (modalState === 'closing') {
-            console.log('▶️ Modal closing animation started', {
-                duration: isMobile ? 300 : 400,
-                ease: 'power2.in',
-                mobile: isMobile
-            });
-
             const timeline = gsap.timeline({
                 onComplete: () => {
-                    console.log('✅ Modal closed successfully');
                     onAnimationComplete('closed');
                 }
             });
@@ -108,11 +90,10 @@ export function useModalAnimation(
         };
     }, [modalState, onAnimationComplete]);
 
-    // Lifecycle logging
+    // Lifecycle
     useEffect(() => {
-        console.log('✨ Modal animation hook initialized');
         return () => {
-            console.log('🧹 Modal animation hook cleanup');
+            // Cleanup
         };
     }, []);
 

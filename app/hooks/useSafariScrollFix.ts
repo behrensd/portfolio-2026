@@ -33,8 +33,6 @@ export function useSafariScrollFix() {
         
         // Apply fixes for all mobile/touch devices
         if (isTouchDevice && isMobile) {
-            console.log('📱 Mobile device detected - optimizing touch actions');
-            
             // Set touch-action CSS for better scroll handling
             // 'pan-y' allows vertical scrolling but prevents horizontal swipes/zooms
             document.body.style.touchAction = 'pan-y';

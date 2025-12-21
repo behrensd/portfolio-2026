@@ -28,14 +28,6 @@ export function initScrollTrigger(): void {
 
     const config = detectViewport();
 
-    console.log('🎯 Initializing ScrollTrigger with config:', {
-        viewport: config.breakpoint,
-        device: config.isMobile ? 'mobile' : config.isTablet ? 'tablet' : 'desktop',
-        iOS: config.isIOS,
-        safari: config.isSafari,
-        instagram: config.isInstagramBrowser,
-    });
-
     // Configure ScrollTrigger defaults
     ScrollTrigger.config({
         // Limit ScrollTrigger update frequency for better performance
@@ -46,8 +38,6 @@ export function initScrollTrigger(): void {
 
     // Prevent mobile address bar resize from triggering refresh
     if (shouldPreventMobileResize(config)) {
-        console.log('📱 Mobile detected: Preventing vertical-only resize refresh');
-
         // Track previous dimensions
         let previousWidth = window.innerWidth;
         let previousHeight = window.innerHeight;
@@ -65,13 +55,11 @@ export function initScrollTrigger(): void {
             // Only refresh if width changed (orientation change or actual resize)
             // Ignore height-only changes (address bar show/hide)
             if (newWidth !== previousWidth) {
-                console.log('📐 Viewport width changed, refreshing ScrollTrigger');
                 ScrollTrigger.refresh();
                 previousWidth = newWidth;
                 previousHeight = newHeight;
             } else if (Math.abs(newHeight - previousHeight) > 100) {
                 // Significant height change might be orientation, refresh just in case
-                console.log('📐 Significant viewport height change, refreshing ScrollTrigger');
                 ScrollTrigger.refresh();
                 previousHeight = newHeight;
             }
@@ -99,35 +87,30 @@ export function setupResponsiveScrollTrigger(
         // Extra small phones (< 480px)
         '(max-width: 479px)': () => {
             const config = detectViewport();
-            console.log('📱 XS breakpoint active');
             return setup({ ...config, breakpoint: 'xs' });
         },
 
         // Small phones/mobile (480px - 767px)
         '(min-width: 480px) and (max-width: 767px)': () => {
             const config = detectViewport();
-            console.log('📱 SM breakpoint active');
             return setup({ ...config, breakpoint: 'sm' });
         },
 
         // Tablets (768px - 1023px)
         '(min-width: 768px) and (max-width: 1023px)': () => {
             const config = detectViewport();
-            console.log('📱 MD breakpoint active');
             return setup({ ...config, breakpoint: 'md' });
         },
 
         // Small desktop (1024px - 1279px)
         '(min-width: 1024px) and (max-width: 1279px)': () => {
             const config = detectViewport();
-            console.log('🖥️  LG breakpoint active');
             return setup({ ...config, breakpoint: 'lg' });
         },
 
         // Large desktop (>= 1280px)
         '(min-width: 1280px)': () => {
             const config = detectViewport();
-            console.log('🖥️  XL breakpoint active');
             return setup({ ...config, breakpoint: 'xl' });
         },
     });
@@ -168,7 +151,6 @@ export function createOptimizedScrollTrigger(
 
     // Instagram browser optimization
     if (config.isInstagramBrowser) {
-        console.log('📸 Instagram browser detected: Using optimized scroll settings');
         // Instagram browser benefits from less aggressive scrubbing
         if (typeof finalOptions.scrub === 'number') {
             finalOptions.scrub = Math.max(finalOptions.scrub as number, 0.5);
@@ -225,7 +207,6 @@ export function safeScrollTriggerRefresh(force = false): void {
     const config = detectViewport();
 
     if (config.shouldUseReducedAnimations && !force) {
-        console.log('⚠️  Skipping ScrollTrigger refresh (reduced motion)');
         return;
     }
 

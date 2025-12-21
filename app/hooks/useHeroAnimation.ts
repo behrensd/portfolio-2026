@@ -26,8 +26,6 @@ export function useHeroAnimation() {
                 ease: 'power3.out',
                 delay: 1
             });
-
-            console.log('✨ Hero animations initialized');
         }, 100);
 
         return () => {

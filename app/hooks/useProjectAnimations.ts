@@ -93,7 +93,6 @@ function splitTextIntoWords(element: HTMLElement): HTMLElement[] {
 function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     // Allow re-animation - remove the guard that prevents it
     // The resetCardState function will handle cleaning up previous animations
-    console.log('✨ Revealing text for project:', project.getAttribute('data-project'));
 
     const title = project.querySelector('.project-title') as HTMLElement;
     const description = project.querySelector('.project-description') as HTMLElement;
@@ -123,7 +122,6 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
                 gsap.set(title, { opacity: 1, visibility: 'visible' });
             }
         } catch (error) {
-            console.error('Error animating title:', error);
             gsap.set(title, { opacity: 1, visibility: 'visible' });
         }
     } else if (title) {
@@ -156,7 +154,6 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
                 gsap.set(description, { opacity: 1, visibility: 'visible' });
             }
         } catch (error) {
-            console.error('Error animating description:', error);
             gsap.set(description, { opacity: 1, visibility: 'visible' });
         }
     } else if (description) {
@@ -217,7 +214,6 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     // Mark as revealed IMMEDIATELY to prevent duplicate triggers
     // This must be at the END after all animations are queued
     project.setAttribute('data-text-revealed', 'true');
-    console.log('✅ Text reveal complete for project:', project.getAttribute('data-project'));
 }
 
 export function useProjectAnimations() {
@@ -247,10 +243,7 @@ export function useProjectAnimations() {
         const timer = setTimeout(() => {
             const projects = gsap.utils.toArray('.project-item');
 
-            console.log('🚀 Initializing project animations for', projects.length, 'projects');
-
             if (projects.length === 0) {
-                console.warn('⚠️ No .project-item elements found');
                 return;
             }
 
@@ -261,7 +254,6 @@ export function useProjectAnimations() {
             existingTriggers.forEach(t => t.kill());
 
             projects.forEach((project: any, index: number) => {
-                console.log(`📋 Setting up project ${index}:`, project.getAttribute('data-project'));
                 const projectNumber = project.querySelector('.project-number');
                 const mockupContainer = project.querySelector('.mockup-container');
                 const title = project.querySelector('.project-title') as HTMLElement;
@@ -311,11 +303,9 @@ export function useProjectAnimations() {
                 const triggerTextReveal = () => {
                     // Only check if slide is complete - allow re-animation
                     if (!project.hasAttribute('data-slide-complete')) {
-                        console.log('⚠️ triggerTextReveal called but slide not complete:', project.getAttribute('data-project'));
                         return;
                     }
 
-                    console.log('🎬 Triggering text reveal for project:', project.getAttribute('data-project'));
                     revealTextWithAnime(project, isMobile);
                 };
 
@@ -327,11 +317,8 @@ export function useProjectAnimations() {
                 const triggerAnimation = () => {
                     // Only animate if not already animated
                     if (project.hasAttribute('data-animated-once')) {
-                        console.log('⏭️ Card already animated, skipping');
                         return;
                     }
-
-                    console.log('🎯 ScrollTrigger - starting animation for project:', project.getAttribute('data-project'));
 
                     // Mark as animated permanently
                     project.setAttribute('data-animated-once', 'true');
@@ -379,7 +366,6 @@ export function useProjectAnimations() {
                     refreshPriority: 1, // Batch with other project triggers
                     once: true, // CRITICAL: Only trigger once, then stay visible forever
                     onEnter: () => {
-                        console.log('⬇️ onEnter triggered (once only)');
                         triggerAnimation();
                     }
                     // REMOVED: onEnterBack, onLeave, onLeaveBack
@@ -407,8 +393,6 @@ export function useProjectAnimations() {
                     const isInViewport = rect.top < viewportHeight * 0.9 && rect.bottom > 0;
 
                     if (isInViewport && !project.hasAttribute('data-slide-complete')) {
-                        console.log('👁️ Project already in viewport on load:', project.getAttribute('data-project'));
-
                         // Mark as complete immediately
                         project.setAttribute('data-slide-complete', 'true');
 

@@ -49,14 +49,13 @@ export default function SplineBackground({ scene, className = '', onSplineLoad }
     const handleLoad = useCallback((splineApp: Application) => {
         splineAppRef.current = splineApp;
         setIsLoaded(true);
-        console.log('✨ Spline scene loaded');
         
         // Zoom out on mobile for better view
         if (isMobile) {
             try {
                 splineApp.setZoom(0.6);
             } catch (e) {
-                console.log('Zoom not available');
+                // Zoom not available
             }
         }
         

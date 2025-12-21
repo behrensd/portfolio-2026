@@ -29,8 +29,6 @@ export function useAnimeInteractions() {
             
             // 5. Skill item animations - removed hover animations
             // initSkillItemAnimations();
-
-            console.log('✨ Anime.js micro-interactions initialized');
         }, 150); // Changed from 100ms to prevent timing conflicts with useTileAnimations
 
         return () => {

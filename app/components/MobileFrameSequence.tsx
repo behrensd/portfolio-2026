@@ -40,7 +40,6 @@ export default function MobileFrameSequence({
     const video = videoRef.current;
     if (!video || isReversingRef.current) return;
 
-    console.log('🔄 Starting reverse');
     isReversingRef.current = true;
     video.pause();
 
@@ -56,7 +55,6 @@ export default function MobileFrameSequence({
         video.currentTime = 0;
         stopReverse();
         video.play().catch(() => {});
-        console.log('🔄 Starting forward');
       } else {
         video.currentTime = newTime;
       }
@@ -76,11 +74,8 @@ export default function MobileFrameSequence({
     const video = videoRef.current;
     if (!video) return;
 
-    console.log('📹 Initializing boomerang video...');
-
     // Handle errors
     const handleError = () => {
-      console.error('❌ Video error:', video.error);
       setHasError(true);
     };
 
@@ -99,15 +94,13 @@ export default function MobileFrameSequence({
 
     // Handle when video is ready
     const handleCanPlay = () => {
-      console.log('📹 Video ready');
       setIsLoaded(true);
 
       // Start playing forward
       video.play().then(() => {
-        console.log('✅ Video playing forward');
+        // Video playing forward
       }).catch((err) => {
-        console.log('⚠️ Auto-play blocked:', err.message);
-        // Try to play on first touch
+        // Auto-play blocked, try to play on first touch
         const playOnTouch = () => {
           video.play().catch(() => {});
           document.removeEventListener('touchstart', playOnTouch);

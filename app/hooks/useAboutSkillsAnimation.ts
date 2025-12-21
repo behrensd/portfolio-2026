@@ -42,7 +42,6 @@ export function useAboutSkillsAnimation() {
         // Respect user's motion preferences
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) {
-            console.log('⚠️ Reduced motion preferred - skipping skills animation');
             return;
         }
 
@@ -73,7 +72,6 @@ export function useAboutSkillsAnimation() {
         
         const skillsContainer = document.querySelector('.about-skills') as HTMLElement;
         if (!skillsContainer) {
-            console.warn('⚠️ .about-skills container not found');
             return;
         }
 
@@ -127,12 +125,7 @@ export function useAboutSkillsAnimation() {
         // Verify position hasn't shifted
         const afterRect = skillsContainer.getBoundingClientRect();
         if (Math.abs(afterRect.left - containerLeft) > 1) {
-            // Position shifted - this shouldn't happen but log it
-            console.warn('⚠️ Container position shifted during lock:', {
-                before: containerLeft,
-                after: afterRect.left,
-                diff: afterRect.left - containerLeft
-            });
+            // Position shifted - this shouldn't happen
         }
         
         // Lock grid items (skill-items) to prevent grid recalculation
@@ -169,7 +162,7 @@ export function useAboutSkillsAnimation() {
             skillsContainer.style.setProperty('max-width', `${containerWidth}px`, 'important');
         }
         if (Math.abs(finalLeft - containerLeft) > 1) {
-            console.warn('⚠️ Container horizontal position shifted after scramble init');
+            // Container horizontal position shifted after scramble init
         }
         
         // Set up ScrollTrigger pin AFTER everything is locked and stable
@@ -226,7 +219,6 @@ export function useAboutSkillsAnimation() {
                         const shift = pinnedLeft - prePinLeft;
                         
                         if (Math.abs(shift) > 1) {
-                            console.warn('⚠️ Container shifted on pin:', shift, 'px - correcting');
                             // Correct the shift using transform
                             const currentTransform = getComputedStyle(skillsContainer).transform;
                             let translateX = 0;
@@ -249,7 +241,6 @@ export function useAboutSkillsAnimation() {
                 }
             },
             onEnter: () => {
-                console.log('📍 Skills card pinned - matrix scramble continues');
                 isVisibleRef.current = true; // Mark as visible when entering viewport
                 scrollProgressRef.current = 0; // Reset progress when entering
                 hasCorrectedPosition = false; // Reset correction flag
@@ -259,14 +250,12 @@ export function useAboutSkillsAnimation() {
                 }
             },
             onEnterBack: () => {
-                console.log('📍 Skills card pinned (scrolled back)');
                 isVisibleRef.current = true; // Mark as visible when re-entering
                 // Reset progress when entering from bottom
                 scrollProgressRef.current = scrollTriggerRef.current?.progress || 0;
                 startAnimation();
             },
             onLeave: () => {
-                console.log('📍 Skills card left viewport - stopping animation for performance');
                 isVisibleRef.current = false; // Mark as not visible when leaving
                 // Ensure all characters are revealed before stopping
                 skillLinesRef.current.forEach((line) => {
@@ -281,7 +270,6 @@ export function useAboutSkillsAnimation() {
                 stopAnimation();
             },
             onLeaveBack: () => {
-                console.log('📍 Skills card exited (scrolled up) - stopping animation');
                 isVisibleRef.current = false; // Mark as not visible when leaving back
                 stopAnimation();
                 resetSkills();
@@ -294,7 +282,6 @@ export function useAboutSkillsAnimation() {
     function initMatrixScramble() {
         const skillLines = document.querySelectorAll('.skill-line');
         if (skillLines.length === 0) {
-            console.warn('⚠️ No .skill-line elements found');
             return;
         }
 
@@ -385,8 +372,6 @@ export function useAboutSkillsAnimation() {
                 lineIndex
             });
         });
-
-        console.log(`✨ Initialized ${skillLinesRef.current.length} skill lines for matrix scramble`);
     }
 
     function getRandomChar(): string {
@@ -560,7 +545,6 @@ export function useAboutSkillsAnimation() {
                     }
                 });
             });
-            console.log('✅ Matrix scramble animation completed - all characters revealed');
             animationRef.current = null;
         }
     }
