@@ -391,13 +391,61 @@ body {
         0 0 20px rgba(255, 107, 53, 0.2);
 }
 
+/* ================================
+   REDUCED MOTION & ACCESSIBILITY
+   ================================ */
+
 /* Reduced motion: disable scroll-linked animations */
 @media (prefers-reduced-motion: reduce) {
+    /* Disable ALL animations for accessibility */
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Ensure content is immediately visible */
+    .content-tile,
+    .project-item,
+    .skill-item,
+    .project-title,
+    .project-description,
+    .tag,
+    .contact-link {
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+    }
+
+    /* Hide scroll-driven elements that rely on animation */
     .avatar-proxy,
     .avatar-fixed {
-        transition: none;
-        animation: none;
-        /* Hide the proxy avatar entirely when reduced motion is preferred */
+        display: none !important;
+    }
+
+    /* Keep hero image visible in static position */
+    .hero-image {
+        position: static !important;
+        transform: none !important;
+    }
+}
+
+/* Low-end device optimization: disable complex animations on very small screens */
+@media (max-width: 360px) and (max-height: 640px) {
+    /* Simplify animations on low-end devices */
+    .project-item,
+    .content-tile {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Disable complex transforms */
+    .avatar-proxy {
         display: none !important;
     }
 }
@@ -794,16 +842,16 @@ body {
 .project-item {
     position: relative;
     margin-bottom: var(--spacing-xl);
-    padding-top: 2rem; /* Space for the date number above */
+    padding-top: 5rem; /* INCREASED: Space for the date number above (was 2rem) */
     border: none; /* NO BORDER */
     perspective: 1200px; /* Enable 3D perspective for child elements */
     /* Performance optimization for animations */
     will-change: transform, opacity;
-    overflow: visible; /* Allow slide-in from sides */
+    overflow: visible; /* Allow slide-in from sides AND project numbers to show */
     /* GSAP handles opacity and transform - don't set them in CSS to avoid conflicts */
     /* Initial state: GSAP will set opacity and x position */
     /* Optimize scroll performance: contain layout recalculations */
-    contain: layout style paint;
+    contain: none; /* CHANGED: Was 'layout style paint' which can clip overflow */
     /* Ensure proper layout and prevent overlapping */
     width: 100%;
     display: block;
@@ -815,22 +863,22 @@ body {
     -webkit-backface-visibility: hidden;
 }
 
-/* Responsive padding for project items */
+/* Responsive padding for project items - INCREASED for number visibility */
 @media (min-width: 768px) {
     .project-item {
-        padding-top: 2.5rem;
+        padding-top: 5.5rem; /* INCREASED from 2.5rem */
     }
 }
 
 @media (min-width: 1024px) {
     .project-item {
-        padding-top: 3rem;
+        padding-top: 6rem; /* INCREASED from 3rem */
     }
 }
 
 @media (min-width: 1280px) {
     .project-item {
-        padding-top: 3.5rem;
+        padding-top: 6.5rem; /* INCREASED from 3.5rem */
     }
 }
 
@@ -1742,11 +1790,16 @@ body {
         min-height: 1.5em;
     }
     
+    /* Project item - ensure enough space for number */
+    .project-item {
+        padding-top: 4rem; /* INCREASED from default to show number */
+    }
+
     /* Project Layout Fixes */
     .project-content {
         margin-left: 0;
         padding: var(--spacing-md);
-        margin-top: -1rem; /* Pull up slightly towards number */
+        margin-top: 0; /* CHANGED: Was -1rem, removed negative margin */
         backdrop-filter: blur(12px); /* Slightly less blur for performance */
     }
     
@@ -1754,7 +1807,7 @@ body {
         position: absolute;
         display: block;
         font-size: 2rem;
-        top: -1.5rem;
+        top: 0.5rem; /* CHANGED: Was -1.5rem, now positive to ensure visibility */
         left: 50%;
         transform: translateX(-50%);
         opacity: 0.8;

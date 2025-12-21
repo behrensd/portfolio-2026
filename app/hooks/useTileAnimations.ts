@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { createOptimizedScrollTrigger } from '../utils/scrollTriggerConfig';
+import { detectViewport, getAnimationDelay, getAnimationDuration } from '../utils/viewportConfig';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -14,13 +16,21 @@ export function useTileAnimations() {
   const tweensRef = useRef<gsap.core.Tween[]>([]);
 
   useEffect(() => {
-    // Respect user's motion preferences
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const viewport = detectViewport();
 
-    if (prefersReducedMotion) {
+    // Respect user's motion preferences
+    if (viewport.shouldUseReducedAnimations) {
       console.log('⚠️ Reduced motion preferred - skipping tile animations');
+      // Set elements to visible immediately
+      const tiles = gsap.utils.toArray<HTMLElement>('.content-tile, .skill-item');
+      tiles.forEach(tile => {
+        gsap.set(tile, { opacity: 1, y: 0 });
+      });
       return;
     }
+
+    const delay = getAnimationDelay(viewport);
+    const duration = getAnimationDuration(viewport, 1);
 
     const timer = setTimeout(() => {
       // Get all content tiles
@@ -31,34 +41,34 @@ export function useTileAnimations() {
         return;
       }
 
-      console.log(`✨ Found ${tiles.length} content tiles to animate`);
+      console.log(`✨ Found ${tiles.length} content tiles to animate on ${viewport.breakpoint}`);
 
       tiles.forEach((tile, index) => {
         const tween = gsap.fromTo(tile,
           // FROM state (explicit initial)
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: viewport.isMobile ? 20 : 30 },
           // TO state
           {
             opacity: 1,
             y: 0,
-            duration: 1,
+            duration: duration,
             ease: 'power2.out',
-            scrollTrigger: {
-              trigger: tile,
-              start: 'top 90%',  // Earlier trigger (was 80%)
-              toggleActions: 'play none none reverse',  // Reverse on scroll back
-              invalidateOnRefresh: false, // Layout is stable
-              refreshPriority: 1, // Batch with other content tiles
-              onEnter: () => {
-                console.log(`📍 Tile ${index + 1} entered viewport - animating`);
-              }
-            }
+            scrollTrigger: createOptimizedScrollTrigger(
+              tile,
+              {
+                toggleActions: 'play none none none',  // Stay visible after first animation
+                onEnter: () => {
+                  console.log(`📍 Tile ${index + 1} entered viewport`);
+                }
+              },
+              'content-reveal'
+            )
           }
         );
         tweensRef.current.push(tween);
         if (tween.scrollTrigger) triggersRef.current.push(tween.scrollTrigger);
       });
-      
+
       // Animate skill items
       const skills = gsap.utils.toArray<HTMLElement>('.skill-item');
 
@@ -70,25 +80,25 @@ export function useTileAnimations() {
 
       skills.forEach((skill, index) => {
         const skillTween = gsap.from(skill, {
-          scrollTrigger: {
-            trigger: skill,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-            invalidateOnRefresh: false, // Layout is stable
-            refreshPriority: 1 // Batch with other content
-          },
+          scrollTrigger: createOptimizedScrollTrigger(
+            skill,
+            {
+              toggleActions: 'play none none none',
+            },
+            'content-reveal'
+          ),
           opacity: 0,
-          y: 30,
-          duration: 0.6,
+          y: viewport.isMobile ? 20 : 30,
+          duration: getAnimationDuration(viewport, 0.6),
           ease: 'power2.out',
           delay: index * 0.15
         });
         tweensRef.current.push(skillTween);
         if (skillTween.scrollTrigger) triggersRef.current.push(skillTween.scrollTrigger);
       });
-      
+
       console.log('✨ Tile animations initialized');
-    }, 100);
+    }, delay);
 
     return () => {
       clearTimeout(timer);

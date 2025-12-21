@@ -5,6 +5,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { batchedScrollTriggerRefresh } from '../utils/scrollOptimization';
+import { createOptimizedScrollTrigger } from '../utils/scrollTriggerConfig';
+import { detectViewport, getAnimationDuration } from '../utils/viewportConfig';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -20,9 +22,10 @@ export function useDockNavigation() {
     const clickHandlersRef = useRef<Map<Element, EventListener>>(new Map());
 
     useEffect(() => {
+        const viewport = detectViewport();
         const dockItems = document.querySelectorAll('.dock-item');
         const sections = document.querySelectorAll('section[id]');
-        
+
         // Helper to update active state immediately
         const setActiveItem = (targetHref: string) => {
             dockItems.forEach(item => {
@@ -33,46 +36,41 @@ export function useDockNavigation() {
                 }
             });
         };
-        
+
         // Update active state on scroll (only when not navigating via click)
         sections.forEach((section) => {
-            const trigger = ScrollTrigger.create({
-                trigger: section,
-                start: 'top center',
-                end: 'bottom center',
-                refreshPriority: 3, // Lower priority for navigation tracking
-                invalidateOnRefresh: false, // Section positions are stable
-                onToggle: (self) => {
-                    // Don't update during programmatic navigation
-                    if (isNavigating) return;
-                    
-                    if (self.isActive) {
-                        const id = section.getAttribute('id');
-                        setActiveItem(`#${id}`);
+            const trigger = createOptimizedScrollTrigger(
+                section as HTMLElement,
+                {
+                    onToggle: (self: any) => {
+                        // Don't update during programmatic navigation
+                        if (isNavigating) return;
+
+                        if (self.isActive) {
+                            const id = section.getAttribute('id');
+                            setActiveItem(`#${id}`);
+                        }
                     }
-                }
-            });
+                },
+                'navigation'
+            );
             triggersRef.current.push(trigger);
         });
 
         // Force "Contact" active when reaching bottom of page
-        const bottomTrigger = ScrollTrigger.create({
-            trigger: 'body',
-            start: 'bottom bottom', 
-            end: 'bottom bottom',
-            refreshPriority: 3, // Lower priority for navigation tracking
-            invalidateOnRefresh: false,
-            onEnter: () => {
-                if (isNavigating) return;
-                setActiveItem('#contact');
-            }
-        });
+        const bottomTrigger = createOptimizedScrollTrigger(
+            'body',
+            {
+                start: 'bottom bottom',
+                end: 'bottom bottom',
+                onEnter: () => {
+                    if (isNavigating) return;
+                    setActiveItem('#contact');
+                }
+            },
+            'navigation'
+        );
         triggersRef.current.push(bottomTrigger);
-        
-        // Detect iOS/Safari - use native scrollIntoView for bulletproof scrolling
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
         // Smooth scroll on click
         dockItems.forEach(item => {
@@ -93,7 +91,9 @@ export function useDockNavigation() {
                 isNavigating = true;
 
                 // iOS Safari & mobile: Use native scrollIntoView (always works)
-                if (isIOS || isSafari) {
+                // Also use for Instagram in-app browser
+                if (viewport.isIOS || viewport.isSafari || viewport.isInstagramBrowser || viewport.isMobile) {
+                    console.log('📱 Using native scrollIntoView for mobile/Safari/Instagram');
                     targetSection.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
@@ -115,7 +115,7 @@ export function useDockNavigation() {
                     gsap.killTweensOf(window, 'scrollTo');
 
                     currentScrollTween = gsap.to(window, {
-                        duration: 0.6,
+                        duration: getAnimationDuration(viewport, 0.6),
                         scrollTo: {
                             y: targetSection,
                             offsetY: 0,

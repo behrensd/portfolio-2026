@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
@@ -10,9 +11,16 @@ import { useTileAnimations } from './hooks/useTileAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
+import { initScrollTrigger } from './utils/scrollTriggerConfig';
 
 export default function Home() {
-  // Safari mobile scroll fix - must be first
+  // Initialize ScrollTrigger with cross-browser optimizations - FIRST
+  useEffect(() => {
+    initScrollTrigger();
+    console.log('✅ ScrollTrigger initialized with cross-browser optimizations');
+  }, []);
+
+  // Safari mobile scroll fix - must be second
   useSafariScrollFix();
 
   // Initialize all animations and interactions

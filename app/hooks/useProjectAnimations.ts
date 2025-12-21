@@ -319,81 +319,25 @@ export function useProjectAnimations() {
                     revealTextWithAnime(project, isMobile);
                 };
 
-                // Reset function to prepare card for animation
-                const resetCardState = () => {
-                    console.log('🔄 Resetting card state for project:', project.getAttribute('data-project'));
-                    
-                    // Kill any running animations on this project to prevent conflicts
-                    gsap.killTweensOf(project);
-                    gsap.killTweensOf(projectNumber);
-                    gsap.killTweensOf(mockupContainer);
-                    if (title) gsap.killTweensOf(title);
-                    if (description) gsap.killTweensOf(description);
-                    if (tags.length > 0) gsap.killTweensOf(tags);
-                    
-                    // Reset card position and visibility
-                    gsap.set(project, { 
-                        x: slideDirection === 'left' ? -slideDistance : slideDistance, 
-                        opacity: 0,
-                        visibility: 'visible'
-                    });
-                    
-                    // Remove completion flags to allow re-animation
-                    project.removeAttribute('data-text-revealed');
-                    project.removeAttribute('data-slide-complete');
-                    
-                    // Reset number and mockup
-                    if (projectNumber) {
-                        gsap.set(projectNumber, { opacity: 0 });
-                    }
-                    if (mockupContainer) {
-                        gsap.set(mockupContainer, { opacity: 0, scale: 0.95 });
-                    }
-                    
-                    // Reset text elements - clear any existing splits and reset opacity
-                    if (title) {
-                        // Clear any existing child spans
-                        const titleSpans = title.querySelectorAll('span');
-                        if (titleSpans.length > 0) {
-                            const originalText = title.getAttribute('data-original-text') || title.textContent || '';
-                            title.textContent = originalText;
-                            title.removeAttribute('data-split');
-                        }
-                        gsap.set(title, { opacity: 0, visibility: 'visible' });
-                    }
-                    if (description) {
-                        // Clear any existing child spans
-                        const descSpans = description.querySelectorAll('span');
-                        if (descSpans.length > 0) {
-                            const originalText = description.getAttribute('data-original-text') || description.textContent || '';
-                            description.textContent = originalText;
-                            description.removeAttribute('data-split');
-                        }
-                        gsap.set(description, { opacity: 0, visibility: 'visible' });
-                    }
-                    if (tags.length > 0) {
-                        // Reset all tag spans if they exist
-                        tags.forEach((tag: Element) => {
-                            const tagElement = tag as HTMLElement;
-                            const tagSpans = tagElement.querySelectorAll('span');
-                            if (tagSpans.length > 0) {
-                                const originalText = tagElement.textContent || '';
-                                tagElement.textContent = originalText;
-                            }
-                        });
-                        gsap.set(tags, { opacity: 0, visibility: 'visible' });
-                    }
-                };
+                // REMOVED: resetCardState function
+                // Cards now stay visible permanently after first animation
+                // Only page refresh will reset them
 
-                // Shared animation function for onEnter and onEnterBack
+                // Animation function - triggers ONCE and stays visible forever
                 const triggerAnimation = () => {
-                    // Always allow re-animation
+                    // Only animate if not already animated
+                    if (project.hasAttribute('data-animated-once')) {
+                        console.log('⏭️ Card already animated, skipping');
+                        return;
+                    }
+
                     console.log('🎯 ScrollTrigger - starting animation for project:', project.getAttribute('data-project'));
 
-                    // Mark slide as starting
+                    // Mark as animated permanently
+                    project.setAttribute('data-animated-once', 'true');
                     project.setAttribute('data-slide-complete', 'true');
 
-                    // Animate the card slide-in (manual control for reliable re-animation)
+                    // Animate the card slide-in (happens once, stays forever)
                     gsap.to(project, {
                         x: 0,
                         opacity: 1,
@@ -433,25 +377,13 @@ export function useProjectAnimations() {
                     end: 'bottom 10%',
                     invalidateOnRefresh: false, // Layout is stable, no need to recalculate
                     refreshPriority: 1, // Batch with other project triggers
-                    // Observe both directions
+                    once: true, // CRITICAL: Only trigger once, then stay visible forever
                     onEnter: () => {
-                        console.log('⬇️ onEnter triggered');
+                        console.log('⬇️ onEnter triggered (once only)');
                         triggerAnimation();
-                    },
-                    onEnterBack: () => {
-                        console.log('⬆️ onEnterBack triggered');
-                        triggerAnimation();
-                    },
-                    onLeave: () => {
-                        console.log('⬆️ onLeave triggered - scrolling up past card');
-                        // Reset when scrolling up past the card
-                        resetCardState();
-                    },
-                    onLeaveBack: () => {
-                        console.log('⬇️ onLeaveBack triggered - scrolling down past card');
-                        // Reset when scrolling down past the card
-                        resetCardState();
                     }
+                    // REMOVED: onEnterBack, onLeave, onLeaveBack
+                    // Cards now stay visible permanently after first animation
                 });
 
                 // Store the ScrollTrigger
