@@ -14,13 +14,13 @@ export default function About() {
             <div className="tile-inner">
                 <h2 className="section-title">
                     <span>
-                        <span style={{ color: 'var(--color-primary)' }}>moin</span>
-                        <span style={{ marginLeft: '0.5em' }}>moin</span>
+                        <span className="skill-category-primary">moin</span>
+                        <span className="skill-category-secondary">moin</span>
                     </span>
                 </h2>
                 <p className="about-description">
-                    In engem Austausch mit Dir, erstelle ich maßgeschneiderte Webseiten und Web-Applikationen für <span style={{ color: 'var(--color-primary)' }}>deine Brand</span> oder <span style={{ color: 'var(--color-primary)' }}>dein Business</span>. 
-                    Von Shopify Development, über Web-Design mit 3D-Animationen bis hin zu KI-Integrationen. Ich bringe <span style={{ color: 'var(--color-primary)' }}>deine Ideen</span> zum Leben!
+                    In engem Austausch mit Dir, erstelle ich maßgeschneiderte Webseiten und Web-Applikationen für <span className="skill-category-primary">deine Brand</span> oder <span className="skill-category-primary">dein Business</span>.
+                    Von Shopify Development, über Web-Design mit 3D-Animationen bis hin zu KI-Integrationen. Ich bringe <span className="skill-category-primary">deine Ideen</span> zum Leben!
                 </p>
                 <div className="about-skills">
                     <div className="skill-item skill-item-development">

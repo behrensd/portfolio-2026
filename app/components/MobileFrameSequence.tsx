@@ -35,6 +35,15 @@ export default function MobileFrameSequence({
   const isReversingRef = useRef(false);
   const reverseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Stop reverse playback (declared first so startReverse can reference it)
+  const stopReverse = useCallback(() => {
+    isReversingRef.current = false;
+    if (reverseIntervalRef.current) {
+      clearInterval(reverseIntervalRef.current);
+      reverseIntervalRef.current = null;
+    }
+  }, []);
+
   // Start reverse playback
   const startReverse = useCallback(() => {
     const video = videoRef.current;
@@ -59,16 +68,7 @@ export default function MobileFrameSequence({
         video.currentTime = newTime;
       }
     }, REVERSE_UPDATE_INTERVAL);
-  }, []);
-
-  // Stop reverse playback
-  const stopReverse = useCallback(() => {
-    isReversingRef.current = false;
-    if (reverseIntervalRef.current) {
-      clearInterval(reverseIntervalRef.current);
-      reverseIntervalRef.current = null;
-    }
-  }, []);
+  }, [stopReverse]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -147,7 +147,7 @@ export default function MobileFrameSequence({
       )}
       {hasError && (
         <div className="frame-loading-indicator">
-          <span style={{ color: 'var(--color-text-dim)', fontSize: '0.875rem' }}>
+          <span className="frame-loading-text">
             Video failed to load
           </span>
         </div>

@@ -358,9 +358,11 @@ export function useProjectAnimations() {
                 };
 
                 // Create ScrollTrigger without attaching to a tween - we'll control animations manually
+                // Trigger later so users can see the slide-in animation
+                const triggerStart = isMobile ? 'top 80%' : 'top 70%';
                 const scrollTrigger = ScrollTrigger.create({
                     trigger: project,
-                    start: 'top 90%',
+                    start: triggerStart,
                     end: 'bottom 10%',
                     invalidateOnRefresh: false, // Layout is stable, no need to recalculate
                     refreshPriority: 1, // Batch with other project triggers
@@ -390,7 +392,9 @@ export function useProjectAnimations() {
 
                     const rect = project.getBoundingClientRect();
                     const viewportHeight = window.innerHeight;
-                    const isInViewport = rect.top < viewportHeight * 0.9 && rect.bottom > 0;
+                    // Match ScrollTrigger start: 80% for mobile, 70% for desktop
+                    const threshold = isMobile ? 0.8 : 0.7;
+                    const isInViewport = rect.top < viewportHeight * threshold && rect.bottom > 0;
 
                     if (isInViewport && !project.hasAttribute('data-slide-complete')) {
                         // Mark as complete immediately
