@@ -37,6 +37,8 @@ export function useAboutSkillsAnimation() {
     const isInitializedRef = useRef(false);
     const scrollProgressRef = useRef<number>(0);
     const isVisibleRef = useRef<boolean>(false); // Track if section is in viewport
+    const visibleStartTimeRef = useRef<number>(0); // Track when section became visible
+    const timeProgressRef = useRef<number>(0); // Time-based auto-progress
 
     useEffect(() => {
         // Respect user's motion preferences
@@ -179,10 +181,9 @@ export function useAboutSkillsAnimation() {
     }
 
     function setupScrollTrigger(skillsContainer: HTMLElement, isMobile: boolean, isSafari: boolean) {
-        // Set up ScrollTrigger pin with MUCH longer duration for extended viewing
-        // Longer duration allows users to really take in the animation
-        const pinDuration = isMobile ? (isSafari ? '+=250vh' : '+=200vh') : (isSafari ? '+=300vh' : '+=250vh');
-        
+        // Pin duration - long enough for user to see the scramble effect
+        const pinDuration = isMobile ? (isSafari ? '+=90vh' : '+=75vh') : (isSafari ? '+=110vh' : '+=90vh');
+
         // Ensure container is still locked before creating ScrollTrigger
         const currentWidth = skillsContainer.offsetWidth;
         if (currentWidth > 0) {
@@ -190,16 +191,16 @@ export function useAboutSkillsAnimation() {
             skillsContainer.style.setProperty('min-width', `${currentWidth}px`, 'important');
             skillsContainer.style.setProperty('max-width', `${currentWidth}px`, 'important');
         }
-        
+
         // Capture position right before creating ScrollTrigger
         const prePinRect = skillsContainer.getBoundingClientRect();
         const prePinLeft = prePinRect.left;
         const prePinWidth = prePinRect.width;
         let hasCorrectedPosition = false;
-        
+
         scrollTriggerRef.current = ScrollTrigger.create({
             trigger: skillsContainer,
-            start: 'top center',
+            start: 'top 65%', // Earlier trigger since About is closer to hero
             end: pinDuration,
             pin: true,
             pinSpacing: true,
@@ -243,6 +244,8 @@ export function useAboutSkillsAnimation() {
             onEnter: () => {
                 isVisibleRef.current = true; // Mark as visible when entering viewport
                 scrollProgressRef.current = 0; // Reset progress when entering
+                visibleStartTimeRef.current = performance.now(); // Start time-based progress
+                timeProgressRef.current = 0;
                 hasCorrectedPosition = false; // Reset correction flag
                 // Ensure animation is running (it should already be from load)
                 if (!animationRef.current) {
@@ -253,6 +256,8 @@ export function useAboutSkillsAnimation() {
                 isVisibleRef.current = true; // Mark as visible when re-entering
                 // Reset progress when entering from bottom
                 scrollProgressRef.current = scrollTriggerRef.current?.progress || 0;
+                visibleStartTimeRef.current = performance.now(); // Restart time-based progress
+                timeProgressRef.current = 0;
                 startAnimation();
             },
             onLeave: () => {
@@ -262,7 +267,7 @@ export function useAboutSkillsAnimation() {
                     line.chars.forEach((char) => {
                         if (!char.isRevealed) {
                             char.element.textContent = char.originalChar;
-                            char.element.style.color = '#ffffff';
+                            char.element.style.color = '#F3EDEC';
                             char.isRevealed = true;
                         }
                     });
@@ -379,8 +384,8 @@ export function useAboutSkillsAnimation() {
     }
 
     function getRandomMatrixColor(): string {
-        // Use white, orange, and subtle colors during scramble
-        const colors = ['#ffffff', '#ff6b35', '#cccccc', '#999999'];
+        // Use parchment, slate grey, and subtle colors during scramble
+        const colors = ['#F3EDEC', '#7D8491', '#D5D5D5', '#999999'];
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
@@ -429,14 +434,23 @@ export function useAboutSkillsAnimation() {
             return;
         }
 
-        // Calculate which lines and characters should be revealed based on scroll progress
-        // When not pinned, progress stays at 0 (scrambled state)
-        // When pinned, progress increases from 0 to 1 as user scrolls
-        const progress = scrollProgressRef.current;
-        const isActive = scrollTriggerRef.current?.isActive || false;
+        // Calculate time-based progress (auto-reveals over 2.5 seconds once visible)
+        // Long enough for user to see the scramble effect
+        const autoRevealDuration = 2500; // 2.5 seconds to fully reveal
+        if (isVisibleRef.current && visibleStartTimeRef.current > 0) {
+            const elapsed = now - visibleStartTimeRef.current;
+            timeProgressRef.current = Math.min(elapsed / autoRevealDuration, 1);
+        }
+
+        // Use the higher of scroll progress or time progress
+        // This ensures text reveals even without scrolling
+        const scrollProgress = scrollProgressRef.current;
+        const timeProgress = timeProgressRef.current;
+        const progress = Math.max(scrollProgress, timeProgress);
+        const isActive = scrollTriggerRef.current?.isActive || isVisibleRef.current;
         
         // Use a threshold slightly less than 1 to account for rounding errors
-        // Only consider complete when pinned AND progress is high
+        // Consider complete when visible AND progress is high (either scroll or time)
         const completionThreshold = 0.99;
         const isComplete = isActive && progress >= completionThreshold;
         
@@ -447,7 +461,7 @@ export function useAboutSkillsAnimation() {
                 line.chars.forEach((char) => {
                     if (!char.isRevealed) {
                         char.element.textContent = char.originalChar;
-                        char.element.style.color = '#ffffff';
+                        char.element.style.color = '#F3EDEC';
                         char.isRevealed = true;
                         allRevealed = false;
                     }
@@ -482,7 +496,7 @@ export function useAboutSkillsAnimation() {
                         // Reveal the correct character
                         char.element.textContent = char.originalChar;
                         char.isRevealed = true;
-                        char.element.style.color = '#ffffff'; // Final white color
+                        char.element.style.color = '#F3EDEC'; // Final parchment color
                         
                         // Add subtle glow effect when revealed (only if not in completion mode)
                         if (!isComplete) {
@@ -540,7 +554,7 @@ export function useAboutSkillsAnimation() {
                 line.chars.forEach((char) => {
                     if (!char.isRevealed) {
                         char.element.textContent = char.originalChar;
-                        char.element.style.color = '#ffffff';
+                        char.element.style.color = '#F3EDEC';
                         char.isRevealed = true;
                     }
                 });

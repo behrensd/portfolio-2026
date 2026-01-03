@@ -212,11 +212,11 @@ export function useHeroMatrixAnimation() {
     }
 
     function getRandomMatrixColor(isSolutions: boolean): string {
-        // Use only orange, black, and white during scramble
-        const colors = ['#ff6b35', '#000000', '#ffffff'];
-        
+        // Use only slate grey, dark, and parchment during scramble
+        const colors = ['#7D8491', '#131515', '#F3EDEC'];
+
         if (isSolutions) {
-            // For SOLUTIONS, prefer orange and white (less black)
+            // For SOLUTIONS, prefer slate grey and parchment (less dark)
             return colors[Math.random() > 0.3 ? (Math.random() > 0.5 ? 0 : 2) : 1];
         }
         // For other text (BAI, subtitle), use all three colors
@@ -266,13 +266,13 @@ export function useHeroMatrixAnimation() {
                     // Set final color based on element
                     const parent = char.element.parentElement;
                     const isSolutions = parent?.classList.contains('hero-line-solutions');
-                    
+
                     if (isSolutions) {
-                        char.element.style.color = '#ff6b35'; // Orange for SOLUTIONS
+                        char.element.style.color = '#7D8491'; // Slate Grey for SOLUTIONS
                     } else if (parent?.classList.contains('hero-subtitle')) {
-                        char.element.style.color = '#ffffff'; // White for subtitle
+                        char.element.style.color = '#F3EDEC'; // Parchment for subtitle
                     } else {
-                        char.element.style.color = '#ffffff'; // White for BAI
+                        char.element.style.color = '#F3EDEC'; // Parchment for BAI
                     }
                     
                     // Add a subtle glow effect when revealed
@@ -303,17 +303,17 @@ export function useHeroMatrixAnimation() {
                 if (!char.isRevealed) {
                     char.element.textContent = char.originalChar;
                     char.isRevealed = true;
-                    
+
                     // Set final colors
                     const parent = char.element.parentElement;
                     const isSolutions = parent?.classList.contains('hero-line-solutions');
-                    
+
                     if (isSolutions) {
-                        char.element.style.color = '#ff6b35';
+                        char.element.style.color = '#7D8491';
                     } else if (parent?.classList.contains('hero-subtitle')) {
-                        char.element.style.color = '#ffffff';
+                        char.element.style.color = '#F3EDEC';
                     } else {
-                        char.element.style.color = '#ffffff';
+                        char.element.style.color = '#F3EDEC';
                     }
                 }
             });

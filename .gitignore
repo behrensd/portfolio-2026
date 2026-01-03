@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -43,3 +45,9 @@ next_backup/
 next_backup/
 .env*.local
 public/videos/*.mp4
+public/videos/*.mov
+
+# Large texture files (use Vercel Blob instead)
+*.tif
+public/volcanic-rock-*.jpg
+public/volcanic-rock-*.png

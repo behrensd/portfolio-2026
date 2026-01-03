@@ -101,16 +101,16 @@ function initTagHoverEffects() {
         const handleMouseEnter = function(this: HTMLElement) {
             animate(this, {
                 scale: 1.15,
-                color: '#ff6b35',
+                color: '#7D8491',
                 duration: 300,
                 ease: 'out(2)'
             });
         };
-        
+
         const handleMouseLeave = function(this: HTMLElement) {
             animate(this, {
                 scale: 1,
-                color: '#ff6b35',
+                color: '#7D8491',
                 duration: 300,
                 ease: 'inOutQuad'
             });
@@ -196,49 +196,49 @@ function initEnhancedHeroAnimation() {
     heroLines.forEach(line => {
         const isSolutions = line.classList.contains('hero-line-solutions');
         
-        // Set SOLUTIONS to orange by default
+        // Set SOLUTIONS to slate grey by default
         if (isSolutions) {
             animate(line, {
-                color: '#ff6b35',
+                color: '#7D8491',
                 duration: 0, // Instant
                 ease: 'linear'
             });
         }
-        
+
         const handleMouseEnter = function(this: HTMLElement) {
             if (isSolutions) {
                 // SOLUTIONS: white on hover
                 animate(this, {
                     scale: 1.05,
-                    color: '#ffffff',
+                    color: '#FCFCFC',
                     duration: 400,
                     ease: 'outCubic'
                 });
             } else {
-                // BAI: orange on hover (unchanged)
+                // BAI: slate grey on hover
                 animate(this, {
                     scale: 1.05,
-                    color: '#ff6b35',
+                    color: '#7D8491',
                     duration: 400,
                     ease: 'outCubic'
                 });
             }
         };
-        
+
         const handleMouseLeave = function(this: HTMLElement) {
             if (isSolutions) {
-                // SOLUTIONS: back to orange
+                // SOLUTIONS: back to slate grey
                 animate(this, {
                     scale: 1,
-                    color: '#ff6b35',
+                    color: '#7D8491',
                     duration: 400,
                     ease: 'inOutQuad'
                 });
             } else {
-                // BAI: back to white (unchanged)
+                // BAI: back to parchment
                 animate(this, {
                     scale: 1,
-                    color: '#ffffff',
+                    color: '#F3EDEC',
                     duration: 400,
                     ease: 'inOutQuad'
                 });
