@@ -12,12 +12,13 @@
 
 /* CSS Variables */
 :root {
-    /* Colors */
-    --color-bg: #0a0a0a;
-    --color-primary: #ff6b35;
-    --color-text: #ffffff;
-    --color-text-dim: #b8b8b8; /* Brighter grey for better contrast (WCAG AA compliant) */
-    --color-text-muted: #8a8a8a; /* For less important text */
+    /* Colors - Monochrome Palette */
+    --color-bg: #131515;           /* Onyx - dark background */
+    --color-primary: #7D8491;      /* Slate Grey - accent color */
+    --color-text: #F3EDEC;         /* Parchment - main text */
+    --color-text-dim: #D5D5D5;     /* Dust Grey - secondary text */
+    --color-text-muted: #7D8491;   /* Slate Grey - tertiary text */
+    --color-white: #FCFCFC;        /* White - brightest highlights */
     
     /* Typography - VHS Gothic System (Single-weight pixel font)
        Hierarchy achieved through SIZE, LETTER-SPACING, COLOR, and TEXT-TRANSFORM
@@ -31,7 +32,7 @@
     --font-size-lg: 1.25rem;     /* 20px */
     --font-size-xl: clamp(1.5rem, 4vw, 2.5rem);      /* Project titles - slightly larger */
     --font-size-2xl: clamp(2rem, 6vw, 4rem);     /* Section titles */
-    --font-size-3xl: clamp(3rem, 10vw, 10rem);     /* Hero display - smaller min for mobile */
+    --font-size-3xl: clamp(4rem, 15vw, 16rem);     /* Hero display - massive 8-bit style */
     
     /* Font Weight - Single weight only */
     --font-weight-normal: 400;
@@ -58,7 +59,7 @@
     --spacing-xxl: clamp(6rem, 12vw, 8rem);
 
     /* Color RGB values for rgba() usage */
-    --color-primary-rgb: 255, 107, 53;
+    --color-primary-rgb: 125, 132, 145;
 
     /* Z-Index layers */
     --z-background: 0;
@@ -88,7 +89,8 @@ html {
 body {
     /* VHS Gothic font - var(--font-vhs) is injected by Next.js via body className */
     font-family: var(--font-vhs), 'Courier New', monospace;
-    background: var(--color-bg);
+    background: var(--color-bg) url('/pics/heroavatars/Unreleased Assets by GstaikDesigns (23).png') no-repeat center center fixed;
+    background-size: cover;
     color: var(--color-text);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
@@ -103,13 +105,17 @@ body {
     /* Mobile touch optimization */
     touch-action: pan-y;
     -webkit-tap-highlight-color: transparent;
-    /* Prevent single-letter word breaks (orphans/widows) */
+    /* MOBILE-FIRST TEXT HANDLING */
     word-break: normal;
     overflow-wrap: break-word;
-    orphans: 2;
-    widows: 2;
+    /* Modern text-wrap for better line distribution */
+    text-wrap: pretty;
+    /* German hyphenation support */
     hyphens: auto;
     -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphenate-limit-chars: 6 3 2;
+    /* Set language for proper hyphenation */
 }
 
 /* ================================
@@ -131,7 +137,7 @@ body {
     width: 12px;
     background-color: var(--color-text);
     border: 2px solid var(--color-primary);
-    border-radius: 50%;
+    border-radius: 0; /* 8-bit pixel aesthetic - square thumb */
     margin-top: -6px; /* Centers thumb on the 2px height track? Actually on 0px height track since we use a separate div for track */
     position: relative;
     z-index: 30;
@@ -142,7 +148,7 @@ body {
     width: 12px;
     background-color: var(--color-text);
     border: 2px solid var(--color-primary);
-    border-radius: 50%;
+    border-radius: 0; /* 8-bit pixel aesthetic - square thumb */
     box-sizing: border-box;
     position: relative;
     z-index: 30;
@@ -166,7 +172,6 @@ body {
 
 /* ================================
    HERO SECTION
-   (Keep this background throughout)
    ================================ */
 #hero {
     position: relative;
@@ -176,49 +181,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg);
+    background: transparent;
     overflow: hidden;
-}
-
-/* ================================
-   HERO STARS BACKGROUND
-   ================================ */
-.hero-stars {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: var(--color-bg);
-}
-
-/* Subtle star field using radial gradients */
-.hero-stars::before,
-.hero-stars::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 50% 20%, rgba(255,255,255,0.25) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 50%, rgba(255,255,255,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 15% 60%, rgba(255,255,255,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 90%, rgba(255,255,255,0.25) 0%, transparent 100%),
-        radial-gradient(1px 1px at 85% 65%, rgba(255,255,255,0.2) 0%, transparent 100%);
-    background-size: 100% 100%;
-}
-
-.hero-stars::after {
-    background-image:
-        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 45%, rgba(255,255,255,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.25) 0%, transparent 100%),
-        radial-gradient(1px 1px at 75% 25%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 95% 75%, rgba(255,255,255,0.15) 0%, transparent 100%);
-    opacity: 0.7;
 }
 
 /* Handle landscape orientation on mobile */
@@ -314,15 +278,52 @@ body {
     width: 100%;
     height: auto;
     max-width: 320px;
-    border-radius: 24px;
+    border-radius: 0; /* 8-bit pixel aesthetic - sharp corners */
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4); /* 8-bit drop shadow */
     /* Removed: animation: float - conflicts with GSAP */
     /* Removed: will-change: transform - not needed */
 }
 
 /* Removed @keyframes float - conflicts with GSAP animations */
+
+/* ================================
+   ANIMATION INITIAL STATES
+   Prevent FOUC by hiding elements in CSS before JS runs
+   ================================ */
+
+/* Project items - hidden until scroll animation triggers */
+.project-item {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Project content elements - hidden for text reveal animations */
+.project-title,
+.project-description,
+.project-role,
+.project-link,
+.project-credits {
+    opacity: 0;
+}
+
+/* Tags - hidden for stagger animation */
+.tag {
+    opacity: 0;
+}
+
+/* Project number and mockup - hidden for fade in */
+.project-number {
+    opacity: 0;
+}
+
+.mockup-container {
+    opacity: 0;
+}
+
+/* Skill lines - visible but text replaced by matrix scramble JS */
+/* Don't hide .skill-line - the matrix scramble handles its own reveal */
 
 /* ================================
    REDUCED MOTION & ACCESSIBILITY
@@ -338,13 +339,19 @@ body {
         scroll-behavior: auto !important;
     }
 
-    /* Ensure content is immediately visible */
+    /* Ensure ALL animated content is immediately visible */
     .content-tile,
     .project-item,
     .skill-item,
     .project-title,
     .project-description,
+    .project-role,
+    .project-link,
+    .project-credits,
+    .project-number,
+    .mockup-container,
     .tag,
+    .skill-line,
     .contact-link {
         opacity: 1 !important;
         transform: none !important;
@@ -405,12 +412,12 @@ body {
 
 .hero-line {
     display: block;
-    opacity: 0; /* Hidden initially, will be shown when animation starts */
-    /* Ensure distinct visibility */
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+    opacity: 1;
     /* Force center */
     text-align: center;
     width: 100%;
+    /* NEVER break hero text on mobile */
+    white-space: nowrap;
 }
 
 /* Matrix animation character spans */
@@ -420,12 +427,13 @@ body {
     transition: color 0.1s ease;
 }
 
-/* Push BAI down from top */
+/* BAI scaled up ~2x to match DESIGN width (3 letters vs 6 letters) */
 .hero-line:first-child {
-    margin-top: 1.5rem;
+    margin-top: 0;
+    font-size: clamp(7rem, 28vw, 30rem);
 }
 
-/* SOLUTIONS always orange by default - prevent breaking on big screens */
+/* SOLUTIONS always slate grey by default - prevent breaking on big screens */
 .hero-line-solutions {
     color: var(--color-primary);
     white-space: nowrap !important; /* Prevent breaking after 'n' on big screens */
@@ -504,6 +512,18 @@ body {
     will-change: transform, opacity;
 }
 
+/* About section - pull closer to hero */
+#about.content-tile {
+    margin-top: calc(var(--spacing-xl) * -0.5); /* Pull up toward hero */
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+}
+
+/* Projects section - reduce top spacing */
+#projects.content-tile {
+    margin-top: calc(var(--spacing-xl) * -1.6); /* Pull up */
+}
+
 /* Last section (Contact) - extra bottom spacing to prevent decentering */
 .content-tile:last-of-type {
     margin-bottom: calc(var(--spacing-xl) * 2);
@@ -530,51 +550,44 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-snug);
     letter-spacing: var(--letter-spacing-wide);
-    margin-bottom: var(--spacing-xl);
-    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
     text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(125, 132, 145, 0.4);
+    /* Mobile-first: balance lines, NO mid-word breaks */
+    text-wrap: balance;
+    word-break: keep-all;
+    hyphens: none;
+    -webkit-hyphens: none;
+}
+
+/* Projects section title needs extra bottom margin to clear project number */
+#projects .section-title {
+    margin-bottom: var(--spacing-xl);
 }
 
 /* ================================
-   LIQUID GLASS CARDS
+   RAW CONTENT - NO CARDS
+   Terminal/8-bit aesthetic - content floats on void
    ================================ */
 .glass-card {
-    background: rgba(10, 10, 10, 0.6); /* Darker base for readability */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px; /* Liquid-like rounding */
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
     padding: var(--spacing-md);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.2),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.05); /* Inner rim */
-    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Removed transform - conflicts with GSAP */
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
 }
 
-/* Subtle glossy sheen */
 .glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.03) 0%,
-        rgba(255, 255, 255, 0.01) 50%,
-        transparent 100%
-    );
-    pointer-events: none;
-    z-index: -1;
+    display: none;
 }
 
 .glass-card:hover {
-    /* Removed: transform: translateY(-2px) - conflicts with GSAP */
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: transparent;
+    box-shadow: none;
 }
 
 /* ================================
@@ -586,16 +599,18 @@ body {
     line-height: var(--line-height-relaxed);
     letter-spacing: var(--letter-spacing-normal);
     margin-bottom: var(--spacing-xl);
-    color: var(--color-text); /* Brighter text on cards */
-    
-    /* Apply Glass Card */
-    background: rgba(10, 10, 10, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: var(--spacing-lg);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    color: var(--color-text);
+    /* Raw text on background - no card */
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    /* Subtle text shadow for depth on dark bg */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    /* Mobile-first: prevent orphans, allow German hyphenation */
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
 }
 
 .about-skills {
@@ -603,15 +618,14 @@ body {
     /* Horizontal layout: two side-by-side halves */
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
-    /* Glass Card Background - same as about-description */
-    background: rgba(10, 10, 10, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    /* Standardized padding - matches other cards */
-    padding: var(--spacing-lg);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    /* Raw grid on background - no card */
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     /* Match width with about-description card above (inherits from .content-tile) */
     width: 100%;
     /* Ensure proper positioning for ScrollTrigger pin */
@@ -667,7 +681,6 @@ body {
 }
 
 .skill-item h3 {
-    /* Larger heading for bigger card */
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-snug);
@@ -677,6 +690,9 @@ body {
     text-transform: uppercase;
     text-align: center;
     width: 100%;
+    text-shadow: 0 0 20px rgba(125, 132, 145, 0.4);
+    /* Balance lines on multi-line headings */
+    text-wrap: balance;
 }
 
 .skill-item p {
@@ -711,6 +727,8 @@ body {
     contain: layout style;
     /* Lock height */
     box-sizing: border-box;
+    /* NEVER break skill names on mobile */
+    white-space: nowrap;
 }
 
 .skill-line span {
@@ -765,10 +783,10 @@ body {
     z-index: 10;
     line-height: 1;
     letter-spacing: var(--letter-spacing-tight);
-    /* Subtle orange glow effect */
-    text-shadow: 
-        0 0 15px rgba(255, 107, 53, 0.6),
-        0 0 30px rgba(255, 107, 53, 0.4);
+    /* Subtle grey glow effect */
+    text-shadow:
+        0 0 15px rgba(125, 132, 145, 0.6),
+        0 0 30px rgba(125, 132, 145, 0.4);
     opacity: 0.85;
     white-space: nowrap;
     /* Ensure number doesn't affect card centering */
@@ -816,61 +834,48 @@ body {
 .project-content {
     position: relative;
     z-index: 2;
-    /* Glass Card Style */
-    background: rgba(10, 10, 10, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: var(--spacing-lg); /* Uniform padding for card */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    /* Raw content on background - no card */
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     /* Center content with proper width constraints */
     margin: 0 auto;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    
+
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-    transition: border-color 0.3s ease; /* Removed transform - conflicts with GSAP */
-    /* Removed will-change - not needed, let browser optimize */
-    /* Ensure text content is visible */
-    color: rgba(255, 255, 255, 0.9);
+    /* Text directly on dark bg */
+    color: var(--color-text);
 }
 
 .project-content:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Added subtle shadow instead of transform */
-    /* Removed: transform: translateY(-2px) - conflicts with GSAP */
+    /* No hover effects on raw content */
 }
 
 /* ================================
-   MOCKUP CONTAINERS
+   MOCKUP CONTAINERS - RAW
    ================================ */
 .mockup-container {
     position: relative;
     width: 100%;
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(255, 107, 53, 0.02) 100%);
-    border: 1px solid rgba(255, 107, 53, 0.15);
-    border-radius: 12px;
+    background: transparent;
+    border: 1px solid rgba(125, 132, 145, 0.3);
+    border-radius: 0;
     overflow: hidden;
-    backdrop-filter: blur(10px);
+    backdrop-filter: none;
     transform-style: preserve-3d;
     will-change: transform, opacity;
-    /* Initial states controlled by GSAP */
 }
 
-/* Glass morphism effect */
 .mockup-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    pointer-events: none;
+    display: none;
 }
 
 .mockup-placeholder {
@@ -881,7 +886,7 @@ body {
     height: 100%;
     background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
     position: relative;
-    border-radius: 8px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
 }
 
 .mockup-label {
@@ -916,7 +921,7 @@ body {
     width: 100%;
     height: auto;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
     display: block;
 }
 
@@ -932,9 +937,7 @@ body {
 
 /* Hover effect for mockup containers */
 .mockup-container:hover {
-    border-color: rgba(255, 107, 53, 0.3);
-    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.1);
-    /* Removed: transition: all - performance killer, use specific properties only */
+    border-color: rgba(125, 132, 145, 0.5);
 }
 
 /* Mockup Grid - Multiple mockups in one project */
@@ -982,25 +985,23 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 6px;
+    background: transparent;
+    border-radius: 0;
     padding: 0;
-    border: 1px solid rgba(255, 107, 53, 0.1);
-    transition: all 0.3s ease;
+    border: 1px solid rgba(125, 132, 145, 0.2);
+    transition: border-color 0.3s ease;
     overflow: hidden;
 }
 
 .mockup-item:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 107, 53, 0.2);
-    transform: translateY(-4px);
+    border-color: rgba(125, 132, 145, 0.4);
 }
 
 .mockup-media {
     width: 100%;
     height: auto;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
     display: block;
     background: rgba(0, 0, 0, 0.2);
 }
@@ -1010,7 +1011,7 @@ body {
     width: 100%;
     height: auto;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
     display: block;
 }
 
@@ -1074,13 +1075,13 @@ body {
     width: 100%;
 }
 
-/* Carousel Container - Glass Morphism */
+/* Carousel Container - Raw */
 .embla {
     overflow: hidden;
-    border-radius: 6px;
-    background: rgba(10, 10, 10, 0.4);
-    border: 1px solid rgba(255, 107, 53, 0.15);
-    backdrop-filter: blur(12px);
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid rgba(125, 132, 145, 0.3);
+    backdrop-filter: none;
     touch-action: pan-x pan-y; /* Critical for mobile Safari */
 }
 
@@ -1107,7 +1108,7 @@ body {
     height: auto;
     max-height: 70vh;
     object-fit: contain;
-    border-radius: 4px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
 }
 
 /* Navigation Controls Container */
@@ -1129,29 +1130,27 @@ body {
 .embla__button {
     width: 44px;
     height: 44px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    border-radius: 50%;
-    backdrop-filter: blur(12px);
-    color: rgba(255, 107, 53, 0.9);
+    background: transparent;
+    border: 1px solid rgba(125, 132, 145, 0.4);
+    border-radius: 0;
+    backdrop-filter: none;
+    color: var(--color-primary);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, color 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .embla__button:hover:not(:disabled) {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    transform: scale(1.1);
+    border-color: var(--color-text);
+    color: var(--color-text);
 }
 
 .embla__button:disabled {
     opacity: 0.3;
     cursor: not-allowed;
-    border-color: rgba(255, 107, 53, 0.1);
+    border-color: rgba(125, 132, 145, 0.1);
 }
 
 .embla__button:focus-visible {
@@ -1177,23 +1176,23 @@ body {
 .embla__dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 107, 53, 0.2);
-    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: 0; /* 8-bit pixel aesthetic - square dots */
+    background: rgba(125, 132, 145, 0.2);
+    border: 1px solid rgba(125, 132, 145, 0.3);
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
 }
 
 .embla__dot:hover {
-    background: rgba(255, 107, 53, 0.4);
-    transform: scale(1.2);
+    background: rgba(125, 132, 145, 0.4);
+    box-shadow: 2px 2px 0 rgba(125, 132, 145, 0.2); /* 8-bit hover */
 }
 
 .embla__dot--selected {
     background: var(--color-primary);
     border-color: var(--color-primary);
-    transform: scale(1.3);
+    box-shadow: 2px 2px 0 rgba(125, 132, 145, 0.3); /* 8-bit selected */
 }
 
 /* Responsive Adjustments */
@@ -1224,7 +1223,10 @@ body {
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
     color: rgba(255, 255, 255, 0.8); /* Ensure visibility on glass card */
-    /* Ensure text wraps properly */
+    /* Mobile-first: prevent orphans, allow German hyphenation */
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
@@ -1240,9 +1242,9 @@ body {
 .metric-item {
     display: inline-block;
     padding: 0.4rem 0.8rem;
-    background: rgba(255, 107, 53, 0.1);
-    border: 1px solid rgba(255, 107, 53, 0.2);
-    border-radius: 6px;
+    background: rgba(125, 132, 145, 0.1);
+    border: 1px solid rgba(125, 132, 145, 0.2);
+    border-radius: 0; /* 8-bit pixel aesthetic */
     color: var(--color-primary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-normal);
@@ -1252,9 +1254,9 @@ body {
 }
 
 .metric-item:hover {
-    background: rgba(255, 107, 53, 0.15);
-    border-color: rgba(255, 107, 53, 0.3);
-    transform: translateY(-2px);
+    background: rgba(125, 132, 145, 0.15);
+    border-color: rgba(125, 132, 145, 0.3);
+    box-shadow: 2px 2px 0 rgba(125, 132, 145, 0.2); /* 8-bit hover */
 }
 
 .project-link {
@@ -1270,16 +1272,16 @@ body {
     font-size: var(--font-size-sm);
     letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
-    border-radius: 8px;
+    border-radius: 0; /* 8-bit pixel aesthetic */
     transition: all 0.3s ease;
     border: 2px solid var(--color-primary);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3); /* 8-bit drop shadow */
 }
 
 .project-link:hover {
     background: transparent;
     color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+    box-shadow: 4px 4px 0 rgba(125, 132, 145, 0.4); /* 8-bit enhanced hover */
 }
 
 .project-link:hover .link-arrow {
@@ -1341,11 +1343,16 @@ body {
     line-height: var(--line-height-snug);
     letter-spacing: var(--letter-spacing-tight);
     margin-bottom: var(--spacing-sm);
-    color: var(--color-text);
+    color: var(--color-white);
     text-transform: uppercase;
-    /* Ensure text renders correctly */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    /* Text glow for readability on dark bg */
+    text-shadow: 0 0 20px rgba(243, 237, 236, 0.3);
+    /* Mobile-first: balance lines, NO mid-word breaks */
+    text-wrap: balance;
+    word-break: keep-all; /* Only break at spaces, not mid-word */
+    hyphens: none; /* Disable hyphenation for titles */
+    -webkit-hyphens: none;
+    overflow-wrap: anywhere; /* Fallback for extremely long single words */
     display: block;
     /* GSAP controls opacity - ensure visibility is not hidden */
     visibility: visible !important;
@@ -1365,9 +1372,13 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
-    color: rgba(255, 255, 255, 0.9); /* Brighter for glass card */
+    color: var(--color-text-dim);
     margin-bottom: var(--spacing-md);
-    /* Ensure text renders correctly */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    /* Mobile-first: prevent orphans, allow German hyphenation */
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: block;
@@ -1419,27 +1430,30 @@ body {
 .tag {
     padding: 0.5rem 0.75rem; /* Touch-friendly padding (44px min height with font) */
     background: transparent;
-    border: 1px solid rgba(255, 107, 53, 0.2); /* Subtle border for tap area visibility */
-    border-radius: 6px;
+    border: 1px solid rgba(125, 132, 145, 0.25); /* 8-bit visible border */
+    border-radius: 0; /* 8-bit pixel aesthetic */
     color: var(--color-primary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-normal);
     letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
     cursor: default;
-    transition: background 0.2s ease, border-color 0.2s ease; /* Removed 'all' - Anime.js handles scale/transform */
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     display: inline-block;
+    /* NEVER break tag names */
+    white-space: nowrap;
 }
 
 .tag:hover {
-    background: rgba(255, 107, 53, 0.1);
-    border-color: rgba(255, 107, 53, 0.4);
+    background: rgba(125, 132, 145, 0.1);
+    border-color: rgba(125, 132, 145, 0.4);
+    box-shadow: 2px 2px 0 rgba(125, 132, 145, 0.2); /* 8-bit hover */
 }
 
 .tag:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
-    background: rgba(255, 107, 53, 0.1);
+    background: rgba(125, 132, 145, 0.1);
 }
 
 /* ================================
@@ -1447,12 +1461,12 @@ body {
    ================================ */
 .contact-content {
     text-align: center;
-    /* Solid black background - no transparency */
-    background: var(--color-bg);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: var(--spacing-lg);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    /* Raw content - no card */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -1464,7 +1478,10 @@ body {
     letter-spacing: var(--letter-spacing-wide);
     margin-bottom: var(--spacing-md);
     text-transform: uppercase;
-    color: var(--color-primary); /* Orange heading */
+    color: var(--color-primary);
+    text-shadow: 0 0 20px rgba(125, 132, 145, 0.4);
+    /* Mobile-first: balance lines for German compound words */
+    text-wrap: balance;
     word-wrap: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
@@ -1475,8 +1492,11 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
-    color: rgba(255, 255, 255, 0.9); /* Brighter text */
+    color: var(--color-text-dim);
     margin-bottom: var(--spacing-lg);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    /* Mobile-first: prevent orphans */
+    text-wrap: pretty;
 }
 
 .contact-links {
@@ -1490,23 +1510,22 @@ body {
     padding: 0.75rem 1.5rem;
     background: var(--color-primary);
     border: 2px solid var(--color-primary);
-    border-radius: 10px; /* Rounded but not round */
+    border-radius: 0; /* 8-bit pixel aesthetic */
     color: var(--color-bg);
     text-decoration: none;
     font-weight: var(--font-weight-normal);
     font-size: var(--font-size-sm);
     letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
-    transition: color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease; /* Removed 'all' and will-change - Anime.js handles transform */
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3); /* 8-bit drop shadow */
 }
 
 .contact-link:hover {
     background: var(--color-primary);
     color: var(--color-bg);
-    /* Removed: transform: translateY(-2px) - conflicts with Anime.js */
-    box-shadow: 0 8px 24px rgba(var(--color-primary-rgb), 0.3);
-    opacity: 0.9;
+    box-shadow: 4px 4px 0 rgba(125, 132, 145, 0.4); /* 8-bit enhanced hover */
 }
 
 .contact-link:focus-visible {
@@ -1524,15 +1543,17 @@ body {
     bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 12px;
+    background: rgba(19, 21, 21, 0.95);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    border: 1px solid rgba(125, 132, 145, 0.3);
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
     gap: 2rem;
     z-index: var(--z-dock);
+    box-shadow: none;
     /* Force GPU layer for smooth positioning */
     -webkit-transform: translateX(-50%) translateZ(0);
     transform: translateX(-50%) translateZ(0);
@@ -1554,6 +1575,8 @@ body {
     background: none;
     border: none;
     cursor: pointer;
+    /* NEVER break nav items */
+    white-space: nowrap;
 }
 
 .dock-item.active {
@@ -1597,12 +1620,12 @@ body {
 
 /* Skill category styling - replaces inline styles in About.tsx */
 .skill-category-primary {
-    color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .skill-category-secondary {
     margin-left: 0.5em;
-    color: var(--color-primary);
+    color: var(--color-white);
 }
 
 /* Project video styling - replaces Tailwind classes in ProjectVideo.tsx */
@@ -1610,7 +1633,7 @@ body {
     width: 100%;
     height: auto;
     object-fit: contain;
-    border-radius: 0.5rem;
+    border-radius: 0; /* 8-bit pixel aesthetic */
     display: block;
 }
 
@@ -1709,14 +1732,14 @@ body {
         opacity: 0.8;
         z-index: 10;
         /* OPTIMIZED SHADOWS FOR MOBILE - REMOVED MULTI-LAYER GLOW */
-        text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        text-shadow: 0 0 10px rgba(125, 132, 145, 0.5);
     }
     
     .glass-card {
-        border-radius: 16px;
+        background: transparent;
+        border: none;
         padding: var(--spacing-md);
-        /* Simplified shadows */
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        box-shadow: none;
     }
     
     .floating-dock {
@@ -1868,23 +1891,27 @@ body {
         -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
     }
 
-    /* Reduce heavy blur on mobile for performance (especially Safari) */
+    /* Raw content - no blur effects */
     .glass-card,
     .about-description,
     .about-skills,
     .project-content,
     .floating-dock {
-        -webkit-backdrop-filter: blur(8px) !important;
-        backdrop-filter: blur(8px) !important;
-        /* Contain layout recalculations */
-        contain: layout style paint;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: transparent !important;
     }
-    
-    /* Contact uses solid black background - no blur needed */
+
+    /* Dock needs subtle bg for readability */
+    .floating-dock {
+        background: rgba(19, 21, 21, 0.95) !important;
+    }
+
+    /* Contact - raw on mobile */
     .contact-content {
-        background: #0a0a0a;
-        max-width: 100%; /* Allow full width on mobile */
-        padding: var(--spacing-lg) var(--spacing-md); /* Reduce padding */
+        background: transparent;
+        max-width: 100%;
+        padding: 0;
     }
     
     /* ================================
@@ -1915,27 +1942,26 @@ body {
         transform: translateZ(0); /* Minimal GPU acceleration */
     }
     
-    /* Reduce backdrop-filter blur during scroll for better performance */
+    /* No blur on mobile */
     .glass-card,
     .about-description,
     .about-skills,
     .project-content {
-        /* Further reduce blur on mobile during scroll */
-        -webkit-backdrop-filter: blur(6px) !important;
-        backdrop-filter: blur(6px) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
     
     /* Simplify text shadows on mobile for better performance */
     .project-number {
-        text-shadow: 0 0 8px rgba(255, 107, 53, 0.4) !important;
+        text-shadow: 0 0 8px rgba(125, 132, 145, 0.4) !important;
     }
     
-    /* Reduce box-shadow complexity on mobile */
+    /* No shadows on raw content */
     .glass-card,
     .about-description,
     .about-skills,
     .project-content {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        box-shadow: none !important;
     }
     
     /* Optimize text rendering for mobile */
@@ -1958,14 +1984,22 @@ body {
     /* Responsive text sizing - ensure all text scales properly on mobile */
     .project-title {
         font-size: clamp(1.25rem, 5vw, 2rem) !important;
+        /* CRITICAL: Never break words mid-character */
+        word-break: keep-all !important;
+        hyphens: none !important;
+        -webkit-hyphens: none !important;
     }
-    
+
     .project-description {
         font-size: clamp(0.875rem, 3vw, 1.125rem) !important;
     }
-    
+
     .section-title {
         font-size: clamp(1.5rem, 6vw, 3rem) !important;
+        /* CRITICAL: Never break words mid-character */
+        word-break: keep-all !important;
+        hyphens: none !important;
+        -webkit-hyphens: none !important;
     }
     
     .about-description {
@@ -2209,35 +2243,7 @@ body {
     }
 }
 
-/* Fix backdrop-filter rendering on older Safari - desktop only */
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    @media (min-width: 769px) {
-        .glass-card,
-        .about-description,
-        .about-skills,
-        .project-content {
-            -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
-        }
-    }
-    /* Floating dock always uses reduced blur for performance */
-}
-
-/* Fallback for browsers without backdrop-filter */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .glass-card,
-    .about-description,
-    .about-skills,
-    .project-content {
-        background: rgba(10, 10, 10, 0.95);
-    }
-    
-    .floating-dock {
-        background: rgba(0, 0, 0, 0.95);
-    }
-    
-    /* Contact already uses solid black */
-}
+/* Raw content - no backdrop-filter needed */
 
 /* Prevent iOS zoom on input focus */
 input, select, textarea {

@@ -18,82 +18,99 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * Helper function to split text into characters for anime.js animation
+ * Helper function to split text into WORDS for anime.js animation
+ * CRITICAL: We split by words, not characters, to preserve text-wrap: balance
+ * Each word span has white-space: nowrap to prevent mid-word breaks
  */
 function splitTextIntoChars(element: HTMLElement): HTMLElement[] {
     if (element.children.length > 0 && element.querySelector('span')) {
         return Array.from(element.children) as HTMLElement[];
     }
-    
+
     const text = element.getAttribute('data-original-text') || element.textContent || '';
-    
+
     if (!text || text.trim().length === 0) {
         return [];
     }
-    
-    const chars: HTMLElement[] = [];
-    text.split('').forEach((char) => {
+
+    // Split by words to preserve text-wrap: balance behavior
+    const words = text.split(/(\s+)/); // Keep whitespace as separate items
+    const spans: HTMLElement[] = [];
+
+    words.forEach((word) => {
+        if (!word) return;
+
         const span = document.createElement('span');
-        // Preserve spaces - use regular space with white-space: pre to maintain spacing
-        if (char === ' ') {
-            span.textContent = ' ';
-            span.style.width = '0.25em'; // Ensure space width is preserved
-            span.style.minWidth = '0.25em';
+        span.textContent = word;
+
+        // Use inline (not inline-block) to preserve text-wrap behavior
+        // Only actual words get inline-block for animation, whitespace stays inline
+        if (word.trim()) {
+            span.style.display = 'inline-block';
+            span.style.whiteSpace = 'nowrap'; // CRITICAL: Keep word intact
         } else {
-            span.textContent = char;
+            span.style.display = 'inline';
+            span.style.whiteSpace = 'pre'; // Preserve space width
         }
-        span.style.display = 'inline-block';
         span.style.opacity = '0';
-        span.style.whiteSpace = 'pre'; // Preserve whitespace
-        chars.push(span);
+        spans.push(span);
     });
-    
+
     element.textContent = '';
-    chars.forEach(char => element.appendChild(char));
-    
-    return chars;
+    spans.forEach(span => element.appendChild(span));
+
+    return spans.filter(s => s.textContent?.trim()); // Only return word spans for animation
 }
 
 /**
  * Helper function to split text into words for anime.js animation
+ * Preserves text-wrap behavior by keeping words as atomic units
  */
 function splitTextIntoWords(element: HTMLElement): HTMLElement[] {
     if (element.children.length > 0 && element.querySelector('span')) {
         return Array.from(element.children) as HTMLElement[];
     }
-    
+
     const text = element.getAttribute('data-original-text') || element.textContent || '';
-    
+
     if (!text || text.trim().length === 0) {
         return [];
     }
-    
-    const words: HTMLElement[] = [];
-    const wordArray = text.split(' ');
-    
-    wordArray.forEach((word, index) => {
+
+    // Split by whitespace but preserve it
+    const parts = text.split(/(\s+)/);
+    const spans: HTMLElement[] = [];
+
+    parts.forEach((part) => {
+        if (!part) return;
+
         const span = document.createElement('span');
-        // Preserve spaces between words - add space after each word except the last
-        span.textContent = word + (index < wordArray.length - 1 ? ' ' : '');
-        span.style.display = 'inline-block';
+        span.textContent = part;
+
+        if (part.trim()) {
+            // Actual word - use inline-block for animation but keep word intact
+            span.style.display = 'inline-block';
+            span.style.whiteSpace = 'nowrap'; // CRITICAL: Prevent mid-word breaks
+        } else {
+            // Whitespace - use inline to preserve natural flow
+            span.style.display = 'inline';
+            span.style.whiteSpace = 'pre';
+        }
         span.style.opacity = '0';
-        span.style.whiteSpace = 'pre'; // Preserve whitespace
-        words.push(span);
+        spans.push(span);
     });
-    
+
     element.textContent = '';
-    words.forEach(word => element.appendChild(word));
-    
-    return words;
+    spans.forEach(span => element.appendChild(span));
+
+    return spans.filter(s => s.textContent?.trim()); // Only return word spans for animation
 }
 
 /**
  * Reveal text elements with anime.js animations
+ * CRITICAL: Splits text by words (not characters) to preserve CSS text-wrap: balance
  */
 function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
-    // Allow re-animation - remove the guard that prevents it
-    // The resetCardState function will handle cleaning up previous animations
-
     const title = project.querySelector('.project-title') as HTMLElement;
     const description = project.querySelector('.project-description') as HTMLElement;
     const role = project.querySelector('.project-role') as HTMLElement;
@@ -101,36 +118,38 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     const link = project.querySelector('.project-link') as HTMLElement;
     const credits = project.querySelector('.project-credits') as HTMLElement;
 
-    // Title: Character-by-character reveal
+    // Title: Word-by-word reveal (not character - preserves text-wrap)
     if (title && !title.hasAttribute('data-split')) {
         try {
             title.setAttribute('data-split', 'true');
-            // CRITICAL FIX: Set parent opacity to 1 BEFORE splitting
-            gsap.set(title, { opacity: 1, visibility: 'visible' });
+            // Set parent visible BEFORE splitting to let CSS calculate layout
+            gsap.set(title, { autoAlpha: 1 });
 
-            const titleChars = splitTextIntoChars(title);
-            if (titleChars.length > 0) {
-                animate(titleChars, {
+            // Force reflow to ensure CSS layout is calculated
+            void title.offsetHeight;
+
+            const titleWords = splitTextIntoChars(title); // Now splits by words
+            if (titleWords.length > 0) {
+                animate(titleWords, {
                     opacity: [0, 1],
-                    translateY: [20, 0],
-                    scale: [0.8, 1],
-                    delay: stagger(50),
-                    duration: 600,
-                    ease: 'outElastic(1, 0.5)'
+                    translateY: [15, 0],
+                    delay: stagger(80), // Slightly slower for word animation
+                    duration: 500,
+                    ease: 'outExpo'
                 });
             } else {
-                gsap.set(title, { opacity: 1, visibility: 'visible' });
+                gsap.set(title, { autoAlpha: 1 });
             }
         } catch (error) {
-            gsap.set(title, { opacity: 1, visibility: 'visible' });
+            gsap.set(title, { autoAlpha: 1 });
         }
     } else if (title) {
         const titleSpans = title.querySelectorAll('span');
         if (titleSpans.length > 0) {
-            gsap.set(title, { opacity: 1, visibility: 'visible' });
-            gsap.set(titleSpans, { opacity: 1, visibility: 'visible' });
+            gsap.set(title, { autoAlpha: 1 });
+            gsap.set(titleSpans, { autoAlpha: 1 });
         } else {
-            gsap.set(title, { opacity: 1, visibility: 'visible' });
+            gsap.set(title, { autoAlpha: 1 });
         }
     }
 
@@ -138,31 +157,34 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     if (description && !description.hasAttribute('data-split')) {
         try {
             description.setAttribute('data-split', 'true');
-            // CRITICAL FIX: Set parent opacity to 1 BEFORE splitting
-            gsap.set(description, { opacity: 1, visibility: 'visible' });
+            // Set parent visible BEFORE splitting
+            gsap.set(description, { autoAlpha: 1 });
+
+            // Force reflow to ensure CSS layout is calculated
+            void description.offsetHeight;
 
             const descWords = splitTextIntoWords(description);
             if (descWords.length > 0) {
                 animate(descWords, {
                     opacity: [0, 1],
-                    translateX: [-20, 0],
-                    delay: stagger(100),
-                    duration: 400,
+                    translateY: [10, 0], // Vertical instead of horizontal for less jarring
+                    delay: stagger(40), // Faster stagger for longer text
+                    duration: 350,
                     ease: 'outExpo'
                 });
             } else {
-                gsap.set(description, { opacity: 1, visibility: 'visible' });
+                gsap.set(description, { autoAlpha: 1 });
             }
         } catch (error) {
-            gsap.set(description, { opacity: 1, visibility: 'visible' });
+            gsap.set(description, { autoAlpha: 1 });
         }
     } else if (description) {
         const descSpans = description.querySelectorAll('span');
         if (descSpans.length > 0) {
-            gsap.set(description, { opacity: 1, visibility: 'visible' });
-            gsap.set(descSpans, { opacity: 1, visibility: 'visible' });
+            gsap.set(description, { autoAlpha: 1 });
+            gsap.set(descSpans, { autoAlpha: 1 });
         } else {
-            gsap.set(description, { opacity: 1, visibility: 'visible' });
+            gsap.set(description, { autoAlpha: 1 });
         }
     }
     
@@ -234,8 +256,9 @@ export function useProjectAnimations() {
         if (prefersReducedMotion) {
             const projects = gsap.utils.toArray('.project-item');
             projects.forEach((project: any) => {
-                gsap.set(project, { opacity: 1, x: 0, visibility: 'visible' });
-                gsap.set(project.querySelectorAll('.project-title, .project-description, .tag'), { opacity: 1 });
+                // Use autoAlpha for consistent visibility handling
+                gsap.set(project, { autoAlpha: 1, x: 0 });
+                gsap.set(project.querySelectorAll('.project-title, .project-description, .tag, .project-number, .mockup-container, .project-role, .project-link, .project-credits'), { autoAlpha: 1 });
             });
             return;
         }
@@ -267,37 +290,37 @@ export function useProjectAnimations() {
                 const slideDirection = index % 2 === 0 ? 'left' : 'right';
                 const slideDistance = isMobile ? 80 : 120;
                 
-                // Set initial state
-                gsap.set(project, { 
+                // Set initial state using autoAlpha (handles visibility + opacity together)
+                // autoAlpha: 0 keeps element invisible, autoAlpha: 1 makes it visible
+                gsap.set(project, {
                     x: slideDirection === 'left' ? -slideDistance : slideDistance,
-                    opacity: 0,
-                    visibility: 'visible'
+                    autoAlpha: 0 // Keeps visibility: hidden until animated
                 });
-                
-                // Hide text elements initially
+
+                // Hide text elements initially with autoAlpha
                 if (title) {
                     if (!title.hasAttribute('data-original-text')) {
                         title.setAttribute('data-original-text', title.textContent || '');
                     }
-                    gsap.set(title, { opacity: 0, visibility: 'visible' });
+                    gsap.set(title, { autoAlpha: 0 });
                 }
                 if (description) {
                     if (!description.hasAttribute('data-original-text')) {
                         description.setAttribute('data-original-text', description.textContent || '');
                     }
-                    gsap.set(description, { opacity: 0, visibility: 'visible' });
+                    gsap.set(description, { autoAlpha: 0 });
                 }
                 if (tags.length > 0) {
-                    gsap.set(tags, { opacity: 0, visibility: 'visible' });
+                    gsap.set(tags, { autoAlpha: 0 });
                 }
-                
-                // Keep role, link, credits visible
-                if (role) gsap.set(role, { opacity: 1, visibility: 'visible' });
-                if (link) gsap.set(link, { opacity: 1, visibility: 'visible' });
-                if (credits) gsap.set(credits, { opacity: 1, visibility: 'visible' });
-                
-                if (projectNumber) gsap.set(projectNumber, { opacity: 0 });
-                if (mockupContainer) gsap.set(mockupContainer, { opacity: 0, scale: 0.95 });
+
+                // Keep role, link, credits visible using autoAlpha
+                if (role) gsap.set(role, { autoAlpha: 1 });
+                if (link) gsap.set(link, { autoAlpha: 1 });
+                if (credits) gsap.set(credits, { autoAlpha: 1 });
+
+                if (projectNumber) gsap.set(projectNumber, { autoAlpha: 0 });
+                if (mockupContainer) gsap.set(mockupContainer, { autoAlpha: 0, scale: 0.95 });
 
                 // Unified text reveal function
                 const triggerTextReveal = () => {
@@ -325,18 +348,19 @@ export function useProjectAnimations() {
                     project.setAttribute('data-slide-complete', 'true');
 
                     // Animate the card slide-in (happens once, stays forever)
+                    // Use autoAlpha to handle visibility + opacity together
                     gsap.to(project, {
                         x: 0,
-                        opacity: 1,
+                        autoAlpha: 1,
                         duration: 0.9,
                         ease: 'power3.out',
                         overwrite: true // Kill any existing animations
                     });
 
-                    // Fade in number and mockup
+                    // Fade in number and mockup using autoAlpha
                     if (projectNumber) {
                         gsap.to(projectNumber, {
-                            opacity: 0.9,
+                            autoAlpha: 0.9,
                             duration: 0.4,
                             ease: 'power2.out',
                             overwrite: true
@@ -344,7 +368,7 @@ export function useProjectAnimations() {
                     }
                     if (mockupContainer) {
                         gsap.to(mockupContainer, {
-                            opacity: 1,
+                            autoAlpha: 1,
                             scale: 1,
                             duration: 0.7,
                             ease: 'power3.out',
@@ -399,35 +423,27 @@ export function useProjectAnimations() {
                     if (isInViewport && !project.hasAttribute('data-slide-complete')) {
                         // Mark as complete immediately
                         project.setAttribute('data-slide-complete', 'true');
+                        project.setAttribute('data-animated-once', 'true');
 
-                        // Ensure visibility is set before animating
-                        gsap.set(project, { visibility: 'visible' });
-
-                        // Animate card
+                        // Animate card using autoAlpha for smooth visibility transition
                         gsap.to(project, {
                             x: 0,
-                            opacity: 1,
+                            autoAlpha: 1,
                             duration: 0.8,
-                            ease: 'power3.out',
-                            onComplete: () => {
-                                // Ensure card stays visible after animation
-                                gsap.set(project, { opacity: 1, visibility: 'visible' });
-                            }
+                            ease: 'power3.out'
                         });
 
                         if (projectNumber) {
-                            gsap.to(projectNumber, { opacity: 0.9, duration: 0.3, ease: 'power2.out' });
+                            gsap.to(projectNumber, { autoAlpha: 0.9, duration: 0.3, ease: 'power2.out' });
                         }
                         if (mockupContainer) {
-                            gsap.to(mockupContainer, { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' });
+                            gsap.to(mockupContainer, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power3.out' });
                         }
 
                         // Trigger text reveal IMMEDIATELY (unified animation)
                         setTimeout(triggerTextReveal, 100);
-                    } else if (!isInViewport) {
-                        // Card not in viewport - ensure it's properly hidden but visible in DOM
-                        gsap.set(project, { visibility: 'visible' });
                     }
+                    // Cards not in viewport stay hidden (autoAlpha: 0) - no visibility change needed
                 };
 
                 // Check immediately (catches first card and mid-page reloads)
