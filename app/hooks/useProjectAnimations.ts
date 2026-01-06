@@ -190,10 +190,11 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     
     // Role: Fade in
     if (role) {
+        gsap.set(role, { visibility: 'visible' });
         animate(role, {
             opacity: [0, 1],
-            translateY: [10, 0],
-            delay: 300,
+            translateY: [8, 0],
+            delay: 250,
             duration: 400,
             ease: 'outExpo'
         });
@@ -202,33 +203,37 @@ function revealTextWithAnime(project: HTMLElement, isMobile: boolean) {
     // Tags: Individual tag reveals
     if (tags.length > 0) {
         const tagsArray = Array.from(tags) as HTMLElement[];
+        // CRITICAL: GSAP autoAlpha sets visibility: hidden, we must reset it
+        // before anime.js animation (which only handles opacity)
+        gsap.set(tagsArray, { visibility: 'visible' });
         animate(tagsArray, {
             opacity: [0, 1],
-            scale: [0.5, 1],
-            translateY: [10, 0],
-            delay: stagger(80),
-            duration: 350,
-            ease: 'outBack(1.5)'
+            translateY: [8, 0],
+            delay: stagger(60),
+            duration: 400,
+            ease: 'outExpo'
         });
     }
     
     // Link: Fade in
     if (link) {
+        gsap.set(link, { visibility: 'visible' });
         animate(link, {
             opacity: [0, 1],
-            scale: [0.9, 1],
-            delay: 400,
-            duration: 300,
+            translateY: [5, 0],
+            delay: 350,
+            duration: 350,
             ease: 'outExpo'
         });
     }
-    
+
     // Credits: Fade in
     if (credits) {
+        gsap.set(credits, { visibility: 'visible' });
         animate(credits, {
             opacity: [0, 1],
-            delay: 500,
-            duration: 300,
+            delay: 450,
+            duration: 350,
             ease: 'outExpo'
         });
     }

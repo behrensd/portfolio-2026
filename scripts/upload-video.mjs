@@ -1,26 +1,33 @@
 #!/usr/bin/env node
 /**
  * Upload video to Vercel Blob storage
+ * Usage: node scripts/upload-video.mjs <local-path> <blob-name>
+ * Example: node scripts/upload-video.mjs public/findus-mockup.mp4 findus-mockup.mp4
  */
 
 import 'dotenv/config';
 import { put } from '@vercel/blob';
 import { readFile } from 'fs/promises';
-import { config } from 'dotenv';
+import { basename } from 'path';
 
-config({ path: '.env.local' });
+const filePath = process.argv[2];
+const blobName = process.argv[3] || basename(filePath);
 
-const filePath = './public/videos/bp-shop-mockup-compressed.mp4';
+if (!filePath) {
+  console.error('Usage: node scripts/upload-video.mjs <local-path> <blob-name>');
+  process.exit(1);
+}
 
 async function uploadVideo() {
-  console.log('🚀 Uploading video to Vercel Blob...\n');
+  console.log(`🚀 Uploading ${filePath} to Vercel Blob as videos/${blobName}...\n`);
 
   try {
     const fileContent = await readFile(filePath);
 
-    const blob = await put('videos/bp-shop-mockup.mp4', fileContent, {
+    const blob = await put(`videos/${blobName}`, fileContent, {
       access: 'public',
       contentType: 'video/mp4',
+      allowOverwrite: true,
     });
 
     console.log('✅ Upload successful!');
@@ -29,6 +36,7 @@ async function uploadVideo() {
     return blob.url;
   } catch (error) {
     console.error('❌ Upload failed:', error.message);
+    process.exit(1);
   }
 }
 

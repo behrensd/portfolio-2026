@@ -516,12 +516,12 @@ body {
 #about.content-tile {
     margin-top: calc(var(--spacing-xl) * -0.5); /* Pull up toward hero */
     margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
+    padding-bottom: calc(var(--spacing-lg) + 3rem); /* Extra space after skills cards */
 }
 
-/* Projects section - reduce top spacing */
+/* Projects section - spacing from about/skills */
 #projects.content-tile {
-    margin-top: calc(var(--spacing-xl) * -1.6); /* Pull up */
+    margin-top: calc(var(--spacing-xl) * -0.5); /* Less aggressive pull - adds ~2-3rem gap */
 }
 
 /* Last section (Contact) - extra bottom spacing to prevent decentering */
@@ -1424,36 +1424,42 @@ body {
 .project-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+/* Add separator dots between tags */
+.project-tags .tag:not(:last-child)::after {
+    content: '·';
+    margin-left: var(--spacing-xs);
+    color: var(--color-text-dim);
+    opacity: 0.5;
 }
 
 .tag {
-    padding: 0.5rem 0.75rem; /* Touch-friendly padding (44px min height with font) */
+    /* Minimal style - just colored text, no box */
+    padding: 0;
     background: transparent;
-    border: 1px solid rgba(125, 132, 145, 0.25); /* 8-bit visible border */
-    border-radius: 0; /* 8-bit pixel aesthetic */
+    border: none;
     color: var(--color-primary);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
-    letter-spacing: var(--letter-spacing-wider);
-    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
     cursor: default;
-    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
     display: inline-block;
-    /* NEVER break tag names */
     white-space: nowrap;
 }
 
 .tag:hover {
-    background: rgba(125, 132, 145, 0.1);
-    border-color: rgba(125, 132, 145, 0.4);
-    box-shadow: 2px 2px 0 rgba(125, 132, 145, 0.2); /* 8-bit hover */
+    color: var(--color-text);
+    text-shadow: 0 0 8px rgba(125, 132, 145, 0.5);
 }
 
 .tag:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-    background: rgba(125, 132, 145, 0.1);
+    outline: none;
+    color: var(--color-text);
+    text-shadow: 0 0 8px rgba(125, 132, 145, 0.5);
 }
 
 /* ================================
@@ -2080,10 +2086,10 @@ body {
         padding: var(--spacing-sm);
     }
 
-    /* Tags - Slightly smaller but still tappable */
+    /* Tags - Minimal text style */
     .tag {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.65rem;
+        padding: 0;
+        font-size: var(--font-size-xs);
     }
 
     /* Contact links - Maintain size */

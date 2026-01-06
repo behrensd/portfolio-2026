@@ -31,6 +31,18 @@ type ProjectType = {
 // Projects ordered chronologically: newest (top) to oldest (bottom)
 const projectsData: ProjectType[] = [
     {
+        id: 3,
+        number: '01/2026',
+        title: 'FINDUSFILMT Portfolio',
+        description: 'Digitales Portfolio für einen Creative Director und Videographen aus Hamburg. Minimalistisches Design mit vollem Fokus auf den Content und 3D Landing Page.',
+        role: 'Design und Entwicklung der Website.',
+        tags: ['Next.js', 'Tailwind CSS', 'Three.js'],
+        mockupSize: 'mockup-large',
+        mockupLabel: 'Portfolio Preview',
+        videoUrl: 'https://g2d5m7efa2bhvzth.public.blob.vercel-storage.com/videos/findus-mockup.mp4',
+        url: 'https://www.findusfilmt.com',
+    },
+    {
         id: 1,
         number: '12/2025',
         title: 'Der BANDOPRINZ Onlineshop',
