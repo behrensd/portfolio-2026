@@ -20,10 +20,11 @@ export function useTileAnimations() {
 
     // Respect user's motion preferences
     if (viewport.shouldUseReducedAnimations) {
-      // Set elements to visible immediately
+      // Set elements to visible immediately with bulletproof class
       const tiles = gsap.utils.toArray<HTMLElement>('.content-tile, .skill-item');
       tiles.forEach(tile => {
         gsap.set(tile, { opacity: 1, y: 0 });
+        tile.classList.add('is-revealed');
       });
       return;
     }
@@ -49,6 +50,10 @@ export function useTileAnimations() {
             y: 0,
             duration: duration,
             ease: 'power2.out',
+            onComplete: () => {
+              // Add bulletproof visibility class
+              tile.classList.add('is-revealed');
+            },
             scrollTrigger: createOptimizedScrollTrigger(
               tile,
               {
@@ -78,7 +83,11 @@ export function useTileAnimations() {
           y: viewport.isMobile ? 20 : 30,
           duration: getAnimationDuration(viewport, 0.6),
           ease: 'power2.out',
-          delay: index * 0.15
+          delay: index * 0.15,
+          onComplete: () => {
+            // Add bulletproof visibility class
+            skill.classList.add('is-revealed');
+          }
         });
         tweensRef.current.push(skillTween);
         if (skillTween.scrollTrigger) triggersRef.current.push(skillTween.scrollTrigger);

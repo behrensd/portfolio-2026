@@ -322,6 +322,50 @@ body {
     opacity: 0;
 }
 
+/* ================================
+   REVEALED STATE CLASSES
+   Bulletproof visibility that survives style clearing
+   Applied via JS after animation completes
+   ================================ */
+
+/* Project items - permanent visibility after animation */
+.project-item.is-revealed {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(0) !important;
+}
+
+.project-item.is-revealed .project-title,
+.project-item.is-revealed .project-description,
+.project-item.is-revealed .project-role,
+.project-item.is-revealed .project-link,
+.project-item.is-revealed .project-credits,
+.project-item.is-revealed .tag,
+.project-item.is-revealed .project-number,
+.project-item.is-revealed .mockup-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Project number gets slightly reduced opacity */
+.project-item.is-revealed .project-number {
+    opacity: 0.9 !important;
+}
+
+/* Content tiles and skill items - permanent visibility */
+.content-tile.is-revealed,
+.skill-item.is-revealed {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+/* Contact links - permanent visibility (no transform override - swap animation uses transforms) */
+.contact-link.is-revealed {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 /* Skill lines - visible but text replaced by matrix scramble JS */
 /* Don't hide .skill-line - the matrix scramble handles its own reveal */
 

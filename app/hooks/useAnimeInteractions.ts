@@ -134,7 +134,7 @@ function initTagHoverEffects() {
 // Contact link stagger reveal - returns ScrollTrigger for cleanup
 function initContactLinkAnimations(): ScrollTrigger | null {
     const contactLinks = document.querySelectorAll('.contact-link');
-    
+
     // Initial load animation
     const trigger = ScrollTrigger.create({
         trigger: '.contact-links',
@@ -148,6 +148,13 @@ function initContactLinkAnimations(): ScrollTrigger | null {
                 duration: 800,
                 ease: 'outExpo'
             });
+
+            // Add bulletproof visibility class after animation
+            setTimeout(() => {
+                contactLinks.forEach(link => {
+                    link.classList.add('is-revealed');
+                });
+            }, 800 + (contactLinks.length * 150));
         }
     });
     
