@@ -22,7 +22,8 @@ export const legalSections: LegalSection[] = [
             'BAI Solutions',
             'Manshardtstraße 13a',
             '22119 Hamburg',
-            'E-Mail: info@behrens-ai.de'
+            'E-Mail: info@behrens-ai.de',
+            'USt-IdNr.: 46/017/04299'
         ]
     },
     {

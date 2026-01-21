@@ -8,7 +8,8 @@
       "mcp__MCP_DOCKER__resolve-library-id",
       "mcp__MCP_DOCKER__search",
       "mcp__MCP_DOCKER__get-library-docs",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
