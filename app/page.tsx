@@ -1,17 +1,25 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Navigation from './components/Navigation';
+import DiveInButton from './components/explore/DiveInButton';
 import { useProjectAnimations } from './hooks/useProjectAnimations';
 import { useTileAnimations } from './hooks/useTileAnimations';
 import { useDockNavigation } from './hooks/useDockNavigation';
 import { useAnimeInteractions } from './hooks/useAnimeInteractions';
 import { useSafariScrollFix } from './hooks/useSafariScrollFix';
 import { initScrollTrigger } from './utils/scrollTriggerConfig';
+
+// Lazy-load the explore overlay (heavy R3F Canvas) - no SSR
+const ExploreOverlay = dynamic(
+  () => import('./components/explore/ExploreOverlay'),
+  { ssr: false, loading: () => null }
+);
 
 export default function Home() {
   // Initialize ScrollTrigger with cross-browser optimizations - FIRST
@@ -33,6 +41,8 @@ export default function Home() {
       {/* Navigation MUST be outside smooth-wrapper to maintain true position:fixed behavior */}
       {/* If inside a transformed container, fixed elements become relative to that container */}
       <Navigation />
+      <DiveInButton />
+      <ExploreOverlay />
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <Hero />
