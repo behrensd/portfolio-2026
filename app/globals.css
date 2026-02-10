@@ -2306,3 +2306,281 @@ input, select, textarea {
     transform: translateX(-50%) translate3d(0, 0, 0);
 }
 
+/* ================================
+   EXPLORE MODE - 3D SPACE
+   Desktop-only full-screen overlay
+   ================================ */
+
+/* Full-screen overlay container */
+.explore-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: #000000;
+    overflow: hidden;
+}
+
+/* Dive In button - positioned in hero section */
+.explore-dive-btn {
+    position: fixed;
+    bottom: 5rem;
+    right: 2rem;
+    z-index: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid rgba(125, 132, 145, 0.3);
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-font-smoothing: none;
+}
+
+.explore-dive-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+    box-shadow: 3px 3px 0 rgba(125, 132, 145, 0.3);
+}
+
+.explore-dive-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+.explore-dive-btn-icon {
+    display: inline-flex;
+    transition: transform 0.3s ease;
+}
+
+.explore-dive-btn:hover .explore-dive-btn-icon {
+    transform: translateY(2px);
+}
+
+/* Transition: zoom background overlay */
+.explore-zoom-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 8999;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transform-origin: center center;
+    will-change: transform, filter;
+}
+
+/* Transition: scanlines flash (8-bit aesthetic) */
+.explore-scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 9001;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    mix-blend-mode: multiply;
+    opacity: 0;
+}
+
+/* HUD overlay */
+.explore-hud {
+    position: fixed;
+    inset: 0;
+    z-index: 9010;
+    pointer-events: none;
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    -webkit-font-smoothing: none;
+}
+
+/* Crosshair */
+.explore-crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+}
+
+/* Resume overlay (when pointer lock is lost) */
+.explore-resume-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.explore-resume-text {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Planet proximity indicator */
+.explore-planet-indicator {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.explore-planet-indicator-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--color-primary);
+    animation: explore-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes explore-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* Controls hint */
+.explore-hints {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+    transition: opacity 1s ease;
+    white-space: nowrap;
+}
+
+/* ESC button */
+.explore-esc-btn {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(19, 21, 21, 0.8);
+    border: 1px solid rgba(125, 132, 145, 0.3);
+    color: var(--color-primary);
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    -webkit-font-smoothing: none;
+}
+
+.explore-esc-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+}
+
+/* Planet info panel */
+.explore-planet-info {
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    background: rgba(19, 21, 21, 0.92);
+    border: 1px solid rgba(125, 132, 145, 0.4);
+    padding: 1.5rem;
+    max-width: 320px;
+    color: #F3EDEC;
+    -webkit-font-smoothing: none;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.explore-planet-info-date {
+    color: #7D8491;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.explore-planet-info-title {
+    color: #FCFCFC;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+}
+
+.explore-planet-info-desc {
+    color: #D5D5D5;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem 0;
+}
+
+.explore-planet-info-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.explore-planet-info-tag {
+    color: #7D8491;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+}
+
+.explore-planet-info-tag:not(:last-child)::after {
+    content: ' \00B7';
+    margin-left: 0.25rem;
+}
+
+.explore-planet-info-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #7D8491;
+    color: #131515;
+    text-decoration: none;
+    font-family: var(--font-vhs), 'Courier New', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 2px solid #7D8491;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: none;
+}
+
+.explore-planet-info-link:hover {
+    background: transparent;
+    color: #7D8491;
+}
+
+/* Hide dive-in button on mobile */
+@media (max-width: 1023px) {
+    .explore-dive-btn {
+        display: none;
+    }
+}
+
